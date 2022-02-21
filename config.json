@@ -1,10 +1,10 @@
 {
-  "prefix": "YOUR_BOT_PREFIX_HERE",
-  "token": "YOUR_BOT_TOKEN_HERE",
-  "permissions": "YOUR_BOT_PERMISSIONS_HERE",
-  "application_id": "YOUR_APPLICATION_ID_HERE",
+  "prefix": "$",
+  "token": "OTM4NTc5MjIzNzgwNjU1MTQ1.YfsWBA.CTZasCBhy6RXIqQDjiaJggVjzZE",
+  "permissions": "8",
+  "application_id": "938579223780655145",
   "owners": [
-    123456789,
-    987654321
+    935339228324311040,
+    935339228324311040
   ]
 }

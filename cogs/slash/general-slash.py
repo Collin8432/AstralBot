@@ -232,6 +232,14 @@ class General(commands.Cog, name="general-slash"):
                         color=0xE02B2B
                     )
                 await interaction.send(embed=embed)
+    @commands.slash_command(
+        name="Help",
+        description="Help Command"
+    )
+    @checks.not_blacklisted()
+    async def server(self, interaction: ApplicationCommandInteraction) -> None:
+        
+
 
 
 def setup(bot):
