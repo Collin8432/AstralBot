@@ -213,4 +213,4 @@ async def on_command_error(context: Context, error) -> None:
 
 
 # Run the bot with the token
-bot.run(config["token"])
+

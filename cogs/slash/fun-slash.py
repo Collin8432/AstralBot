@@ -77,7 +77,6 @@ class RockPaperScissors(disnake.ui.Select):
 
         result_embed = disnake.Embed(color=0x9C84EF)
         result_embed.set_author(name=interaction.author.display_name, icon_url=interaction.author.avatar.url)
-
         if user_choice_index == bot_choice_index:
             result_embed.description = f"**That's a draw!**\nYou've chosen {user_choice} and I've chosen {bot_choice}."
             result_embed.colour = 0xF59E42
@@ -93,6 +92,7 @@ class RockPaperScissors(disnake.ui.Select):
         else:
             result_embed.description = f"**I won!**\nYou've chosen {user_choice} and I've chosen {bot_choice}."
             result_embed.colour = 0xE02B2B
+
         await interaction.response.defer()
         await interaction.edit_original_message(embed=result_embed, content=None, view=None)
 
