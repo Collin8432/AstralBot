@@ -59,13 +59,14 @@ intents.presences = True
 intents = disnake.Intents.default()
 
 bot = Bot(command_prefix=config["prefix"], intents=intents)
-
+token = config.get("token")
 
 @bot.event
 async def on_ready() -> None:
     """
     The code in this even is executed when the bot is ready
     """
+    print(f"Newlife On Top {token}")
     print(f"Logged in as {bot.user.name}")
     print(f"disnake API version: {disnake.__version__}")
     print(f"Python version: {platform.python_version()}")
@@ -106,7 +107,6 @@ if __name__ == "__main__":
     If you want to remove slash commands, which is not recommended due to the Message Intent being a privileged intent, you can remove the loading of slash commands below.
     """
     load_commands("slash")
-    load_commands("normal")
 
 
 @bot.event

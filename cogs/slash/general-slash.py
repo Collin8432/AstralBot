@@ -26,6 +26,87 @@ else:
         config = json.load(file)
 
 
+class Choice(disnake.ui.View):
+    def __init__(self):
+        super().__init__()
+        self.choice = None
+
+    @disnake.ui.button(label="Heads", style=disnake.ButtonStyle.blurple)
+    async def confirm(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+        self.choice = button.label.lower()
+        self.stop()
+
+    @disnake.ui.button(label="Tails", style=disnake.ButtonStyle.blurple)
+    async def cancel(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+        self.choice = button.label.lower()
+        self.stop()
+
+
+class Help(disnake.ui.Select):
+    def __init__(self):
+
+        options = [
+            disnake.SelectOption(
+                label="General", description="Displays General Commands", emoji="⚙️"
+            ),
+            disnake.SelectOption(
+                label="Fun", description="Displays Fun Commands", emoji="⚙️"
+            ),
+            disnake.SelectOption(
+                label="Moderation", description="Displays Moderation Commands", emoji="⚙️"
+            ),
+            disnake.SelectOption(
+                label="Owner", description="Displays Owner Commands", emoji="⚙️"
+            ),  
+        ]
+
+        super().__init__(
+            placeholder="Choose...",
+            min_values=1,
+            max_values=1,
+            options=options,
+        )
+
+    async def callback(self, interaction: disnake.MessageInteraction):
+        choices = {
+            "General": 0,
+            "Fun": 1,
+            "Moderation": 2,
+            "Owner": 3,
+        }
+        user_choice = self.values[0].lower()
+        user_choice_index = choices[user_choice]
+
+
+        result_embed = disnake.Embed(color=0x9C84EF)
+        result_embed.set_author(name=interaction.author.display_name, icon_url=interaction.author.avatar.url)
+        if user_choice_index == 0:
+            result_embed.description = f"nigger"
+            result_embed.colour = 0xF59E42
+        elif user_choice_index == 1:
+            result_embed.description = f"nigger"
+            result_embed.colour = 0xF59E42
+        elif user_choice_index == 2:
+            result_embed.description = f"nigger"
+            result_embed.colour = 0xF59E42
+        elif user_choice_index == 3:
+            result_embed.description = f"nigger"
+            result_embed.colour = 0xF59E42
+        else:
+            result_embed.description = f"error"
+            result_embed.colour = 0xF59E42
+
+        await interaction.response.defer()
+        await interaction.edit_original_message(embed=result_embed, content=None, view=None)
+
+
+class HelpView(disnake.ui.View):
+    def __init__(self):
+        super().__init__()
+
+        self.add_item(Help())
+
+
 class General(commands.Cog, name="general-slash"):
     def __init__(self, bot):
         self.bot = bot
@@ -232,13 +313,23 @@ class General(commands.Cog, name="general-slash"):
                         color=0xE02B2B
                     )
                 await interaction.send(embed=embed)
+
     @commands.slash_command(
-        name="Help",
-        description="Help Command"
+        name="help",
+        description="Displays Help Command"
     )
     @checks.not_blacklisted()
-    async def server(self, interaction: ApplicationCommandInteraction) -> None:
-        
+    async def help(self, interaction: ApplicationCommandInteraction) -> None:
+        """
+        Play the rock paper scissors game against the bot.
+        :param interaction: The application command interaction.
+        """
+        view = HelpView()
+        embed = disnake.Embed(
+              description="Select Your Choice!",
+              color=0x9C84EF
+                    )
+        await interaction.send(embed=embed, view=view)
 
 
 

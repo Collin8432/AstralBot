@@ -177,7 +177,11 @@ class Fun(commands.Cog, name="fun-slash"):
         :param interaction: The application command interaction.
         """
         view = RockPaperScissorsView()
-        await interaction.send("Please make your choice", view=view)
+        embed = disnake.Embed(
+            description="Choose Your Option",
+            color=0x9C84EF
+        )
+        await interaction.send(embed=embed, view=view)
 
 
 def setup(bot):
