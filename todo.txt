@@ -1,0 +1,3 @@
+log channel (through webhook)
+nick through msg content
+message delete automatically
