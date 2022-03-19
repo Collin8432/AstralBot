@@ -148,7 +148,13 @@ class General(commands.Cog, name="General Cmds"):
    )
    async def ranchoice(self, interaction: ApplicationCommandInteraction, choiceone: str, choicetwo: str):
         choices = [choiceone, choicetwo]
-        await interaction.send(random.choice(choices))
+        choicechoser = random.choice(choices)
+        embed = disnake.embed(
+            title="Choice Selected!",
+            description=f"{choicechoser}",
+            color = 0xDC143C
+        )
+        await interaction.send(embed)
 
    
 

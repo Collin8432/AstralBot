@@ -10,8 +10,9 @@ from disnake import ApplicationCommandInteraction
 from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from disnake.ext.commands import Context
+from discord_webhook import DiscordWebhook, DiscordEmbed
 
-
+from helpers import checks
 import exceptions
 
 if not os.path.isfile("config.json"):
@@ -49,6 +50,7 @@ def load_commands(command_type: str) -> None:
 
 if __name__ == "__main__":
     load_commands("general")
+    load_commands("moderation")
 
 @bot.event 
 async def on_ready():
@@ -89,10 +91,27 @@ async def on_message(message):
     if "code" in message.content:
         await message.reply(f"<@{message.author.id}> https://realms.gg/X7UmWxzws7O")
 
+
 @bot.listen('on_message')
 async def on_message(message):
-    if message.channel.id == 943425671101812767:
-        await message.author.edit(nick=f"{message.content}")
+    if "nigger" or "nig" in message.content:
+        await message.reply("Please Don't Say That")
+        await message.delete()
+        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/954788066374078504/58vt7xjbtpWabo_ugmKdeW4cNsDBeivgdOwCn53KZ9q2H19jr6V2QU9nxBvp3TEF7qU2")
+        embed = DiscordEmbed(title="N-Word Logged", color=0xDC143C)
+        embed.set_description(f"**{message.author}** Sent An N-Word In <#{message.channel.id}>")
+        webhook.add_embed(embed)
+        response = webhook.execute()          
+
+
+@bot.command(name="hook")
+@checks.is_owner()
+async def hook(interaction):
+    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/954784175611871303/_vTyOlKL5HbKVJ2AkEOrENPjkC_8iy_T26z_b5MVV-WXHOF5jtru1986Aw0OTVgyPEqX")
+    embed = DiscordEmbed(title='test', color=0xDC143C)
+    embed.set_description("Hi")
+    webhook.add_embed(embed)
+    response = webhook.execute()                  
 
 
 bot.run(config["token"])
