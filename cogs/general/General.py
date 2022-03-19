@@ -9,9 +9,30 @@ import disnake
 from disnake.ext import commands
 from disnake.ext.commands import Context
 from disnake import ApplicationCommandInteraction, Option, OptionType
+from disnake.enums import ButtonStyle
+from disnake.ext import commands
 
 from helpers import checks
 
+
+class Buttons(disnake.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    # Creates a row of buttons and when one of them is pressed, it will send a message with the number of the button.
+
+    @disnake.ui.button(emoji="✅", style=ButtonStyle.green)
+    async def first_button(
+        self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
+    ):
+        await interaction.response.send_message("Exiting...")
+        os._exit(0)
+    @disnake.ui.button(emoji="⛔", style=ButtonStyle.red)
+    async def second_button(
+        self, button: disnake.ui.button, interaction: disnake.MessageInteraction
+    ):
+        await interaction.response.send_message("Cancelled!")
+        await interaction.message.delete()
 
 class Help(disnake.ui.Select):
     def __init__(self):
@@ -39,9 +60,6 @@ class Help(disnake.ui.Select):
         }
         user_choice = self.values[0].lower()
         user_choice_index = choices[user_choice]
-
-        bot_choice = random.choice(list(choices.keys()))
-        bot_choice_index = choices[bot_choice]
 
         result_embed = disnake.Embed(color=0xDC143C )
         result_embed.set_author(name=interaction.author.display_name, icon_url=interaction.author.avatar.url)
@@ -99,6 +117,40 @@ class General(commands.Cog, name="General Cmds"):
          text=f"Requested by {interaction.author}"
       )
       await interaction.send(embed=embed, view=HelpView())
+
+
+   @commands.slash_command(
+        name="Shutdown",
+        description="Shuts The Bot Down.",
+   )
+   @checks.is_owner()
+   async def shutdown(interaction):
+      await interaction.send("Are You Sure?", view=Buttons())
+
+
+   @commands.slash_command(
+        name="Randomchoice",
+        description="Picks A Random Choice Out Of 2 Options",
+        options=[
+            Option(
+                name="choiceone",
+                description="First Choice",
+                type=OptionType.string,
+                required=True
+            ),
+            Option(
+                name="choicetwo",
+                description="Second Choice",
+                type=OptionType.string,
+                required=True
+            )
+        ]
+   )
+   async def ranchoice(self, interaction: ApplicationCommandInteraction, choiceone: str, choicetwo: str):
+        choices = [choiceone, choicetwo]
+        await interaction.send(random.choice(choices))
+
+   
 
 def setup(bot):
     bot.add_cog(General(bot))
