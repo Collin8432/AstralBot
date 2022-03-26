@@ -4,5 +4,6 @@
   "owners": [
     935339228324311040,
     935632419694985276
-  ]
+  ],
+  "mongo_urI": "mongodb+srv://Astro1:Astroontop@nlbot.nlja1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 }

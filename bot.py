@@ -11,6 +11,8 @@ from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from disnake.ext.commands import Context
 from discord_webhook import DiscordWebhook, DiscordEmbed
+import traceback
+
 
 from helpers import checks
 import exceptions
@@ -65,26 +67,18 @@ async def on_slash_command(interaction: ApplicationCommandInteraction) -> None:
     webhook.add_embed(embed)
     response = webhook.execute()          
 
+def fancy_traceback(exc: Exception) -> str:
+    text = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))
+    return f"```py\n{text[-4086:]}\n```"
+
 @bot.event
-async def on_slash_command_error(interaction: ApplicationCommandInteraction, error: Exception) -> None:
-    if isinstance(error, exceptions.UserBlacklisted):
-        embed = disnake.Embed(
-            title="Error!",
-            description="You are blacklisted from using the bot.",
-            color=0xFF0000
-        )
-        print("A blacklisted user tried to execute a command.")
-        return await interaction.send(embed=embed, ephemeral=True)
-    elif isinstance(error, commands.errors.MissingPermissions):
-        embed = disnake.Embed(
-            title="Error!",
-            description="You are missing the permission(s) `" + ", ".join(
-                error.missing_permissions) + "` to execute this command!",
-            color=0xFF0000
-        )
-        print("A blacklisted user tried to execute a command.")
-        return await interaction.send(embed=embed, ephemeral=True)
-    raise error
+async def on_command_error(self, ctx: commands.Context, error: commands.CommandError) -> None:
+    embed = disnake.Embed(
+        title=f"Command `{ctx.command}` failed due to `{error}`",
+        description=fancy_traceback(error),
+        color=disnake.Color.red(),
+    )
+    await ctx.send(embed=embed)
 
 @bot.listen('on_message')
 async def on_message(message):
