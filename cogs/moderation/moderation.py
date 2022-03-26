@@ -11,64 +11,132 @@ from disnake.ext.commands import Context
 from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.enums import ButtonStyle
 from disnake.ext import commands
+from discord_webhook import DiscordWebhook, DiscordEmbed
+import disnake
+from disnake import ApplicationCommandInteraction, Option, OptionType
+from disnake.ext import commands
 
 from helpers import checks
 
 class Moderation(commands.Cog, name="Mod Cmds"):
-   def __init__(self, bot):
+    def __init__(self, bot):
       self.bot = bot
 
-   @commands.slash_command(
-      name="Kick",
-      description="Kicks A User From A Server",
-      options=[
-         Option(
-               name="Member",
-               description="Select The Member To Kick",
-               type=OptionType.user,
-               required=True
-         ),
-         Option(
-               name="Reason",
-               description="Reason To Kick User",
-               type=OptionType.string,
-               required=False
-         )
-      ]
-   )
-   @commands.has_permissions(kick_members=True)
-   @checks.not_blacklisted()
-   async def kick(interaction: ApplicationCommandInteraction, Reason: str, user: disnake.User):
-      member = await interaction.guild.get_or_fetch_member(user.id)
-      if member.guild.permissions.administrator:
-         embed = disnake.Embed(
-            title="Error Kicking Member!",
-            description="Member Has Administrator Permissons!",
-            color = 0xDC143C
-         )
-         await interaction.send(embed=embed)
-      else:
-         try:
+    @commands.slash_command(
+        name="Kick",
+        description="Kicks A Member From The Server",
+        options=[
+            Option(
+                name="user",
+                description="The Member You Want To Kick",
+                type=OptionType.user,
+                required=True
+            ),
+            Option(
+                name="reason",
+                description="Reason To Kick Member",
+                type=OptionType.string,
+                required=False
+            )
+        ]
+    )
+    @commands.has_permissions(kick_members=True)
+    @checks.not_blacklisted()
+    async def kick(self, interaction: ApplicationCommandInteraction, user: disnake.User,
+                   reason: str = "Not specified") -> None:
+        member = await interaction.guild.get_or_fetch_member(user.id)
+        if member.guild_permissions.administrator:
             embed = disnake.Embed(
-               title = "Member Kicked!", 
-               description = f"**{member}** Was Kicked By **{interaction.author}**\n**Reason: {Reason}",
-               color = 0xDC143C
+                title="Error!",
+                description="User has Admin permissions.",
+                color=0xE02B2B
             )
             await interaction.send(embed=embed)
-            await member.kick(reason=Reason)
-
-         except:
-            embed = disnake.Embed(
-               title = "Error!",
-               description = "Error Kicking Member",
-               color = 0xDC143C
+        else:
+            try:
+                embed = disnake.Embed(
+                    title="Member Kicked",
+                    description=f"<@{member.id}> Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}",
+                    color=0xDC143C
+                )
+                await interaction.send(embed=embed)
+                try:
+                    await member.send(
+                        f"You Were Kicked From Newlife By <@{interaction.author.id}>\n**Reason:**\n{reason}"
+                    )
+                except disnake.Forbidden:
+                    pass
+                await member.kick(reason=reason)
+                webhook = DiscordWebhook(url="https://discord.com/api/webhooks/955273637206843432/TjG_TW6lfl3rrenI9JK5KkFen9qtel4uP3aerV0YTWqkRzkQHMY86NEfSpptEQxai0Pz")
+                embed = DiscordEmbed(title="Member Kicked!", color=0xDC143C)
+                embed.set_description(f"**{member}** Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}")
+                webhook.add_embed(embed)
+                response = webhook.execute()     
+            except:
+                embed = disnake.Embed(
+                    title="Error",
+                    description="Error While Kicking Member, Make Sure Member Does Not Have Higher Roles Than Me",
+                    color=0xDC143C
+                )
+                await interaction.send(embed=embed)
+    @commands.slash_command(
+        name="Ban",
+        description="Bans A Member From The Server",
+        options=[
+            Option(
+                name="user",
+                description="The Member You Want To Ban",
+                type=OptionType.user,
+                required=True
+            ),
+            Option(
+                name="reason",
+                description="Reason To Ban Member",
+                type=OptionType.string,
+                required=False
             )
-            await interaction.send(embed=embed)
-
-
-
-   
-
-
+        ]
+    )
+    @commands.has_permissions(ban_members=True)
+    @checks.not_blacklisted()
+    async def ban(self, interaction: ApplicationCommandInteraction, user: disnake.User,
+                  reason: str = "Not specified") -> None:
+                  member = await interaction.guild.get_or_fetch_member(user.id)
+                  if member.guild_permissions.administrator:
+                      embed = disnake.Embed(
+                          title="Error!",
+                          description="User Has Administrator Permissions",
+                          color=0xDC143C
+                      )
+                      await interaction.send(embed=embed)
+                  else:
+                      try:
+                        embed = disnake.Embed(
+                            title="Member Banned",
+                            description=f"<@{member.id}> Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}",
+                            color=0xDC143C
+                        )
+                        await interaction.send(embed=embed)
+                        try:
+                            embed = disnake.Embed(
+                            title="You Were Banned!",
+                            description=f"<@{member.id}> Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}",
+                            color=0xDC143C
+                            )
+                            await member.send(embed=embed)
+                        except disnake.Forbidden:
+                            pass
+                        await member.ban(reason=reason)
+                        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/954803072096436255/scSHea18bR_vByOrlJSTEy-8yi0paqITg34YGPLmm6O762cdFQx1xdiz9MYccquf7vgz")
+                        embed = DiscordEmbed(title="Member Banned!", color=0xDC143C)
+                        embed.set_description(f"**{member}** Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}")
+                        webhook.add_embed(embed)
+                        response = webhook.execute()     
+                      except:
+                          embed = disnake.Embed(
+                              title="Error!",
+                              description="Error While Banning Member, Make Sure Member Does Not Have Higher Roles Than Me",
+                              color=0xDC143C
+                          )
 def setup(bot):
     bot.add_cog(Moderation(bot))

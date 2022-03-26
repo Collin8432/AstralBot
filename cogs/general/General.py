@@ -65,8 +65,38 @@ class Help(disnake.ui.Select):
         result_embed.set_author(name=interaction.author.display_name, icon_url=interaction.author.avatar.url)
 
         if user_choice_index == 0:
-            result_embed.description = f"**In Progress**"
+            result_embed.description = f"**General Help**"
             result_embed.colour = 0xDC143C
+            result_embed.add_field(
+                name="Help", 
+                value=f"```Displays Help Command```",
+                inline=True
+            )
+            result_embed.add_field(
+                name="Test", 
+                value=f"```Not A Real Command```",
+                inline=True
+            )
+            result_embed.add_field(
+                name="Test", 
+                value=f"```Not A Real Command```",
+                inline=True
+            )
+            result_embed.add_field(
+                name="Test", 
+                value=f"```Not A Real Command```",
+                inline=True
+            )
+            result_embed.add_field(
+                name="Test", 
+                value=f"```Not A Real Command```",
+                inline=True
+            )
+            result_embed.add_field(
+                name="Test", 
+                value=f"```Not A Real Command```",
+                inline=True
+            )
         elif user_choice_index == 1:
             result_embed.description = f"**In Progress**"
             result_embed.colour= 0xDC143C
@@ -95,9 +125,10 @@ class General(commands.Cog, name="General Cmds"):
       name="Help",
       description="Displays Help Command"
    )
+   @checks.not_blacklisted()
    async def help(interaction: ApplicationCommandInteraction) -> None:
       embed = disnake.Embed(
-         description="Newlife Bot - Coded by Astro",
+         description="Newlife Bot - Coded by <@935339228324311040>",
          color=0xDC143C
       )
       embed.set_author(
@@ -149,14 +180,15 @@ class General(commands.Cog, name="General Cmds"):
    async def ranchoice(self, interaction: ApplicationCommandInteraction, choiceone: str, choicetwo: str):
         choices = [choiceone, choicetwo]
         choicechoser = random.choice(choices)
-        embed = disnake.embed(
+        embed = disnake.Embed(
             title="Choice Selected!",
             description=f"{choicechoser}",
             color = 0xDC143C
         )
-        await interaction.send(embed)
+        await interaction.send(embed=embed)
 
    
 
 def setup(bot):
     bot.add_cog(General(bot))
+

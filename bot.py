@@ -33,7 +33,7 @@ async def on_ready() -> None:
 
 @tasks.loop(minutes=1.0)
 async def status_task() -> None:
-    statuses = ["Newlife Realms", "Newlife is the Best Server"]
+    statuses = ["With Astro", "With You", "/help", "With Humans"]
     await bot.change_presence(activity=disnake.Game(random.choice(statuses)))
 
 def load_commands(command_type: str) -> None:
@@ -55,15 +55,15 @@ if __name__ == "__main__":
 @bot.event 
 async def on_ready():
     print(f"Logged in as {bot.user}, Welcome!")
+    status_task.start()
 
 @bot.event
 async def on_slash_command(interaction: ApplicationCommandInteraction) -> None:
-    """
-    The code in this event is executed every time a slash command has been *successfully* executed
-    :param interaction: The slash command that has been executed.
-    """
-    print(
-        f"Executed {interaction.data.name} command in {interaction.guild.name} (ID: {interaction.guild.id}) by {interaction.author} (ID: {interaction.author.id})")
+    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/954798642043174982/R-YPK-tNPkfXKrMwamx1g1piJULf3Dq3tYfjwrHqrbni1DY1noBptL_Vu0gswktFAKAO")
+    embed = DiscordEmbed(title="Command Executed", color=0xDC143C)
+    embed.set_description(f"**<@{interaction.author.id}>** Executed **{interaction.data.name}** in <#{interaction.channel.id}>")
+    webhook.add_embed(embed)
+    response = webhook.execute()          
 
 @bot.event
 async def on_slash_command_error(interaction: ApplicationCommandInteraction, error: Exception) -> None:
@@ -90,28 +90,24 @@ async def on_slash_command_error(interaction: ApplicationCommandInteraction, err
 async def on_message(message):
     if "code" in message.content:
         await message.reply(f"<@{message.author.id}> https://realms.gg/X7UmWxzws7O")
-
-
-@bot.listen('on_message')
-async def on_message(message):
-    if "nigger" or "nig" in message.content:
+    if "nigger" in message.content:
         await message.reply("Please Don't Say That")
         await message.delete()
         webhook = DiscordWebhook(url="https://discord.com/api/webhooks/954788066374078504/58vt7xjbtpWabo_ugmKdeW4cNsDBeivgdOwCn53KZ9q2H19jr6V2QU9nxBvp3TEF7qU2")
         embed = DiscordEmbed(title="N-Word Logged", color=0xDC143C)
-        embed.set_description(f"**{message.author}** Sent An N-Word In <#{message.channel.id}>")
+        embed.set_description(f"<@{message.author.id}> Sent An N-Word In <#{message.channel.id}>\n **Content:** \n{message.content}")
         webhook.add_embed(embed)
-        response = webhook.execute()          
+        response = webhook.execute()      
 
-
-@bot.command(name="hook")
-@checks.is_owner()
-async def hook(interaction):
-    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/954784175611871303/_vTyOlKL5HbKVJ2AkEOrENPjkC_8iy_T26z_b5MVV-WXHOF5jtru1986Aw0OTVgyPEqX")
-    embed = DiscordEmbed(title='test', color=0xDC143C)
-    embed.set_description("Hi")
+@bot.event
+async def on_message_delete(message):
+    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/954802482104660008/oV8tTjVR7Ozt0sCI7rGMs1ArRtzouToY6VsACHsRKq91r446y-SL_YlVUhn82jSg-FOp")
+    embed = DiscordEmbed(title="Message Deleted", color=0xDC143C)
+    embed.set_description(f"<@{message.author.id}> Deleted A Chat In <#{message.channel.id}>\n **Content:** \n{message.content}")
     webhook.add_embed(embed)
-    response = webhook.execute()                  
+    response = webhook.execute()      
+
+         
 
 
 bot.run(config["token"])
