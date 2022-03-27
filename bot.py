@@ -53,6 +53,7 @@ def load_commands(command_type: str) -> None:
 if __name__ == "__main__":
     load_commands("general")
     load_commands("moderation")
+    load_commands("fun")
 
 @bot.event 
 async def on_ready():
@@ -67,24 +68,23 @@ async def on_slash_command(interaction: ApplicationCommandInteraction) -> None:
     webhook.add_embed(embed)
     response = webhook.execute()          
 
-def fancy_traceback(exc: Exception) -> str:
-    text = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))
-    return f"```py\n{text[-4086:]}\n```"
 
 @bot.event
-async def on_command_error(self, ctx: commands.Context, error: commands.CommandError) -> None:
+async def on_slash_command_error(interaction: ApplicationCommandInteraction, error: Exception) -> None:
     embed = disnake.Embed(
-        title=f"Command `{ctx.command}` failed due to `{error}`",
-        description=fancy_traceback(error),
-        color=disnake.Color.red(),
+        title="Error",
+        description=f"Error With Command:\n```py\n{error}```",
+        color=0xDC143C
     )
-    await ctx.send(embed=embed)
+    await interaction.send(embed=embed, ephemeral=True)
 
+
+whitelist = [938579223780655145]
 @bot.listen('on_message')
 async def on_message(message):
     if "code" in message.content:
         await message.reply(f"<@{message.author.id}> https://realms.gg/X7UmWxzws7O")
-    if "nigger" in message.content:
+    if "nigger" in message.content and message.guild.id == 935632847547555920 and message.author.id not in whitelist:
         await message.reply("Please Don't Say That")
         await message.delete()
         webhook = DiscordWebhook(url="https://discord.com/api/webhooks/954788066374078504/58vt7xjbtpWabo_ugmKdeW4cNsDBeivgdOwCn53KZ9q2H19jr6V2QU9nxBvp3TEF7qU2")
@@ -92,6 +92,9 @@ async def on_message(message):
         embed.set_description(f"<@{message.author.id}> Sent An N-Word In <#{message.channel.id}>\n **Content:** \n{message.content}")
         webhook.add_embed(embed)
         response = webhook.execute()      
+    if message.channel.id == 957322698269278229 and message.author.id not in whitelist:
+        await message.delete()
+
 
 @bot.event
 async def on_message_delete(message):
@@ -101,7 +104,6 @@ async def on_message_delete(message):
     webhook.add_embed(embed)
     response = webhook.execute()      
 
-         
 
 
 bot.run(config["token"])

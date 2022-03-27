@@ -18,6 +18,27 @@ from disnake.ext import commands
 
 from helpers import checks
 
+class Counter(disnake.ui.View):
+
+    # Define the actual button
+    # When pressed, this increments the number displayed until it hits 5.
+    # When it hits 5, the counter button is disabled and it turns green.
+    # note: The name of the function does not matter to the library
+    @disnake.ui.button(label="0", style=disnake.ButtonStyle.red)
+    async def count(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+        number = int(button.label) if button.label else 0
+        if number + 1 >= 5:
+            button.style = disnake.ButtonStyle.green
+            button.disabled = True
+        button.label = str(number + 1)
+
+        # Make sure to update the message with our updated selves
+        await interaction.response.edit_message(view=self)
+
+
+
+
+
 class Moderation(commands.Cog, name="Mod Cmds"):
     def __init__(self, bot):
       self.bot = bot
@@ -138,5 +159,14 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                               description="Error While Banning Member, Make Sure Member Does Not Have Higher Roles Than Me",
                               color=0xDC143C
                           )
+
+    @commands.slash_command(
+        name="testcommand",
+        description="This is a testing command that does nothing.",
+    )
+    @checks.not_blacklisted()
+    @checks.is_owner()
+    async def testcommand(self, interaction: ApplicationCommandInteraction):
+        await interaction.send("This is a testing command that does nothing.", view=Counter(), ephemeral=True)
 def setup(bot):
     bot.add_cog(Moderation(bot))
