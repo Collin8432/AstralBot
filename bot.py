@@ -94,6 +94,8 @@ async def on_message(message):
         response = webhook.execute()      
     if message.channel.id == 957322698269278229 and message.author.id not in whitelist:
         await message.delete()
+    if message.channel.id == 943425671101812767 and message.author.id not in whitelist:
+        await message.author.edit(nick=f"{message.content}")
 
 
 @bot.event

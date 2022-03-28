@@ -2,4 +2,3 @@ log channel (through webhook)
 nick through msg content
 add commands that would be good for the server 
 suggestion channel (through webhook)
-find love with her
