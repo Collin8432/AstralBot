@@ -96,6 +96,13 @@ async def on_message(message):
         await message.delete()
     if message.channel.id == 943425671101812767 and message.author.id not in whitelist:
         await message.author.edit(nick=f"{message.content}")
+        embed = disnake.Embed(
+            title=f"Nickname Changed!", 
+            description=f"<@{message.author.id}> Changed Nickname To: {message.content}",
+            color=0xDC143C
+        )
+        embed.set_image(url=bot.display_avatar.url)
+        await message.reply(embed=embed)
 
 
 @bot.event
