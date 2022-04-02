@@ -220,5 +220,6 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     async def Appliction(interaction: disnake.CommandInteraction):
       await interaction.response.send_modal(modal=ModApp())
 
+
 def setup(bot):
     bot.add_cog(Moderation(bot))

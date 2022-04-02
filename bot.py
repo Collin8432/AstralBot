@@ -4,6 +4,9 @@ import os
 import platform
 import random
 import sys
+from time import time
+import datetime
+from tkinter import N
 
 import disnake
 from disnake import ApplicationCommandInteraction
@@ -101,7 +104,7 @@ async def on_message(message):
             description=f"<@{message.author.id}> Changed Nickname To: {message.content}",
             color=0xDC143C
         )
-        embed.set_image(url=bot.display_avatar.url)
+        embed.set_image(url="https://cdn.discordapp.com/attachments/959507426942521345/959524599647846522/unknown.png")
         await message.reply(embed=embed)
 
 
@@ -113,6 +116,37 @@ async def on_message_delete(message):
     webhook.add_embed(embed)
     response = webhook.execute()      
 
+
+@bot.slash_command(
+    name="testembed",
+    description="Test Embed",
+)
+async def embed(interaction):
+    embed = disnake.Embed(
+        title="Embedtitle",
+        description="Embeddescription",
+        color=0xDC143C,
+        timestamp=datetime.datetime.now(),
+    )
+    embed.set_author(
+        name="Embedauthor",
+        url="https://store-newlife.tebex.io",
+        icon_url="https://cdn.discordapp.com/attachments/959507426942521345/959524599647846522/unknown.png",
+    )
+    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/959507426942521345/959524599647846522/unknown.png")
+    embed.set_image(url="https://cdn.discordapp.com/attachments/959507426942521345/959524599647846522/unknown.png")
+
+    embed.add_field(name="Regular Title", value="Regular Value", inline=False)
+
+    embed.add_field(name="Inline Title", value="Inline Value", inline=True)
+    embed.add_field(name="Inline Title", value="Inline Value", inline=True)
+    embed.add_field(name="Inline Title", value="Inline Value", inline=True)
+
+    embed.set_footer(
+        text="Embed Footer",
+        icon_url="https://cdn.discordapp.com/attachments/959507426942521345/959524599647846522/unknown.png",
+    )
+    await interaction.send(embed=embed)
 
 
 bot.run(config["token"])
