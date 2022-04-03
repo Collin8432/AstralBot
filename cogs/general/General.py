@@ -44,6 +44,9 @@ class Help(disnake.ui.Select):
             disnake.SelectOption(
                 label="Fun", description="Displays Fun Commands", emoji="⚙️"
             ),
+            disnake.SelectOption(
+                label="Moderation", description="Displays Moderation Commands", emoji="⚙️"
+            ),
         ]
 
         super().__init__(
@@ -57,55 +60,24 @@ class Help(disnake.ui.Select):
         choices = {
             "general": 0,
             "fun": 1,
+            "moderation": 2,
         }
         user_choice = self.values[0].lower()
         user_choice_index = choices[user_choice]
 
-        result_embed = disnake.Embed(color=0xDC143C )
-        result_embed.set_author(name=interaction.author.display_name, icon_url=interaction.author.avatar.url)
+        embed = disnake.Embed(color=0xDC143C)
+        embed.set_author(name=interaction.author.display_name, icon_url=interaction.author.avatar.url)
 
         if user_choice_index == 0:
-            result_embed.description = f"**General Help**"
-            result_embed.colour = 0xDC143C
-            result_embed.add_field(
-                name="Help", 
-                value=f"```Displays Help Command```",
-                inline=True
-            )
-            result_embed.add_field(
-                name="Test", 
-                value=f"```Not A Real Command```",
-                inline=True
-            )
-            result_embed.add_field(
-                name="Test", 
-                value=f"```Not A Real Command```",
-                inline=True
-            )
-            result_embed.add_field(
-                name="Test", 
-                value=f"```Not A Real Command```",
-                inline=True
-            )
-            result_embed.add_field(
-                name="Test", 
-                value=f"```Not A Real Command```",
-                inline=True
-            )
-            result_embed.add_field(
-                name="Test", 
-                value=f"```Not A Real Command```",
-                inline=True
-            )
+            embed.description = f"**General Help**"
         elif user_choice_index == 1:
-            result_embed.description = f"**In Progress**"
-            result_embed.colour= 0xDC143C
+            embed.description = f"**In Progress**"
         else:
-            result_embed.description = f"**Error!**"
-            result_embed.colour= 0xDC143C
+            embed.description = f"**Error!**"
+            embed.colour= 0xDC143C
             
         await interaction.response.defer()
-        await interaction.edit_original_message(embed=result_embed, content=None, view=None)
+        await interaction.edit_original_message(embed=embed, content=None, view=None)
 
 
 class HelpView(disnake.ui.View):

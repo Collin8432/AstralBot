@@ -47,7 +47,7 @@ def load_commands(command_type: str) -> None:
             extension = file[:-3]
             try:
                 bot.load_extension(f"cogs.{command_type}.{extension}")
-                print(f"Loaded extension '{extension}'")
+                print(f"Loaded Extention {extension}")
             except Exception as e:
                 exception = f"{type(e).__name__}: {e}"
                 print(f"Failed to load extension {extension}\n{exception}")
@@ -131,10 +131,10 @@ async def embed(interaction):
     embed.set_author(
         name="Embedauthor",
         url="https://store-newlife.tebex.io",
-        icon_url="https://cdn.discordapp.com/attachments/959507426942521345/959524599647846522/unknown.png",
+        icon_url="https://cdn.discordapp.com/attachments/959507426942521345/959823837611040828/newlife.gif",
     )
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/959507426942521345/959524599647846522/unknown.png")
-    embed.set_image(url="https://cdn.discordapp.com/attachments/959507426942521345/959524599647846522/unknown.png")
+    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/959507426942521345/959823837611040828/newlife.gif")
+    embed.set_image(url="ttps://cdn.discordapp.com/attachments/959507426942521345/959823837611040828/newlife.gif")
 
     embed.add_field(name="Regular Title", value="Regular Value", inline=False)
 

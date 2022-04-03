@@ -60,7 +60,6 @@ class Fun(commands.Cog, name="fun cmds"):
          await interaction.send(view=BallsButton())
 
 
-
       
 def setup(bot):
     bot.add_cog(Fun(bot))
