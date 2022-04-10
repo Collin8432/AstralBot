@@ -104,7 +104,7 @@ async def on_message(message):
             description=f"<@{message.author.id}> Changed Nickname To: {message.content}",
             color=0xDC143C
         )
-        embed.set_image(url="https://cdn.discordapp.com/attachments/959507426942521345/959524599647846522/unknown.png")
+        embed.set_image(url=message.author.avatar.url)
         await message.reply(embed=embed)
 
 
@@ -131,10 +131,10 @@ async def embed(interaction):
     embed.set_author(
         name="Embedauthor",
         url="https://store-newlife.tebex.io",
-        icon_url="https://cdn.discordapp.com/attachments/959507426942521345/959823837611040828/newlife.gif",
+        icon_url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/newlife.gif",
     )
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/959507426942521345/959823837611040828/newlife.gif")
-    embed.set_image(url="ttps://cdn.discordapp.com/attachments/959507426942521345/959823837611040828/newlife.gif")
+    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/newlife.gif")
+    embed.set_image(url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/newlife.gif")
 
     embed.add_field(name="Regular Title", value="Regular Value", inline=False)
 
@@ -144,7 +144,7 @@ async def embed(interaction):
 
     embed.set_footer(
         text="Embed Footer",
-        icon_url="https://cdn.discordapp.com/attachments/959507426942521345/959524599647846522/unknown.png",
+        icon_url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/newlife.gif",
     )
     await interaction.send(embed=embed)
 
