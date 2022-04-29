@@ -38,7 +38,7 @@ async def on_ready() -> None:
 
 @tasks.loop(minutes=1.0)
 async def status_task() -> None:
-    statuses = ["With Astro", "With You", "/help", "With Humans"]
+    statuses = ["astralsb.ga", "astral on top", "with you"]
     await bot.change_presence(activity=disnake.Game(random.choice(statuses)))
 
 def load_commands(command_type: str) -> None:
@@ -117,36 +117,49 @@ async def on_message_delete(message):
     response = webhook.execute()      
 
 
-@bot.slash_command(
-    name="testembed",
-    description="Test Embed",
-)
-async def embed(interaction):
-    embed = disnake.Embed(
-        title="Embedtitle",
-        description="Embeddescription",
-        color=0xDC143C,
-        timestamp=datetime.datetime.now(),
-    )
-    embed.set_author(
-        name="Embedauthor",
-        url="https://store-newlife.tebex.io",
-        icon_url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/newlife.gif",
-    )
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/newlife.gif")
-    embed.set_image(url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/newlife.gif")
+# @bot.slash_command(
+#     name="testembed",
+#     description="Test Embed",
+# )
+# async def embed(interaction):
+#     embed = disnake.Embed(
+#         title="Embedtitle",
+#         description="Embeddescription",
+#         color=0xDC143C,
+#         timestamp=datetime.datetime.now(),
+#     )
+#     embed.set_author(
+#         name="Embedauthor",
+#         url="https://store-Astral.tebex.io",
+#         icon_url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/Astral.gif",
+#     )
+#     embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/Astral.gif")
+#     embed.set_image(url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/Astral.gif")
 
-    embed.add_field(name="Regular Title", value="Regular Value", inline=False)
+#     embed.add_field(name="Regular Title", value="Regular Value", inline=False)
 
-    embed.add_field(name="Inline Title", value="Inline Value", inline=True)
-    embed.add_field(name="Inline Title", value="Inline Value", inline=True)
-    embed.add_field(name="Inline Title", value="Inline Value", inline=True)
+#     embed.add_field(name="Inline Title", value="Inline Value", inline=True)
+#     embed.add_field(name="Inline Title", value="Inline Value", inline=True)
+#     embed.add_field(name="Inline Title", value="Inline Value", inline=True)
 
-    embed.set_footer(
-        text="Embed Footer",
-        icon_url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/newlife.gif",
-    )
-    await interaction.send(embed=embed)
+#     embed.set_footer(
+#         text="Embed Footer",
+#         icon_url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/Astral.gif",
+#     )
+#     await interaction.send(embed=embed)
+
+@bot.slash_command()
+async def command(inter):
+    print("This code is ran every time any subcommand is invoked")
 
 
+@command.sub_command()
+async def foo(inter, option: str):
+    await inter.response.send_message(f"Received {option}")
+
+
+@command.sub_command()
+async def bar(inter, option: int):
+    await inter.response.send_message(f"Gotten {option}")
+    
 bot.run(config["token"])

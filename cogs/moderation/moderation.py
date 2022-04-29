@@ -127,7 +127,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 await interaction.send(embed=embed)
                 try:
                     await member.send(
-                        f"You Were Kicked From Newlife By <@{interaction.author.id}>\n**Reason:**\n{reason}"
+                        f"You Were Kicked From Astral By <@{interaction.author.id}>\n**Reason:**\n{reason}"
                     )
                 except disnake.Forbidden:
                     pass
@@ -213,12 +213,30 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     async def testcommand(self, interaction: ApplicationCommandInteraction):
         await interaction.send("This is a testing command that does nothing.", view=Counter(), ephemeral=True)
 
+
+
     @commands.slash_command(
        name="ModeratorApplication",
        description="Sends A Moderator Appliction"
     )
     async def Appliction(interaction: disnake.CommandInteraction):
       await interaction.response.send_modal(modal=ModApp())
+
+
+    @commands.slash_command(
+        name="purge",
+        description="Purges A Number Of Messages",
+        options=[
+            Option(
+                name="amount",
+                description="The Amount Of Messages You Want To Purge",
+                type=OptionType.integer,
+                required=True
+            )
+        ]
+    )
+    async def purge(interaction: disnake.CommandInteraction, amount: int):
+        await interaction.channel.purge(limit=amount)
 
 
 def setup(bot):

@@ -100,7 +100,7 @@ class General(commands.Cog, name="General Cmds"):
    @checks.not_blacklisted()
    async def help(interaction: ApplicationCommandInteraction) -> None:
       embed = disnake.Embed(
-         description="Newlife Bot - Coded by <@935339228324311040>",
+         description="Astral Bot - Coded by <@935339228324311040>",
          color=0xDC143C
       )
       embed.set_author(
@@ -158,6 +158,9 @@ class General(commands.Cog, name="General Cmds"):
             color = 0xDC143C
         )
         await interaction.send(embed=embed)
+
+
+
 
    
 
