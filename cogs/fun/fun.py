@@ -59,6 +59,13 @@ class Fun(commands.Cog, name="fun cmds"):
     async def balls(self, interaction):
          await interaction.send(view=BallsButton())
 
+    @balls.sub_command(
+       name="astro", 
+       decription="Astrocmd"
+    )
+    async def astro(interaction):
+         await interaction.send("astro")
+
 
       
 def setup(bot):

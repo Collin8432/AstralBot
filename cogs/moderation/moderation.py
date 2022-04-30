@@ -4,6 +4,7 @@ import random
 import sys
 import platform
 
+import asyncio
 import aiohttp
 import disnake
 from disnake.ext import commands
@@ -132,7 +133,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 except disnake.Forbidden:
                     pass
                 await member.kick(reason=reason)
-                webhook = DiscordWebhook(url="https://discord.com/api/webhooks/955273637206843432/TjG_TW6lfl3rrenI9JK5KkFen9qtel4uP3aerV0YTWqkRzkQHMY86NEfSpptEQxai0Pz")
+                webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
                 embed = DiscordEmbed(title="Member Kicked!", color=0xDC143C)
                 embed.set_description(f"**{member}** Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}")
                 webhook.add_embed(embed)
@@ -192,7 +193,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                         except disnake.Forbidden:
                             pass
                         await member.ban(reason=reason)
-                        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/954803072096436255/scSHea18bR_vByOrlJSTEy-8yi0paqITg34YGPLmm6O762cdFQx1xdiz9MYccquf7vgz")
+                        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
                         embed = DiscordEmbed(title="Member Banned!", color=0xDC143C)
                         embed.set_description(f"**{member}** Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}")
                         webhook.add_embed(embed)
@@ -223,20 +224,16 @@ class Moderation(commands.Cog, name="Mod Cmds"):
       await interaction.response.send_modal(modal=ModApp())
 
 
+
     @commands.slash_command(
         name="purge",
-        description="Purges A Number Of Messages",
-        options=[
-            Option(
-                name="amount",
-                description="The Amount Of Messages You Want To Purge",
-                type=OptionType.integer,
-                required=True
-            )
-        ]
+        description="Purges All Messages In A Server",
     )
-    async def purge(interaction: disnake.CommandInteraction, amount: int):
-        await interaction.channel.purge(limit=amount)
+    @commands.has_permissions(manage_messages=True)
+    async def purge(interaction: disnake.CommandInteraction):
+        await interaction.channel.purge(limit=9999999999999999999999999)
+        await interaction.send("""Purge Complete, May Say ```The application did not respond```But It Should've Worked""", ephemeral=True)
+
 
 
 def setup(bot):

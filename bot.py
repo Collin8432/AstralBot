@@ -64,13 +64,12 @@ async def on_ready():
     status_task.start()
 
 @bot.event
-async def on_slash_command(interaction: ApplicationCommandInteraction) -> None:
-    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/954798642043174982/R-YPK-tNPkfXKrMwamx1g1piJULf3Dq3tYfjwrHqrbni1DY1noBptL_Vu0gswktFAKAO")
+async def on_slash_command(interaction: Context):
+    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
     embed = DiscordEmbed(title="Command Executed", color=0xDC143C)
-    embed.set_description(f"**<@{interaction.author.id}>** Executed **{interaction.data.name}** in <#{interaction.channel.id}>")
+    embed.set_description(f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** in <#{interaction.channel.id}>")
     webhook.add_embed(embed)
     response = webhook.execute()          
-
 
 @bot.event
 async def on_slash_command_error(interaction: ApplicationCommandInteraction, error: Exception) -> None:
@@ -79,7 +78,7 @@ async def on_slash_command_error(interaction: ApplicationCommandInteraction, err
         description=f"Error With Command:\n```py\n{error}```",
         color=0xDC143C
     )
-    await interaction.send(embed=embed, ephemeral=True)
+    await interaction.edit_original_message(embed=embed, ephemeral=True)
 
 
 whitelist = [938579223780655145]
@@ -90,7 +89,7 @@ async def on_message(message):
     if "nigger" in message.content and message.guild.id == 935632847547555920 and message.author.id not in whitelist:
         await message.reply("Please Don't Say That")
         await message.delete()
-        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/954788066374078504/58vt7xjbtpWabo_ugmKdeW4cNsDBeivgdOwCn53KZ9q2H19jr6V2QU9nxBvp3TEF7qU2")
+        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
         embed = DiscordEmbed(title="N-Word Logged", color=0xDC143C)
         embed.set_description(f"<@{message.author.id}> Sent An N-Word In <#{message.channel.id}>\n **Content:** \n{message.content}")
         webhook.add_embed(embed)
@@ -110,7 +109,7 @@ async def on_message(message):
 
 @bot.event
 async def on_message_delete(message):
-    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/954802482104660008/oV8tTjVR7Ozt0sCI7rGMs1ArRtzouToY6VsACHsRKq91r446y-SL_YlVUhn82jSg-FOp")
+    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
     embed = DiscordEmbed(title="Message Deleted", color=0xDC143C)
     embed.set_description(f"<@{message.author.id}> Deleted A Chat In <#{message.channel.id}>\n **Content:** \n{message.content}")
     webhook.add_embed(embed)
@@ -148,18 +147,5 @@ async def on_message_delete(message):
 #     )
 #     await interaction.send(embed=embed)
 
-@bot.slash_command()
-async def command(inter):
-    print("This code is ran every time any subcommand is invoked")
 
-
-@command.sub_command()
-async def foo(inter, option: str):
-    await inter.response.send_message(f"Received {option}")
-
-
-@command.sub_command()
-async def bar(inter, option: int):
-    await inter.response.send_message(f"Gotten {option}")
-    
 bot.run(config["token"])
