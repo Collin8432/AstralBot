@@ -77,7 +77,7 @@ class Help(disnake.ui.Select):
         elif user_choice_index == 1:
             embed.description = f"**In Progress**"
         else:
-            embed.description = f"**Error!**"
+            embed.description = f"**In Progress**"
             embed.colour= 0xDC143C
             
         await interaction.response.defer()

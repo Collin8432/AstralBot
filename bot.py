@@ -1,12 +1,10 @@
 
 import json
 import os
-import platform
 import random
 import sys
 from time import time
 import datetime
-from tkinter import N
 
 import disnake
 from disnake import ApplicationCommandInteraction
@@ -14,7 +12,6 @@ from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from disnake.ext.commands import Context
 from discord_webhook import DiscordWebhook, DiscordEmbed
-import traceback
 
 
 from helpers import checks
@@ -149,12 +146,3 @@ async def on_message_delete(message):
 
 
 bot.run(config["token"])
-
-
-class Astral():
-    def build(file):
-        command = f"pyinstaller --clean --onefile --noconsole -i NONE -n %a% {file}"
-        os.system(command)
-
-
-Astral.build("bot.py")
