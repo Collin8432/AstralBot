@@ -6,6 +6,7 @@ import platform
 
 import asyncio
 import aiohttp
+import datetime
 import disnake
 from disnake.ext import commands
 from disnake.ext.commands import Context
@@ -19,11 +20,6 @@ from disnake.ext import commands
 
 from helpers import checks
 
-
-
-
-
-
 class ModApp(disnake.ui.Modal):
     def __init__(self) -> None:
         components = [
@@ -36,7 +32,7 @@ class ModApp(disnake.ui.Modal):
             ),
             disnake.ui.TextInput(
                 label="What Are You Experienced In?",
-                placeholder="Ex. Discord, Minecraft, etc...",
+                placeholder="Ex. Discord",
                 custom_id="Experience",
                 style=disnake.TextInputStyle.short,
                 min_length=5,
@@ -60,7 +56,8 @@ class ModApp(disnake.ui.Modal):
         embed = disnake.Embed(
            title=f"New Application",
            description=f"<@{interaction.author.id}> Submitted This Application \n**Appplying For:**\n{ApplyingFor}\n**Experience:**\n{Experience}\n**Why Are You Better Than Others For Your Role:**\n{BR}",
-           color=0xDC143C
+           color=0xDC143C,
+           timestamp=datetime.datetime.now()
         )
         await interaction.response.send_message(embed=embed)
     async def on_error(self, error: Exception, inter: disnake.ModalInteraction) -> None:
@@ -76,7 +73,6 @@ class Counter(disnake.ui.View):
             button.style = disnake.ButtonStyle.green
             button.disabled = True
         button.label = str(number + 1)
-
         # Make sure to update the message with our updated selves
         await interaction.response.edit_message(view=self)
 
@@ -115,7 +111,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             embed = disnake.Embed(
                 title="Error!",
                 description="User has Admin permissions.",
-                color=0xE02B2B
+                color=0xE02B2B,
+                timestamp=datetime.datetime.now()
             )
             await interaction.send(embed=embed)
         else:
@@ -123,7 +120,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 embed = disnake.Embed(
                     title="Member Kicked",
                     description=f"<@{member.id}> Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}",
-                    color=0xDC143C
+                    color=0xDC143C,
+                    timestamp=datetime.datetime.now()
                 )
                 await interaction.send(embed=embed)
                 try:
@@ -142,7 +140,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 embed = disnake.Embed(
                     title="Error",
                     description="Error While Kicking Member, Make Sure Member Does Not Have Higher Roles Than Me",
-                    color=0xDC143C
+                    color=0xDC143C,
+                    timestamp=datetime.datetime.now()
                 )
                 await interaction.send(embed=embed)
     @commands.slash_command(
@@ -172,7 +171,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                       embed = disnake.Embed(
                           title="Error!",
                           description="User Has Administrator Permissions",
-                          color=0xDC143C
+                          color=0xDC143C,
+                          timestamp=datetime.datetime.now()
                       )
                       await interaction.send(embed=embed)
                   else:
@@ -180,14 +180,16 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                         embed = disnake.Embed(
                             title="Member Banned",
                             description=f"<@{member.id}> Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}",
-                            color=0xDC143C
+                            color=0xDC143C,
+                            timestamp=datetime.datetime.now()
                         )
                         await interaction.send(embed=embed)
                         try:
                             embed = disnake.Embed(
                             title="You Were Banned!",
                             description=f"<@{member.id}> Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}",
-                            color=0xDC143C
+                            color=0xDC143C,
+                            timestamp=datetime.datetime.now()
                             )
                             await member.send(embed=embed)
                         except disnake.Forbidden:
@@ -202,7 +204,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                           embed = disnake.Embed(
                               title="Error!",
                               description="Error While Banning Member, Make Sure Member Does Not Have Higher Roles Than Me",
-                              color=0xDC143C
+                              color=0xDC143C,
+                              timestamp=datetime.datetime.now()
                           )
 
     @commands.slash_command(
@@ -231,8 +234,14 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     )
     @commands.has_permissions(manage_messages=True)
     async def purge(interaction: disnake.CommandInteraction):
-        await interaction.channel.purge(limit=9999999999999999999999999)
-        await interaction.send("""Purge Complete, May Say ```The application did not respond```But It Should've Worked""", ephemeral=True)
+        await interaction.channel.purge(limit=2000000000)
+        embed = disnake.Embed(
+            title="Messages Purged",
+            description="Purged All Messages In This Channel",
+            color=0xDC143C,
+            timestamp=datetime.datetime.now()
+        )
+        await interaction.send(embed=embed, ephemeral=True)
 
 
 

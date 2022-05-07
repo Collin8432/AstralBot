@@ -47,7 +47,7 @@ def load_commands(command_type: str) -> None:
             extension = file[:-3]
             try:
                 bot.load_extension(f"cogs.{command_type}.{extension}")
-                print(f"Loaded Extention {extension}")
+                print(f"Loaded (/) {extension} Commands")
             except Exception as e:
                 exception = f"{type(e).__name__}: {e}"
                 print(f"Failed to load extension {extension}\n{exception}")
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
 @bot.event 
 async def on_ready():
-    print(f"Logged in as {bot.user}, Welcome!")
+    print(f"Logged in as {bot.user.name}, Welcome!")
     status_task.start()
 
 @bot.event
@@ -76,7 +76,8 @@ async def on_slash_command_error(interaction: ApplicationCommandInteraction, err
     embed = disnake.Embed(
         title="Error",
         description=f"Error With Command:\n```py\n{error}```",
-        color=0xDC143C
+        color=0xDC143C,
+        timestamp=datetime.datetime.now()
     )
     await interaction.edit_original_message(embed=embed, ephemeral=True)
 
@@ -94,18 +95,16 @@ async def on_message(message):
         embed.set_description(f"<@{message.author.id}> Sent An N-Word In <#{message.channel.id}>\n **Content:** \n{message.content}")
         webhook.add_embed(embed)
         response = webhook.execute()      
-    if message.channel.id == 957322698269278229 and message.author.id not in whitelist:
-        await message.delete()
-    if message.channel.id == 943425671101812767 and message.author.id not in whitelist:
+    if message.channel.id == 970325969359503460 and message.author.id not in whitelist:
         await message.author.edit(nick=f"{message.content}")
         embed = disnake.Embed(
             title=f"Nickname Changed!", 
             description=f"<@{message.author.id}> Changed Nickname To: {message.content}",
-            color=0xDC143C
+            color=0xDC143C,
+            timestamp=datetime.datetime.now()
         )
         embed.set_image(url=message.author.avatar.url)
         await message.reply(embed=embed)
-
 
 @bot.event
 async def on_message_delete(message):
@@ -114,6 +113,7 @@ async def on_message_delete(message):
     embed.set_description(f"<@{message.author.id}> Deleted A Chat In <#{message.channel.id}>\n **Content:** \n{message.content}")
     webhook.add_embed(embed)
     response = webhook.execute()      
+
 
 
 # @bot.slash_command(
@@ -146,6 +146,5 @@ async def on_message_delete(message):
 #         icon_url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/Astral.gif",
 #     )
 #     await interaction.send(embed=embed)
-
 
 bot.run(config["token"])

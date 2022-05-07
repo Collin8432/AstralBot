@@ -5,6 +5,7 @@ import sys
 import platform
 
 import aiohttp
+import datetime
 import disnake
 from disnake.ext import commands
 from disnake.ext.commands import Context
@@ -65,7 +66,10 @@ class Help(disnake.ui.Select):
         user_choice = self.values[0].lower()
         user_choice_index = choices[user_choice]
 
-        embed = disnake.Embed(color=0xDC143C)
+        embed = disnake.Embed(
+            color=0xDC143C,
+            timestamp=datetime.datetime.now()
+            )
         embed.set_author(name=interaction.author.display_name, icon_url=interaction.author.avatar.url)
 
         if user_choice_index == 0:
@@ -101,7 +105,8 @@ class General(commands.Cog, name="General Cmds"):
    async def help(interaction: ApplicationCommandInteraction) -> None:
       embed = disnake.Embed(
          description="Astral Bot - Coded by <@935339228324311040>",
-         color=0xDC143C
+         color=0xDC143C,
+         timestamp=datetime.datetime.now()
       )
       embed.set_author(
          name="Bot Information/Help"

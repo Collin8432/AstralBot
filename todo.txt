@@ -1,4 +1,1 @@
-log channel (through webhook)
-add commands that would be good for the server 
-suggestion channel (through webhook)
-make some cool interations
+idk
