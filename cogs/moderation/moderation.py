@@ -135,7 +135,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 embed = DiscordEmbed(title="Member Kicked!", color=0xDC143C)
                 embed.set_description(f"**{member}** Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}")
                 webhook.add_embed(embed)
-                response = webhook.execute()     
+                response = webhook.execute()
             except:
                 embed = disnake.Embed(
                     title="Error",
@@ -199,7 +199,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                         embed = DiscordEmbed(title="Member Banned!", color=0xDC143C)
                         embed.set_description(f"**{member}** Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}")
                         webhook.add_embed(embed)
-                        response = webhook.execute()     
+                        response = webhook.execute()
                       except:
                           embed = disnake.Embed(
                               title="Error!",

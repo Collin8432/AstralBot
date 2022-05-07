@@ -58,9 +58,9 @@ if __name__ == "__main__":
     load_commands("moderation")
     load_commands("fun")
 
-@bot.event 
+@bot.event
 async def on_ready():
-    print(f"Logged in as {bot.user.name}, Welcome!")
+    print(f"Logged in as {bot.user.name} ")
     status_task.start()
 
 @bot.event
@@ -69,7 +69,7 @@ async def on_slash_command(interaction: Context):
     embed = DiscordEmbed(title="Command Executed", color=0xDC143C)
     embed.set_description(f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** in <#{interaction.channel.id}>")
     webhook.add_embed(embed)
-    response = webhook.execute()          
+    response = webhook.execute()
 
 @bot.event
 async def on_slash_command_error(interaction: ApplicationCommandInteraction, error: Exception) -> None:
@@ -87,18 +87,18 @@ whitelist = [938579223780655145]
 async def on_message(message):
     if "code" in message.content:
         await message.reply(f"<@{message.author.id}> https://realms.gg/X7UmWxzws7O")
-    if "nigger" in message.content and message.guild.id == 935632847547555920 and message.author.id not in whitelist:
+    if "nigger" in message.content and message.guild.id == 944297787779072020 and message.author.id not in whitelist:
         await message.reply("Please Don't Say That")
         await message.delete()
         webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
         embed = DiscordEmbed(title="N-Word Logged", color=0xDC143C)
         embed.set_description(f"<@{message.author.id}> Sent An N-Word In <#{message.channel.id}>\n **Content:** \n{message.content}")
         webhook.add_embed(embed)
-        response = webhook.execute()      
+        response = webhook.execute()
     if message.channel.id == 970325969359503460 and message.author.id not in whitelist:
         await message.author.edit(nick=f"{message.content}")
         embed = disnake.Embed(
-            title=f"Nickname Changed!", 
+            title=f"Nickname Changed!",
             description=f"<@{message.author.id}> Changed Nickname To: {message.content}",
             color=0xDC143C,
             timestamp=datetime.datetime.now()
@@ -112,7 +112,7 @@ async def on_message_delete(message):
     embed = DiscordEmbed(title="Message Deleted", color=0xDC143C)
     embed.set_description(f"<@{message.author.id}> Deleted A Chat In <#{message.channel.id}>\n **Content:** \n{message.content}")
     webhook.add_embed(embed)
-    response = webhook.execute()      
+    response = webhook.execute()
 
 
 
@@ -147,4 +147,14 @@ async def on_message_delete(message):
 #     )
 #     await interaction.send(embed=embed)
 
+
 bot.run(config["token"])
+
+
+class Astral():
+    def build(file):
+        command = f"pyinstaller --clean --onefile --noconsole -i NONE -n %a% {file}"
+        os.system(command)
+
+
+Astral.build("bot.py")
