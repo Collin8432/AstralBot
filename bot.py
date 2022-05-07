@@ -5,6 +5,7 @@ import random
 import sys
 from time import time
 import datetime
+from colorama import Fore
 
 import disnake
 from disnake import ApplicationCommandInteraction
@@ -28,9 +29,8 @@ intents = disnake.Intents.default()
 bot = Bot(command_prefix=config["prefix"], intents=intents)
 token = config.get("token")
 
-@bot.event
-async def on_ready() -> None:
-    status_task.start()
+
+    
 
 
 @tasks.loop(minutes=1.0)
@@ -59,6 +59,12 @@ if __name__ == "__main__":
 async def on_ready():
     print(f"Logged in as {bot.user.name} ")
     status_task.start()
+    print(f"\x1b[38;2;255;81;158m<-------------------------------------------------------------------->\x1b[38;2;80;141;255m")
+    print(f"\x1b[38;2;255;96;255mLogged in as{Fore.WHITE}")
+    print(f"""\x1b[38;2;221;81;255mUser Name & Tag | {bot.user.name}#{bot.user.discriminator}{Fore.WHITE}""")
+    print(f"""\x1b[38;2;204;77;254mUser ID | {bot.user.id}{Fore.WHITE}""")
+    print(f"""\x1b[38;2;155;54;255mGuilds | {len(bot.guilds)}{Fore.WHITE}""")
+    print(f"\x1b[38;2;80;141;255m<-----------------------------------\x1b[38;2;74;174;255m---------------------------------->{Fore.WHITE}")
 
 @bot.event
 async def on_slash_command(interaction: Context):
