@@ -253,7 +253,6 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             title="Astral Rules",
         )
         await interaction.send(embed=embed)
-        Adasldasjkacfsn'
-
+        
 def setup(bot):
     bot.add_cog(Moderation(bot))

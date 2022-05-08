@@ -6,13 +6,17 @@ import sys
 from time import time
 import datetime
 from colorama import Fore
-
+import random
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 import disnake
 from disnake import ApplicationCommandInteraction
 from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from disnake.ext.commands import Context
 from discord_webhook import DiscordWebhook, DiscordEmbed
+import asyncio
 
 
 from helpers import checks
@@ -76,8 +80,10 @@ async def on_slash_command_error(interaction: ApplicationCommandInteraction, err
         color=0xDC143C,
         timestamp=datetime.datetime.now()
     )
-    await interaction.edit_original_message(embed=embed, ephemeral=True)
-
+    try:
+        await interaction.edit_original_message(embed=embed, ephemeral=True)
+    except:
+        print(f"\n\n{error}")
 
 whitelist = [938579223780655145]
 @bot.listen('on_message')
@@ -154,6 +160,11 @@ async def on_user_update(before, after):
 #     img.save(f"astral{FileName}.png")
     # await member.send(file=disnake.File(f"astral{FileName}.png"))
     # member.add_roles(disnake.Object(945359108012400730))
+async def checker(filename):
+    def check(message):
+        return message.content == filename
+    await bot.wait_for("message", check=check)
+    
 verifychannel = [972679418763935794]
 @bot.slash_command(
     name="Verify",
@@ -161,32 +172,29 @@ verifychannel = [972679418763935794]
 )
 async def verify(interaction):
     if interaction.channel.id not in verifychannel:
-        pass
+        await interaction.send("You can only use this command in <#972679418763935794>")
     else:
-        import random
-        import os
         list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-        FileName = ""
-        for i in range(5, 50):
-            FileName += (random.choice(list))
+        FFileName = ""
+        for i in range(5, 8):
+            FFileName += (random.choice(list))
             continue
-        from PIL import Image
-        from PIL import ImageDraw
-
+        print(f"{FFileName}")
         img = Image.open('astral.png')
 
         I1 = ImageDraw.Draw(img)
         
+        font = ImageFont.truetype("sans-serif.ttf", 16)
+        I1.text((180, 275), f"{FFileName}", fill=(255,0,0))
+        I1.text((60, 300), f"Please enter the numbers above to gain access to the server", fill=(255,0,0), font=font)
 
-        I1.text((180, 275), f"{FileName}", fill=(255,0,0))
-        I1.text((60, 300), f"Please enter the numbers above to gain access to the server", fill=(255,0,0))
-        img.save(f"astral{FileName}.png")
-        await interaction.send(file=disnake.File(f"astral{FileName}.png"))
-        interaction.author.add_roles(disnake.Object(945359108012400730))
-
-
-
-
+        img.save(f"astral{FFileName}.png")
+        await interaction.send(file=disnake.File(f"astral{FFileName}.png"))
+        try:
+            await checker(f"{FFileName}")
+        except:
+            print("fail")
+        await interaction.author.add_roles(disnake.Object(945359108012400730))
 
 # @bot.slash_command(
 #     name="testembed",
