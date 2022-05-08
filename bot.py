@@ -111,8 +111,27 @@ async def on_message_delete(message):
     webhook.add_embed(embed)
     response = webhook.execute()
 
-
-
+@bot.event
+async def on_user_update(before, after):
+    if before.discriminator != after.discriminator:
+        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
+        embed = DiscordEmbed(title="User Discriminator Changed", color=0xDC143C)
+        embed.set_description(f"<@{after.id}> Changed Discriminator From {before.discriminator} To {after.discriminator}")
+        webhook.add_embed(embed)
+        response = webhook.execute()
+    if before.username != after.username:
+        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
+        embed = DiscordEmbed(title="User Nickname Changed", color=0xDC143C)
+        embed.set_description(f"<@{after.id}> Changed Nickname From {before.username} To {after.username}")
+        webhook.add_embed(embed)
+        response = webhook.execute()
+    if before.avatar != after.avatar:
+        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
+        embed = DiscordEmbed(title="User Avatar Changed", color=0xDC143C)
+        embed.set_description(f"<@{after.id}> Changed Avatar From {before.avatar} To {after.avatar}")
+        webhook.add_embed(embed)
+        response = webhook.execute()
+    
 # @bot.slash_command(
 #     name="testembed",
 #     description="Test Embed",

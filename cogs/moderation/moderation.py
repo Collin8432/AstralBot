@@ -243,7 +243,25 @@ class Moderation(commands.Cog, name="Mod Cmds"):
         )
         await interaction.send(embed=embed, ephemeral=True)
 
+    @commands.slash_command(
+        name="rules",
+        description="Sends The Rules",
+    )
+    @commands.has_permissions(administrator=True)
+    async def rules(interaction):
+        embed = disnake.Embed(
+            title="Astral Rules",
+        )
+        await interaction.send(embed=embed)
+        Adasldasjkacfsn'
+        a
 
+        as
+        as
+        a
+        a
+        a
 
+        a
 def setup(bot):
     bot.add_cog(Moderation(bot))
