@@ -138,28 +138,9 @@ async def on_user_update(before, after):
         webhook.add_embed(embed)
         response = webhook.execute()
     
-# @bot.event
-# async def on_member_join(member):
-#     import random
-#     import os
-#     list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-#     FileName = ""
-#     for i in range(5, 50):
-#         FileName += (random.choice(list))
-#         continue
-#     from PIL import Image
-#     from PIL import ImageDraw
-
-#     img = Image.open('astral.png')
-
-#     I1 = ImageDraw.Draw(img)
-    
-
-#     I1.text((180, 275), f"{FileName}", fill=(255,0,0))
-#     I1.text((60, 300), f"Please enter the numbers above to gain access to the server", fill=(255,0,0))
-#     img.save(f"astral{FileName}.png")
-    # await member.send(file=disnake.File(f"astral{FileName}.png"))
-    # member.add_roles(disnake.Object(945359108012400730))
+@bot.event
+async def on_member_join(member):
+    await bot.fetch_channel()
 async def checker(filename):
     def check(message):
         return message.content == filename
@@ -176,7 +157,7 @@ async def verify(interaction):
     else:
         list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
         FFileName = ""
-        for i in range(5, 8):
+        for i in range(5, 15):
             FFileName += (random.choice(list))
             continue
         print(f"{FFileName}")
@@ -184,9 +165,9 @@ async def verify(interaction):
 
         I1 = ImageDraw.Draw(img)
         
-        font = ImageFont.truetype("sans-serif.ttf", 16)
-        I1.text((180, 275), f"{FFileName}", fill=(255,0,0))
-        I1.text((60, 300), f"Please enter the numbers above to gain access to the server", fill=(255,0,0), font=font)
+        font = ImageFont.truetype("MomB.ttf", 6)
+        I1.text((180, 275), f"{FFileName}", fill=(255,0,0), font=font)
+        I1.text((10, 300), f"Please enter the following letters & numbers Above to gain access to the server", fill=(255,0,0), font=font)
 
         img.save(f"astral{FFileName}.png")
         await interaction.send(file=disnake.File(f"astral{FFileName}.png"))
@@ -195,37 +176,6 @@ async def verify(interaction):
         except:
             print("fail")
         await interaction.author.add_roles(disnake.Object(945359108012400730))
-
-# @bot.slash_command(
-#     name="testembed",
-#     description="Test Embed",
-# )
-# async def embed(interaction):
-#     embed = disnake.Embed(
-#         title="Embedtitle",
-#         description="Embeddescription",
-#         color=0xDC143C,
-#         timestamp=datetime.datetime.now(),
-#     )
-#     embed.set_author(
-#         name="Embedauthor",
-#         url="https://store-Astral.tebex.io",
-#         icon_url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/Astral.gif",
-#     )
-#     embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/Astral.gif")
-#     embed.set_image(url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/Astral.gif")
-
-#     embed.add_field(name="Regular Title", value="Regular Value", inline=False)
-
-#     embed.add_field(name="Inline Title", value="Inline Value", inline=True)
-#     embed.add_field(name="Inline Title", value="Inline Value", inline=True)
-#     embed.add_field(name="Inline Title", value="Inline Value", inline=True)
-
-#     embed.set_footer(
-#         text="Embed Footer",
-#         icon_url="https://cdn.discordapp.com/attachments/937106701063192677/960305394566176808/Astral.gif",
-#     )
-#     await interaction.send(embed=embed)
 
 
 bot.run(config["token"])
