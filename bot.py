@@ -132,6 +132,62 @@ async def on_user_update(before, after):
         webhook.add_embed(embed)
         response = webhook.execute()
     
+# @bot.event
+# async def on_member_join(member):
+#     import random
+#     import os
+#     list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+#     FileName = ""
+#     for i in range(5, 50):
+#         FileName += (random.choice(list))
+#         continue
+#     from PIL import Image
+#     from PIL import ImageDraw
+
+#     img = Image.open('astral.png')
+
+#     I1 = ImageDraw.Draw(img)
+    
+
+#     I1.text((180, 275), f"{FileName}", fill=(255,0,0))
+#     I1.text((60, 300), f"Please enter the numbers above to gain access to the server", fill=(255,0,0))
+#     img.save(f"astral{FileName}.png")
+    # await member.send(file=disnake.File(f"astral{FileName}.png"))
+    # member.add_roles(disnake.Object(945359108012400730))
+verifychannel = [972679418763935794]
+@bot.slash_command(
+    name="Verify",
+    description="Verify yourself to gain access to the server"
+)
+async def verify(interaction):
+    if interaction.channel.id not in verifychannel:
+        pass
+    else:
+        import random
+        import os
+        list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        FileName = ""
+        for i in range(5, 50):
+            FileName += (random.choice(list))
+            continue
+        from PIL import Image
+        from PIL import ImageDraw
+
+        img = Image.open('astral.png')
+
+        I1 = ImageDraw.Draw(img)
+        
+
+        I1.text((180, 275), f"{FileName}", fill=(255,0,0))
+        I1.text((60, 300), f"Please enter the numbers above to gain access to the server", fill=(255,0,0))
+        img.save(f"astral{FileName}.png")
+        await interaction.send(file=disnake.File(f"astral{FileName}.png"))
+        interaction.author.add_roles(disnake.Object(945359108012400730))
+
+
+
+
+
 # @bot.slash_command(
 #     name="testembed",
 #     description="Test Embed",
