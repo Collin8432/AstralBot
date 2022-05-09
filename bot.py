@@ -29,6 +29,7 @@ else:
         config = json.load(file)
 
 intents = disnake.Intents.default()
+intents.members = True
 
 bot = Bot(command_prefix=config["prefix"], intents=intents)
 token = config.get("token")
@@ -106,7 +107,7 @@ async def on_message(message):
             color=0xDC143C,
             timestamp=datetime.datetime.now()
         )
-        embed.set_image(url=message.author.avatar.url)
+        embed.set_image(url=message.author.display_avatar)
         await message.reply(embed=embed)
 
 @bot.event
@@ -137,13 +138,35 @@ async def on_user_update(before, after):
         embed.set_description(f"<@{after.id}> Changed Avatar From {before.avatar} To {after.avatar}")
         webhook.add_embed(embed)
         response = webhook.execute()
-    
+
 @bot.event
 async def on_member_join(member):
-    await bot.fetch_channel()
+    guild = member.guild
+    if guild.system_channel is not None:
+        img = Image.open("astral.png")
+        image = ImageDraw.Draw(img)
+        font = ImageFont.truetype("MomB.ttf", 30)
+        image.text((160, 275), f"Welcome,", font=font, fill=(43,22,197))
+        image.text((160, 325), f"{member.name}", font=font, fill=(43,22,197))
+        list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        randomnumber = ""
+        for i in range(5, 15):
+            randomnumber += (random.choice(list))
+            continue
+        img.save(f"astral{randomnumber}.png")
+        imgfile = disnake.File(f"astral{randomnumber}.png") 
+        # embed = disnake.Embed(
+        #     title="Member Joined",
+        #     color=0xDC143C,
+        #     timestamp=datetime.datetime.now()
+        # )
+        # embed.set_image(imgfile)
+        await guild.system_channel.send(file=imgfile)
+
+
 async def checker(filename):
     def check(message):
-        return message.content == filename
+        return message.content == filename.upper() or message.content == filename.lower()
     await bot.wait_for("message", check=check)
     
 verifychannel = [972679418763935794]
@@ -165,17 +188,19 @@ async def verify(interaction):
 
         I1 = ImageDraw.Draw(img)
         
-        font = ImageFont.truetype("MomB.ttf", 6)
-        I1.text((180, 275), f"{FFileName}", fill=(255,0,0), font=font)
-        I1.text((10, 300), f"Please enter the following letters & numbers Above to gain access to the server", fill=(255,0,0), font=font)
-
+        font = ImageFont.truetype("MomB.ttf", 30)
+        I1.text((150, 275), f"{FFileName}", fill=(32,22,197), font=font)
+        I1.text((125, 300), f"Please enter the", fill=(43,22,197), font=font)
+        I1.text((125, 325), f"letters/numbers", fill=(43,22,197), font=font)
+        I1.text((75, 350), f"above to gain access", fill=(43,22,197), font=font)
+        I1.text((150, 375), f"to Astral", fill=(43,22,197), font=font)
         img.save(f"astral{FFileName}.png")
         await interaction.send(file=disnake.File(f"astral{FFileName}.png"))
         try:
             await checker(f"{FFileName}")
         except:
             print("fail")
-        await interaction.author.add_roles(disnake.Object(945359108012400730))
+        await interaction.author.add_roles(disnake.Object(972988909573242881))
 
 
 bot.run(config["token"])

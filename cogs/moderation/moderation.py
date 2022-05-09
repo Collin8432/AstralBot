@@ -230,7 +230,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
 
     @commands.slash_command(
         name="purge",
-        description="Purges All Messages In A Server",
+        description="Purges All Messages In A Channel",
     )
     @commands.has_permissions(manage_messages=True)
     async def purge(interaction: disnake.CommandInteraction):
@@ -251,8 +251,10 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     async def rules(interaction):
         embed = disnake.Embed(
             title="Astral Rules",
+            description="1. Dont Be Annoying\n2. Dont Ask For Free Shit/Mod\n3. Be Smart With What You Say And Do\n4. Please Be Kind And Follow Discord TOS",
+            color=0xDC143C,
+            timestamp=datetime.datetime.now()
         )
         await interaction.send(embed=embed)
-        
 def setup(bot):
     bot.add_cog(Moderation(bot))
