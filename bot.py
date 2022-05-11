@@ -17,11 +17,11 @@ from disnake.ext.commands import Bot
 from disnake.ext.commands import Context
 from discord_webhook import DiscordWebhook, DiscordEmbed
 import asyncio
-
-
+from disnake import Webhook
+import aiohttp
+from helpers.webhook import webhooksend
 from helpers import checks
 import exceptions
-
 if not os.path.isfile("config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
 else:
@@ -33,10 +33,6 @@ intents.members = True
 
 bot = Bot(command_prefix=config["prefix"], intents=intents)
 token = config.get("token")
-
-
-    
-
 
 @tasks.loop(minutes=1.0)
 async def status_task() -> None:
@@ -67,6 +63,7 @@ async def on_ready():
 
 @bot.event
 async def on_slash_command(interaction: Context):
+    webhooksend
     webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
     embed = DiscordEmbed(title="Command Executed", color=0xDC143C)
     embed.set_description(f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** in <#{interaction.channel.id}>")
@@ -89,8 +86,6 @@ async def on_slash_command_error(interaction: ApplicationCommandInteraction, err
 whitelist = [938579223780655145]
 @bot.listen('on_message')
 async def on_message(message):
-    if "code" in message.content:
-        await message.reply(f"<@{message.author.id}> https://realms.gg/X7UmWxzws7O")
     if "nigger" in message.content and message.guild.id == 944297787779072020 and message.author.id not in whitelist:
         await message.reply("Please Don't Say That")
         await message.delete()
@@ -200,6 +195,7 @@ async def verify(interaction):
             await checker(f"{FFileName}")
         except:
             print("fail")
+
         await interaction.author.add_roles(disnake.Object(972988909573242881))
 
 
