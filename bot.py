@@ -63,12 +63,7 @@ async def on_ready():
 
 @bot.event
 async def on_slash_command(interaction: Context):
-    webhooksend
-    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
-    embed = DiscordEmbed(title="Command Executed", color=0xDC143C)
-    embed.set_description(f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** in <#{interaction.channel.id}>")
-    webhook.add_embed(embed)
-    response = webhook.execute()
+    await webhooksend(f"Command Executed", f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** in <#{interaction.channel.id}>")
 
 @bot.event
 async def on_slash_command_error(interaction: ApplicationCommandInteraction, error: Exception) -> None:
@@ -89,11 +84,7 @@ async def on_message(message):
     if "nigger" in message.content and message.guild.id == 944297787779072020 and message.author.id not in whitelist:
         await message.reply("Please Don't Say That")
         await message.delete()
-        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
-        embed = DiscordEmbed(title="N-Word Logged", color=0xDC143C)
-        embed.set_description(f"<@{message.author.id}> Sent An N-Word In <#{message.channel.id}>\n **Content:** \n{message.content}")
-        webhook.add_embed(embed)
-        response = webhook.execute()
+        await webhooksend("N-Word Logged", f"<@{message.author.id}> Sent An N-Word In <#{message.channel.id}>\n **Content:** \n{message.content}")
     if message.channel.id == 970325969359503460 and message.author.id not in whitelist:
         await message.author.edit(nick=f"{message.content}")
         embed = disnake.Embed(
@@ -107,32 +98,18 @@ async def on_message(message):
 
 @bot.event
 async def on_message_delete(message):
-    webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
-    embed = DiscordEmbed(title="Message Deleted", color=0xDC143C)
-    embed.set_description(f"<@{message.author.id}> Deleted A Chat In <#{message.channel.id}>\n **Content:** \n{message.content}")
-    webhook.add_embed(embed)
-    response = webhook.execute()
+    await webhooksend("Message Deleted", f"Chat Deleted In <#{message.channel.id}>\n**Author:** \n<@{message.author.id}>\n**Content:** \n{message.content}")
 
 @bot.event
 async def on_user_update(before, after):
-    if before.discriminator != after.discriminator:
-        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
-        embed = DiscordEmbed(title="User Discriminator Changed", color=0xDC143C)
-        embed.set_description(f"<@{after.id}> Changed Discriminator From {before.discriminator} To {after.discriminator}")
-        webhook.add_embed(embed)
-        response = webhook.execute()
-    if before.username != after.username:
-        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
-        embed = DiscordEmbed(title="User Nickname Changed", color=0xDC143C)
-        embed.set_description(f"<@{after.id}> Changed Nickname From {before.username} To {after.username}")
-        webhook.add_embed(embed)
-        response = webhook.execute()
-    if before.avatar != after.avatar:
-        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
-        embed = DiscordEmbed(title="User Avatar Changed", color=0xDC143C)
-        embed.set_description(f"<@{after.id}> Changed Avatar From {before.avatar} To {after.avatar}")
-        webhook.add_embed(embed)
-        response = webhook.execute()
+    if before.nickname != after.nickname:
+        print(f"{before.nickname} -> {after.nickname}")
+    # if before.discriminator != after.discriminator:
+    #     await webhooksend("Member Discriminator Changed", f"<@{after.id}> Changed Discriminator From {before.discriminator} To {after.discriminator}")
+    # if before.username != after.username:
+    #     await webhooksend("Member Nickname Changed", f"<@{after.id}> Changed Nickname From {before.username} To {after.username}")
+    # if before.avatar != after.avatar:
+    #     await webhooksend("Member Avatar Changed", f"<@{after.id}> Changed Avatar From {before.avatar} To {after.avatar}")
 
 @bot.event
 async def on_member_join(member):
@@ -150,13 +127,8 @@ async def on_member_join(member):
             continue
         img.save(f"astral{randomnumber}.png")
         imgfile = disnake.File(f"astral{randomnumber}.png") 
-        # embed = disnake.Embed(
-        #     title="Member Joined",
-        #     color=0xDC143C,
-        #     timestamp=datetime.datetime.now()
-        # )
-        # embed.set_image(imgfile)
         await guild.system_channel.send(file=imgfile)
+        await webhooksend("Member Joined", f"<@{member.id}> Joined Astral")
 
 
 async def checker(filename):
@@ -197,6 +169,7 @@ async def verify(interaction):
             print("fail")
 
         await interaction.author.add_roles(disnake.Object(972988909573242881))
+        await webhooksend("Member Verified", f"Verified <@{interaction.author.id}>")
 
 
 bot.run(config["token"])

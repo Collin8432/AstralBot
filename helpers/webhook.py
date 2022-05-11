@@ -14,4 +14,3 @@ async def webhooksend(title: str, description: str) -> None:
             timestamp=datetime.datetime.now()
          )
          await webhook.send(embed=embed, username="Astral - Bot Logging")
-asyncio.run(webhooksend("hi", "hi", "hi"))
