@@ -104,12 +104,24 @@ async def on_message_delete(message):
 async def on_member_update(before, after):
     if before.display_name != after.display_name:
         print(f"{before.display_name} -> {after.display_name}")
+    if before.roles != after.roles:
+        print(f"{before.roles[1]} -> {after.roles[1]}")
     # if before.discriminator != after.discriminator:
     #     await webhooksend("Member Discriminator Changed", f"<@{after.id}> Changed Discriminator From {before.discriminator} To {after.discriminator}")
     # if before.username != after.username:
     #     await webhooksend("Member Nickname Changed", f"<@{after.id}> Changed Nickname From {before.username} To {after.username}")
     # if before.avatar != after.avatar:
     #     await webhooksend("Member Avatar Changed", f"<@{after.id}> Changed Avatar From {before.avatar} To {after.avatar}")
+    """nickname - .nickname
+
+roles ?
+
+pending What even is this
+
+timeout .timeout? 
+
+guild specific avatar ?
+"""
 
 @bot.event
 async def on_member_join(member):
@@ -170,6 +182,15 @@ async def verify(interaction):
 
         await interaction.author.add_roles(disnake.Object(972988909573242881))
         await webhooksend("Member Verified", f"Verified <@{interaction.author.id}>")
+        if interaction.channel.id == 972679418763935794:
+            await interaction.channel.purge(limit=9999999)
+            embed = disnake.Embed(
+                title=f"How To Verify!",
+                description=f"To Verify Yourself, Please Enter /verify, Then Enter The Code, Case InSensitive",
+                color=0xDC143C,
+                timestamp=datetime.datetime.now()
+            )
+            await interaction.send(embed=embed)
 
 
 bot.run(config["token"])
