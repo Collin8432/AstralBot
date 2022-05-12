@@ -101,9 +101,9 @@ async def on_message_delete(message):
     await webhooksend("Message Deleted", f"Chat Deleted In <#{message.channel.id}>\n**Author:** \n<@{message.author.id}>\n**Content:** \n{message.content}")
 
 @bot.event
-async def on_user_update(before, after):
-    if before.nickname != after.nickname:
-        print(f"{before.nickname} -> {after.nickname}")
+async def on_member_update(before, after):
+    if before.display_name != after.display_name:
+        print(f"{before.display_name} -> {after.display_name}")
     # if before.discriminator != after.discriminator:
     #     await webhooksend("Member Discriminator Changed", f"<@{after.id}> Changed Discriminator From {before.discriminator} To {after.discriminator}")
     # if before.username != after.username:
