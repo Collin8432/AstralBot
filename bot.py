@@ -105,7 +105,12 @@ async def on_member_update(before, after):
     if before.display_name != after.display_name:
         print(f"{before.display_name} -> {after.display_name}")
     if before.roles != after.roles:
-        print(f"{before.roles[1]} -> {after.roles[1]}")
+        beforeroles = ""
+        for before.role.name in before.roles:
+            beforeroles += f"{before.role.name}"
+
+        print(f"{before.roles} -> {after.roles}\n\n{beforeroles}")
+        
     # if before.discriminator != after.discriminator:
     #     await webhooksend("Member Discriminator Changed", f"<@{after.id}> Changed Discriminator From {before.discriminator} To {after.discriminator}")
     # if before.username != after.username:
