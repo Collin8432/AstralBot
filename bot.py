@@ -31,6 +31,7 @@ else:
 intents = disnake.Intents.default()
 intents.members = True
 intents.presences = True 
+intents.bans = True
 bot = Bot(command_prefix=config["prefix"], intents=intents)
 token = config.get("token")
 
@@ -63,7 +64,7 @@ async def on_ready():
 
 @bot.event
 async def on_slash_command(interaction):
-    await webhooksend(f"Command Executed", f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** {interaction.data.target_id} in <#{interaction.channel.id}>")
+    await webhooksend(f"Command Executed", f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** {interaction.application_command.qualified_name} in <#{interaction.channel.id}>")
 
 @bot.event
 async def on_slash_command_error(interaction: ApplicationCommandInteraction, error: Exception) -> None:
@@ -100,12 +101,14 @@ async def on_message(message):
 async def on_message_delete(message):
     await webhooksend("Message Deleted", f"Chat Deleted In <#{message.channel.id}>\n**Author:** \n<@{message.author.id}>\n**Content:** \n{message.content}")
 
+# @bot.event
+
 @bot.event
 async def on_presence_update(before, after):
     if before.status != after.status:
-        await webhooksend("Presence Changed", f"<@{after.user.id}> Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}")
+        await webhooksend("Presence Changed", f"<@{after.member.id}> Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}")
     if before.activity != after.activity:
-        await webhooksend("Activity Changed", f"<@{after.user.id}> Changed Activity \n**From:**\n{before.activity}\n**To:**\n{after.activity}")
+        await webhooksend("Activity Changed", f"<@{after.member.id}> Changed Activity \n**From:**\n{before.activity}\n**To:**\n{after.activity}")
 
 @bot.event
 async def on_member_update(before, after):
@@ -116,69 +119,18 @@ async def on_member_update(before, after):
         roles2 = [role.mention for role in after.roles]
         beforeroles = str(roles).replace("]", "").replace("[", "").replace("'", "")
         afterroles = str(roles2).replace("]", "").replace("[", "").replace("'", "")
-        await webhooksend(f"Roles Changed", f"<@{after.user.id}> Roles Changed\n**Before:**\n{beforeroles}\n**After:**\n{afterroles}")
+        await webhooksend(f"Roles Changed", f"<@{after.member.id}> Roles Changed\n**Before:**\n{beforeroles}\n**After:**\n{afterroles}")
     if before.current_timeout != after.current_timeout:
-        await webhooksend(f"Timeout!", f"<@{after.user.id}> Timeout Changed\n**Before:**\n{before.current_timeout}\n**After:**\n{after.current_timeout}")
+        await webhooksend(f"Timeout!", f"<@{after.member.id}> Timeout Changed\n**Before:**\n{before.current_timeout}\n**After:**\n{after.current_timeout}")
 
  
 
 @bot.event
 async def on_user_update(before, after):
     if before.display_avatar != after.display_avatar:
-        await webhooksend(f"Avatar Changed", f"<@{after.user.id}> Avatar Changed\n**Before:**\n{before.display_avatar}\n**After:**\n{after.display_avatar}")
+        await webhooksend(f"Avatar Changed", f"<@{after.member.id}> Avatar Changed\n**Before:**\n{before.display_avatar}\n**After:**\n{after.display_avatar}")
     if before.discriminator != after.discriminator:
-        await webhooksend(f"Discriminator Changed", f"<@{after.user.id}> Discriminator Changed\n**Before:**\n{before.discriminator}\n**After:**\n{after.discriminator}")
-    """nickname - .nickname
-
-roles ?
-
-pending What even is this
-
-timeout .timeout? 
-
-guild specific avatar ?
-
- qParam
-ParamInfo
-ParamInfo.autocomplete
-ParamInfo.channel_types
-ParamInfo.choices
-ParamInfo.converter
-ParamInfo.default
-ParamInfo.description
-octocobra
-BOT
- — 11/21/2021
-on_member_ban
-on_member_join
-on_member_remove
-on_member_screening_reject
-on_member_unban
-on_member_update
-on_raw_member_screening_reject
-Permissions.ban_members
-octocobra
-BOT
- — 11/21/2021
-on_connect
-on_disconnect
-on_shard_connect
-on_shard_disconnect
-VoiceClient.is_connected
-AuditLogAction.member_disconnect
-Bot.wait_until_first_connect
-InteractionBot.wait_until_first_connect
-octocobra
-BOT
- — 11/21/2021
-VoiceClient.move_to
-ext.tasks.Loop.remove_exception_type
-Member.move_to
-Embed.remove_author
-HelpCommand.remove_mentions
-Message.remove_reaction
-Permissions.view_audit_log
-PartialMessage.remove_reaction"""
+        await webhooksend(f"Discriminator Changed", f"<@{after.member.id}> Discriminator Changed\n**Before:**\n{before.discriminator}\n**After:**\n{after.discriminator}")
 
 @bot.event
 async def on_member_join(member):

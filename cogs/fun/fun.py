@@ -53,20 +53,18 @@ class Fun(commands.Cog, name="fun cmds"):
        await interaction.send(view=NerdButton())
 
     @commands.slash_command(
-       name="balls",
-       description="balls"
+       name="test",
+       description="test"
     )
-    async def balls(self, interaction):
-         await interaction.send(view=BallsButton())
+    async def test(self, interaction):
+         await interaction.send(interaction.application_command.qualified_name)
 
-    @balls.sub_command(
-       name="astro", 
-       decription="Astrocmd"
+    @test.sub_command(
+       name="sub", 
+       decription="sub"
     )
-    async def astro(interaction):
-         await interaction.send("astro")
-
-
+    async def sub(interaction):
+         await interaction.send(interaction.application_command.qualified_name)
       
 def setup(bot):
     bot.add_cog(Fun(bot))
