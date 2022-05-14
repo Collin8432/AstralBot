@@ -62,8 +62,8 @@ async def on_ready():
     status_task.start()
 
 @bot.event
-async def on_slash_command(interaction: Context):
-    await webhooksend(f"Command Executed", f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** in <#{interaction.channel.id}>")
+async def on_slash_command(interaction):
+    await webhooksend(f"Command Executed", f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** {interaction.data.target_id} in <#{interaction.channel.id}>")
 
 @bot.event
 async def on_slash_command_error(interaction: ApplicationCommandInteraction, error: Exception) -> None:
@@ -214,7 +214,7 @@ async def on_member_remove(member):
         pass
 
     
-async def checker(filename):
+async def Checker(filename):
     def check(message):
         return message.content == filename.upper() or message.content == filename.lower()
     await bot.wait_for("message", check=check)
@@ -247,7 +247,7 @@ async def verify(interaction):
         img.save(f"astral{FileName}.png")
         await interaction.send(file=disnake.File(f"astral{FileName}.png"))
         try:
-            await checker(f"{FileName}")
+            await Checker(f"{FileName}")
         except:
             print("fail")
 
