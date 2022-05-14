@@ -78,14 +78,14 @@ async def on_slash_command_error(interaction: ApplicationCommandInteraction, err
     except:
         print(f"\n\n{error}")
 
-whitelist = [938579223780655145]
+botids = [938579223780655145]
 @bot.listen('on_message')
 async def on_message(message):
-    if "nigger" in message.content and message.guild.id == 944297787779072020 and message.author.id not in whitelist:
+    if "nigger" in message.content and message.guild.id == 944297787779072020 and message.author.id not in botids:
         await message.reply("Please Don't Say That")
         await message.delete()
         await webhooksend("N-Word Logged", f"<@{message.author.id}> Sent An N-Word In <#{message.channel.id}>\n **Content:** \n{message.content}")
-    if message.channel.id == 970325969359503460 and message.author.id not in whitelist:
+    if message.channel.id == 970325969359503460 and message.author.id not in botids:
         await message.author.edit(nick=f"{message.content}")
         embed = disnake.Embed(
             title=f"Nickname Changed!",
@@ -105,18 +105,15 @@ async def on_member_update(before, after):
     if before.display_name != after.display_name:
         print(f"{before.display_name} -> {after.display_name}")
     if before.roles != after.roles:
-        beforeroles = ""
-        for before.role.name in before.roles:
-            beforeroles += f"{before.role.name}"
-
-        print(f"{before.roles} -> {after.roles}\n\n{beforeroles}")
-        
-    # if before.discriminator != after.discriminator:
-    #     await webhooksend("Member Discriminator Changed", f"<@{after.id}> Changed Discriminator From {before.discriminator} To {after.discriminator}")
-    # if before.username != after.username:
-    #     await webhooksend("Member Nickname Changed", f"<@{after.id}> Changed Nickname From {before.username} To {after.username}")
-    # if before.avatar != after.avatar:
-    #     await webhooksend("Member Avatar Changed", f"<@{after.id}> Changed Avatar From {before.avatar} To {after.avatar}")
+        roles = [role.mention for role in before.roles]
+        roles2 = [role.mention for role in after.roles]
+        beforeroles = str(roles).replace("]", "").replace("[", "").replace("'", "")
+        afterroles = str(roles2).replace("]", "").replace("[", "").replace("'", "")
+        await webhooksend(f"Roles Changed", f" member: **{before.display_name}**'s Roles Changed\n**Before:**\n{beforeroles}\n**After:**\n{afterroles}")
+    if before.discriminator != after.discriminator:
+        await webhooksend(f"Discriminator Changed", f"member: **{before.display_name}**'s Discriminator Changed\n**Before:**\n{before.discriminator}\n**After:**\n{after.discriminator}")
+    if before.member.display_avatar != after.member.display_avatar:
+        print(f"Avatar Changed", f"member: **{after.display_name}**'s Avatar Changed\n**Before:**\n{before.member.display_avatar}\n**After:**\n{after.member.display_avatar}")
     """nickname - .nickname
 
 roles ?
