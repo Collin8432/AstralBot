@@ -76,7 +76,7 @@ async def on_slash_command_error(interaction: ApplicationCommandInteraction, err
     try:
         await interaction.edit_original_message(embed=embed, ephemeral=True)
     except:
-        print(f"\n\n{error}")
+        await interaction.send(embed=embed, ephemeral=True)
 
 botids = [938579223780655145]
 @bot.listen('on_message')
@@ -103,9 +103,9 @@ async def on_message_delete(message):
 @bot.event
 async def on_presence_update(before, after):
     if before.status != after.status:
-        await webhooksend("Presence Changed", f"{after.display_name} Changed Status From:\n{before.status}\nTo:\n{after.status}")
+        await webhooksend("Presence Changed", f"<@{after.user.id}> Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}")
     if before.activity != after.activity:
-        await webhooksend("Activity Changed", f"{after.display_name} Changed Activity From:\n{before.activity}\nTo:\n{after.activity}")
+        await webhooksend("Activity Changed", f"<@{after.user.id}> Changed Activity \n**From:**\n{before.activity}\n**To:**\n{after.activity}")
 
 @bot.event
 async def on_member_update(before, after):
@@ -116,18 +116,18 @@ async def on_member_update(before, after):
         roles2 = [role.mention for role in after.roles]
         beforeroles = str(roles).replace("]", "").replace("[", "").replace("'", "")
         afterroles = str(roles2).replace("]", "").replace("[", "").replace("'", "")
-        await webhooksend(f"Roles Changed", f" member: **{after.display_name}**'s Roles Changed\n**Before:**\n{beforeroles}\n**After:**\n{afterroles}")
+        await webhooksend(f"Roles Changed", f"<@{after.user.id}> Roles Changed\n**Before:**\n{beforeroles}\n**After:**\n{afterroles}")
     if before.current_timeout != after.current_timeout:
-        await webhooksend(f"Timeout!", f"**{after.display_name}**'s Timeout Changed\n**Before:**\n{before.current_timeout}\n**After:**\n{after.current_timeout}")
+        await webhooksend(f"Timeout!", f"<@{after.user.id}> Timeout Changed\n**Before:**\n{before.current_timeout}\n**After:**\n{after.current_timeout}")
 
  
 
 @bot.event
 async def on_user_update(before, after):
     if before.display_avatar != after.display_avatar:
-        await webhooksend(f"Avatar Changed", f"**{after.display_name}**'s Avatar Changed\n**Before:**\n{before.display_avatar}\n**After:**\n{after.display_avatar}")
+        await webhooksend(f"Avatar Changed", f"<@{after.user.id}> Avatar Changed\n**Before:**\n{before.display_avatar}\n**After:**\n{after.display_avatar}")
     if before.discriminator != after.discriminator:
-        await webhooksend(f"Discriminator Changed", f"**{after.display_name}**'s Discriminator Changed\n**Before:**\n{before.discriminator}\n**After:**\n{after.discriminator}")
+        await webhooksend(f"Discriminator Changed", f"<@{after.user.id}> Discriminator Changed\n**Before:**\n{before.discriminator}\n**After:**\n{after.discriminator}")
     """nickname - .nickname
 
 roles ?
@@ -199,9 +199,21 @@ async def on_member_join(member):
         await guild.system_channel.send(file=imgfile)
         await webhooksend("Member Joined", f"<@{member.id}> Joined Astral")
 
+@bot.event
+async def on_member_remove(member):
+    await webhooksend("Member Left", f"<@{member.id}> Left Astral")
+    embed = disnake.Embed(
+        title=f"{member.name}, Sorry Too See You Go!",
+        description=f"If you left on accident, please join back!\nhttps://discord.gg/uNnJyjaG",
+        color=0xDC143C,
+        timestamp=datetime.datetime.now()
+    )
+    try:
+        await member.send(embed=embed)
+    except:
+        pass
 
-
-
+    
 async def checker(filename):
     def check(message):
         return message.content == filename.upper() or message.content == filename.lower()
