@@ -30,7 +30,7 @@ else:
 
 intents = disnake.Intents.default()
 intents.members = True
-
+intents.presences = True 
 bot = Bot(command_prefix=config["prefix"], intents=intents)
 token = config.get("token")
 
@@ -101,6 +101,13 @@ async def on_message_delete(message):
     await webhooksend("Message Deleted", f"Chat Deleted In <#{message.channel.id}>\n**Author:** \n<@{message.author.id}>\n**Content:** \n{message.content}")
 
 @bot.event
+async def on_presence_update(before, after):
+    if before.status != after.status:
+        await webhooksend("Presence Changed", f"{after.display_name} Changed Status From:\n{before.status}\nTo:\n{after.status}")
+    if before.activity != after.activity:
+        await webhooksend("Activity Changed", f"{after.display_name} Changed Activity From:\n{before.activity}\nTo:\n{after.activity}")
+
+@bot.event
 async def on_member_update(before, after):
     if before.display_name != after.display_name:
         print(f"{before.display_name} -> {after.display_name}")
@@ -109,11 +116,18 @@ async def on_member_update(before, after):
         roles2 = [role.mention for role in after.roles]
         beforeroles = str(roles).replace("]", "").replace("[", "").replace("'", "")
         afterroles = str(roles2).replace("]", "").replace("[", "").replace("'", "")
-        await webhooksend(f"Roles Changed", f" member: **{before.display_name}**'s Roles Changed\n**Before:**\n{beforeroles}\n**After:**\n{afterroles}")
+        await webhooksend(f"Roles Changed", f" member: **{after.display_name}**'s Roles Changed\n**Before:**\n{beforeroles}\n**After:**\n{afterroles}")
+    if before.current_timeout != after.current_timeout:
+        await webhooksend(f"Timeout!", f"**{after.display_name}**'s Timeout Changed\n**Before:**\n{before.current_timeout}\n**After:**\n{after.current_timeout}")
+
+ 
+
+@bot.event
+async def on_user_update(before, after):
+    if before.display_avatar != after.display_avatar:
+        await webhooksend(f"Avatar Changed", f"**{after.display_name}**'s Avatar Changed\n**Before:**\n{before.display_avatar}\n**After:**\n{after.display_avatar}")
     if before.discriminator != after.discriminator:
-        await webhooksend(f"Discriminator Changed", f"member: **{before.display_name}**'s Discriminator Changed\n**Before:**\n{before.discriminator}\n**After:**\n{after.discriminator}")
-    if before.member.display_avatar != after.member.display_avatar:
-        print(f"Avatar Changed", f"member: **{after.display_name}**'s Avatar Changed\n**Before:**\n{before.member.display_avatar}\n**After:**\n{after.member.display_avatar}")
+        await webhooksend(f"Discriminator Changed", f"**{after.display_name}**'s Discriminator Changed\n**Before:**\n{before.discriminator}\n**After:**\n{after.discriminator}")
     """nickname - .nickname
 
 roles ?
@@ -123,7 +137,48 @@ pending What even is this
 timeout .timeout? 
 
 guild specific avatar ?
-"""
+
+ qParam
+ParamInfo
+ParamInfo.autocomplete
+ParamInfo.channel_types
+ParamInfo.choices
+ParamInfo.converter
+ParamInfo.default
+ParamInfo.description
+octocobra
+BOT
+ — 11/21/2021
+on_member_ban
+on_member_join
+on_member_remove
+on_member_screening_reject
+on_member_unban
+on_member_update
+on_raw_member_screening_reject
+Permissions.ban_members
+octocobra
+BOT
+ — 11/21/2021
+on_connect
+on_disconnect
+on_shard_connect
+on_shard_disconnect
+VoiceClient.is_connected
+AuditLogAction.member_disconnect
+Bot.wait_until_first_connect
+InteractionBot.wait_until_first_connect
+octocobra
+BOT
+ — 11/21/2021
+VoiceClient.move_to
+ext.tasks.Loop.remove_exception_type
+Member.move_to
+Embed.remove_author
+HelpCommand.remove_mentions
+Message.remove_reaction
+Permissions.view_audit_log
+PartialMessage.remove_reaction"""
 
 @bot.event
 async def on_member_join(member):
@@ -134,7 +189,7 @@ async def on_member_join(member):
         font = ImageFont.truetype("MomB.ttf", 30)
         image.text((160, 275), f"Welcome,", font=font, fill=(43,22,197))
         image.text((160, 325), f"{member.name}", font=font, fill=(43,22,197))
-        list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
         randomnumber = ""
         for i in range(5, 15):
             randomnumber += (random.choice(list))
@@ -143,6 +198,8 @@ async def on_member_join(member):
         imgfile = disnake.File(f"astral{randomnumber}.png") 
         await guild.system_channel.send(file=imgfile)
         await webhooksend("Member Joined", f"<@{member.id}> Joined Astral")
+
+
 
 
 async def checker(filename):
@@ -159,26 +216,26 @@ async def verify(interaction):
     if interaction.channel.id not in verifychannel:
         await interaction.send("You can only use this command in <#972679418763935794>")
     else:
-        list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-        FFileName = ""
+        list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        FileName = ""
         for i in range(5, 15):
-            FFileName += (random.choice(list))
+            FileName += (random.choice(list))
             continue
-        print(f"{FFileName}")
+        print(f"{FileName}")
         img = Image.open('astral.png')
 
         I1 = ImageDraw.Draw(img)
         
         font = ImageFont.truetype("MomB.ttf", 30)
-        I1.text((150, 275), f"{FFileName}", fill=(32,22,197), font=font)
+        I1.text((150, 275), f"{FileName}", fill=(32,22,197), font=font)
         I1.text((125, 300), f"Please enter the", fill=(43,22,197), font=font)
         I1.text((125, 325), f"letters/numbers", fill=(43,22,197), font=font)
         I1.text((75, 350), f"above to gain access", fill=(43,22,197), font=font)
         I1.text((150, 375), f"to Astral", fill=(43,22,197), font=font)
-        img.save(f"astral{FFileName}.png")
-        await interaction.send(file=disnake.File(f"astral{FFileName}.png"))
+        img.save(f"astral{FileName}.png")
+        await interaction.send(file=disnake.File(f"astral{FileName}.png"))
         try:
-            await checker(f"{FFileName}")
+            await checker(f"{FileName}")
         except:
             print("fail")
 
