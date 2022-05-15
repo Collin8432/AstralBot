@@ -125,9 +125,13 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 )
                 await interaction.send(embed=embed)
                 try:
-                    await member.send(
-                        f"You Were Kicked From Astral By <@{interaction.author.id}>\n**Reason:**\n{reason}"
+                    embed = disnake.Embed(
+                    title="You Were Kicked!",
+                    description=f"<@{member.id}> Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}",
+                    color=0xDC143C,
+                    timestamp=datetime.datetime.now()
                     )
+                    await member.send(embed=embed)
                 except disnake.Forbidden:
                     pass
                 await member.kick(reason=reason)
@@ -184,16 +188,6 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                             timestamp=datetime.datetime.now()
                         )
                         await interaction.send(embed=embed)
-                        try:
-                            embed = disnake.Embed(
-                            title="You Were Banned!",
-                            description=f"<@{member.id}> Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}",
-                            color=0xDC143C,
-                            timestamp=datetime.datetime.now()
-                            )
-                            await member.send(embed=embed)
-                        except disnake.Forbidden:
-                            pass
                         await member.ban(reason=reason)
                         webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
                         embed = DiscordEmbed(title="Member Banned!", color=0xDC143C)

@@ -32,6 +32,7 @@ intents = disnake.Intents.default()
 intents.members = True
 intents.presences = True 
 intents.bans = True
+intents.guilds = True
 bot = Bot(command_prefix=config["prefix"], intents=intents)
 token = config.get("token")
 
@@ -39,6 +40,8 @@ token = config.get("token")
 async def status_task() -> None:
     statuses = ["astralsb.ga", "astral on top", "with you"]
     await bot.change_presence(activity=disnake.Game(random.choice(statuses)))
+    channel = await bot.fetch_channel(975404941919260672)
+    await channel.edit(name=f"Members: {channel.guild.member_count}")
 
 def load_commands(command_type: str) -> None:
     for file in os.listdir(f"./cogs/{command_type}"):
@@ -101,14 +104,34 @@ async def on_message(message):
 async def on_message_delete(message):
     await webhooksend("Message Deleted", f"Chat Deleted In <#{message.channel.id}>\n**Author:** \n<@{message.author.id}>\n**Content:** \n{message.content}")
 
-# @bot.event
+@bot.event
+async def on_member_ban(guild, user):
+    await webhooksend("Member Banned", f"<@{user.id}> Was Banned From Astral")
+    embed = disnake.Embed(
+        title="You Were Banned From Astral",
+        description=f"<@{user.id}> Was Banned From Astral",
+        color=0xDC143C,
+        timestamp=datetime.datetime.now()
+    )
+    await user.send(embed=embed)   
+
+@bot.event
+async def on_member_unban(guild, user):
+    await webhooksend("Member Unbanned", f"<@{user.id}> Was Unbanned From Astral")
+    embed = disnake.Embed(
+        title="You Were Unbanned From Astral",
+        description=f"<@{user.id}> Was Unbanned From Astral\nhttps://discord.gg/uNnJyjaG",
+        color=0xDC143C,
+        timestamp=datetime.datetime.now()
+    )
+    await user.send(embed=embed)
 
 @bot.event
 async def on_presence_update(before, after):
     if before.status != after.status:
-        await webhooksend("Presence Changed", f"<@{after.member.id}> Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}")
+        await webhooksend("Presence Changed", f"<@{after.id}> Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}")
     if before.activity != after.activity:
-        await webhooksend("Activity Changed", f"<@{after.member.id}> Changed Activity \n**From:**\n{before.activity}\n**To:**\n{after.activity}")
+        await webhooksend("Activity Changed", f"<@{after.id}> Changed Activity \n**From:**\n{before.activity}\n**To:**\n{after.activity}")
 
 @bot.event
 async def on_member_update(before, after):
@@ -119,9 +142,9 @@ async def on_member_update(before, after):
         roles2 = [role.mention for role in after.roles]
         beforeroles = str(roles).replace("]", "").replace("[", "").replace("'", "")
         afterroles = str(roles2).replace("]", "").replace("[", "").replace("'", "")
-        await webhooksend(f"Roles Changed", f"<@{after.member.id}> Roles Changed\n**Before:**\n{beforeroles}\n**After:**\n{afterroles}")
+        await webhooksend(f"Roles Changed", f"<@{after.id}> Roles Changed\n**Before:**\n{beforeroles}\n**After:**\n{afterroles}")
     if before.current_timeout != after.current_timeout:
-        await webhooksend(f"Timeout!", f"<@{after.member.id}> Timeout Changed\n**Before:**\n{before.current_timeout}\n**After:**\n{after.current_timeout}")
+        await webhooksend(f"Timeout!", f"<@{after.id}> Timeout Changed\n**Before:**\n{before.current_timeout}\n**After:**\n{after.current_timeout}")
 
  
 
@@ -215,5 +238,24 @@ async def verify(interaction):
             )
             await interaction.send(embed=embed)
 
+@bot.event
+async def on_guild_channel_delete(channel):
+    await webhooksend("Channel Deleted", f"{channel.name} Was Deleted")
+
+@bot.event
+async def on_guild_channel_create(channel):
+    await webhooksend("Channel Created", f"<#{channel.name.id}> Was Created")
+
+@bot.event
+async def on_guild_channel_update(before, after):
+    if before.name != after.name:
+        await webhooksend("Channel Name Changed", f"**From:**\n<#{before.id}>\n**To:**\n<#{after.id}>")
+    if before.permissions_for != after.permissions_for:
+        print(f"{before.permissions_for} -> {after.permissions_for}")
+
+@bot.slash_command(name="setperms", description="Set Permissions")
+async def setperms(interaction):
+    await interaction.channel.set_permissions(interaction.author, view_channel=True,
+                                                      send_messages=False)
 
 bot.run(config["token"])
