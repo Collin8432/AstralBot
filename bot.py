@@ -22,26 +22,25 @@ import aiohttp
 from helpers.webhook import webhooksend
 from helpers import checks
 import exceptions
+import arrow
 if not os.path.isfile("config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
 else:
     with open("config.json") as file:
         config = json.load(file)
 
-intents = disnake.Intents.default()
-intents.members = True
-intents.presences = True 
-intents.bans = True
-intents.guilds = True
+intents = disnake.Intents.all()
 bot = Bot(command_prefix=config["prefix"], intents=intents)
 token = config.get("token")
+
 
 @tasks.loop(minutes=1.0)
 async def status_task() -> None:
     statuses = ["astralsb.ga", "astral on top", "with you"]
     await bot.change_presence(activity=disnake.Game(random.choice(statuses)))
     channel = await bot.fetch_channel(975404941919260672)
-    await channel.edit(name=f"Members: {channel.guild.member_count}")
+    member = channel.guild.member_count
+    await channel.edit(name=f"Members: {member}")
 
 def load_commands(command_type: str) -> None:
     for file in os.listdir(f"./cogs/{command_type}"):
@@ -251,7 +250,66 @@ async def on_guild_channel_update(before, after):
     if before.name != after.name:
         await webhooksend("Channel Name Changed", f"**From:**\n<#{before.id}>\n**To:**\n<#{after.id}>")
     if before.permissions_for != after.permissions_for:
-        print(f"{before.permissions_for} -> {after.permissions_for}")
+        if before.id != after.id or before.name != after.name or before.rtc_region != after.rtc_region or before.position != after.position or before.bitrate != after.bitrate or before.video_quality_mode != after.video_quality_mode or before.user_limit != after.user_limit or before.category_id != after.category_id or before.nsfw != after.nsfw:
+            await webhooksend("Channel Information", f"{after.mention} Was Updated\n**Id Before:**\n{before.id}\n**Id After:**\n{after.id}\n**Name Before:**\n{before.name}\n**Name After:**\n{after.name}\n**Position Before:**\n{before.position}\n**Position After:**\n{after.position}\n**Bitrate Before:**\n{before.bitrate}\n**Bitrate After:**\n{after.bitrate}\n**User Limit Before:**\n{before.user_limit}\n**User Limit After:**\n{after.user_limit}\n**Category Before:**\n{before.category_id}\n**Category After:**\n{after.category_id}\n**NSFW Before:**\n{before.nsfw}\n**NSFW After:**\n{after.nsfw}\n**RTC Region Before:**\n{before.rtc_region}\n**RTC Region After:**\n{after.rtc_region}\n**Video Quality Mode Before:**\n{before.video_quality_mode}\n**Video Quality Mode After:**\n{after.video_quality_mode}")
+
+
+
+
+@bot.event
+async def on_connect():
+    global uptime
+    uptime = arrow.now()
+
+@bot.event
+async def on_shard_connect(shard_id):
+    pass
+
+@bot.event  
+async def on_disconnect():
+    await webhooksend("Discord Error", "Called when the client has disconnected from Discord, or a connection attempt to Discord has failed. This could happen either through the internet being disconnected, explicit calls to close, or Discord terminating the connection one way or the other.")
+
+@bot.event
+async def on_shard_disconnect(shard_id):
+    pass
+
+@bot.event
+async def on_shard_ready(shard_id):
+    pass
+
+@bot.event
+async def on_resumed():
+    await webhooksend("Resumed", "Called when the client has resumed a connection to Discord.")
+
+@bot.event
+async def on_shard_resumed(shard_id):
+    pass
+
+
+@bot.event
+async def on_socket_event_type(event_type):
+    pass
+
+@bot.event
+async def on_typing(channel, user, when):
+    pass
+
+@bot.event
+async def on_bulk_message_delete(messages):
+    await webhooksend("Messages Bulk Deleted/Purged", f"{messages}, With A Total Of {len(messages)} Messages Deleted")
+
+@bot.event
+async def on_message_edit(before, after):
+    if before.content != after.content:
+        await webhooksend("Message Edited", f"**From:**\n{before.content}\n**To:**\n{after.content}")
+
+@bot.event
+async def on_reaction_add(reaction, user):
+    await webhooksend("Reaction Added", f"{reaction.emoji} Was Added To {reaction.message.content} In {reaction.message.channel.mention} By {user.mention}")
+
+@bot.event
+async def on_reaction_remove(reaction, user):
+    await webhooksend("Reaction Removed", f"{reaction.emoji} Was Removed From {reaction.message.content} In {reaction.message.channel.mention} By {user.mention}")
 
 @bot.slash_command(name="setperms", description="Set Permissions")
 async def setperms(interaction):
