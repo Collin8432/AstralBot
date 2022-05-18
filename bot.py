@@ -247,11 +247,14 @@ async def on_guild_channel_create(channel):
 
 @bot.event
 async def on_guild_channel_update(before, after):
-    if before.name != after.name:
-        await webhooksend("Channel Name Changed", f"**From:**\n<#{before.id}>\n**To:**\n<#{after.id}>")
-    if before.permissions_for != after.permissions_for:
-        if before.id != after.id or before.name != after.name or before.rtc_region != after.rtc_region or before.position != after.position or before.bitrate != after.bitrate or before.video_quality_mode != after.video_quality_mode or before.user_limit != after.user_limit or before.category_id != after.category_id or before.nsfw != after.nsfw:
-            await webhooksend("Channel Information", f"{after.mention} Was Updated\n**Id Before:**\n{before.id}\n**Id After:**\n{after.id}\n**Name Before:**\n{before.name}\n**Name After:**\n{after.name}\n**Position Before:**\n{before.position}\n**Position After:**\n{after.position}\n**Bitrate Before:**\n{before.bitrate}\n**Bitrate After:**\n{after.bitrate}\n**User Limit Before:**\n{before.user_limit}\n**User Limit After:**\n{after.user_limit}\n**Category Before:**\n{before.category_id}\n**Category After:**\n{after.category_id}\n**NSFW Before:**\n{before.nsfw}\n**NSFW After:**\n{after.nsfw}\n**RTC Region Before:**\n{before.rtc_region}\n**RTC Region After:**\n{after.rtc_region}\n**Video Quality Mode Before:**\n{before.video_quality_mode}\n**Video Quality Mode After:**\n{after.video_quality_mode}")
+    # if before.name != after.name:
+    #     await webhooksend("Channel Name Changed", f"**From:**\n<#{before.id}>\n**To:**\n<#{after.id}>")
+    # if before.permissions_for != after.permissions_for:
+    #     if before.id != after.id or before.name != after.name or before.rtc_region != after.rtc_region or before.position != after.position or before.bitrate != after.bitrate or before.video_quality_mode != after.video_quality_mode or before.user_limit != after.user_limit or before.category_id != after.category_id or before.nsfw != after.nsfw:
+    #         await webhooksend("Channel Information", f"{after.mention} Was Updated\n**Id Before:**\n{before.id}\n**Id After:**\n{after.id}\n**Name Before:**\n{before.name}\n**Name After:**\n{after.name}\n**Position Before:**\n{before.position}\n**Position After:**\n{after.position}\n**Bitrate Before:**\n{before.bitrate}\n**Bitrate After:**\n{after.bitrate}\n**User Limit Before:**\n{before.user_limit}\n**User Limit After:**\n{after.user_limit}\n**Category Before:**\n{before.category_id}\n**Category After:**\n{after.category_id}\n**NSFW Before:**\n{before.nsfw}\n**NSFW After:**\n{after.nsfw}\n**RTC Region Before:**\n{before.rtc_region}\n**RTC Region After:**\n{after.rtc_region}\n**Video Quality Mode Before:**\n{before.video_quality_mode}\n**Video Quality Mode After:**\n{after.video_quality_mode}")
+    # if before.permissions != after.permissions:
+    perm = await after.overwrites_for(944297787779072020)
+    print(perm)
 
 
 
