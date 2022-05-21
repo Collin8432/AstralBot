@@ -228,7 +228,6 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     )
     @commands.has_permissions(manage_messages=True)
     async def purge(interaction: disnake.CommandInteraction):
-        await interaction.channel.purge(limit=2000000000)
         embed = disnake.Embed(
             title="Messages Purged",
             description="Purged All Messages In This Channel",
@@ -236,6 +235,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             timestamp=datetime.datetime.now()
         )
         await interaction.send(embed=embed, ephemeral=True)
+        await interaction.channel.purge(limit=200)
+
 
     @commands.slash_command(
         name="rules",
