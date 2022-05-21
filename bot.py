@@ -263,10 +263,37 @@ async def on_guild_channel_update(before, after):
         await webhooksend("Channel Name Changed", f"**From:**\n<#{before.id}>\n**To:**\n<#{after.id}>")
     if before.changed_roles != after.changed_roles:
         print(f"{before.changed_roles} -> {after.changed_roles}")
-    if before.overwrites != after.overwrites:
-        print(f"{before.overwrites.PermissionOverwrite } -> {after.overwrites.PermissionOverwrite }")
+    if dict(before.overwrites_for(before.guild.get_role(945358876193210381))) != dict(after.overwrites_for(after.guild.get_role(945358876193210381))):
+        permissions = dict(after.overwrites_for(after.guild.get_role(945358876193210381)))
+        # if permissions["send_messages"] == True:
+        #     await webhooksend("Channel Permissions Changed", f"{after.mention} Sendmessages== True")
+        # if permissions["send_messages"] == None:
+        #     await webhooksend("Channel Permissions Changed", f"{after.mention} Sendmessages== None")
+        # if permissions["send_messages"] == False:
+        #     await webhooksend("Channel Permissions Changed", f"{after.mention} Sendmessages== False")
+        # for permission in permissions:
+        finalpermissions = (str(permissions).replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
+        await webhooksend("Channel Permissions Changed", f"```\n{finalpermissions}```")
         
+        
+        
+        
+        
+        
+        
+        
+        
+        # perms = after.guild.me.guild_permissions
 
+        # paginator = commands.Paginator()
+        # max_perm_length = max(len(p[0]) for p in perms) + 1
+
+        # for attr, value in perms:
+        #     indicator = '✅' if value else '❌'
+        #     paginator.add_line(f'{attr: <{max_perm_length}} --> {indicator}')
+
+        # for page in paginator.pages:
+        #     await webhooksend("page", page)
 
 
 
