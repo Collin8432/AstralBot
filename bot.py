@@ -44,13 +44,15 @@ async def status_task() -> None:
 
 @tasks.loop(minutes=10.0)
 async def uptime_task() -> None:
-    beforeuptime = datetime.datetime.now()
-    uptime = beforeuptime
-    before1 = beforeuptime.strftime("%I")
-    before2 = beforeuptime.strftime("%M")
-    before3 = beforeuptime.strftime("%S")
-    aftertime = (f"{before1}:{before2}:{before3}")
-    await webhooksend(f"Uptime Update", f"{starttime} -> {aftertime}")
+    end_time = datetime.datetime.now()
+    diff = end_time - start_time
+    seconds = diff.seconds % 60
+    minutes = (diff.seconds // 60) % 60
+    hours = (diff.seconds // 3600) % 24
+    days = diff.days
+    uptime_str = f"{days} days, {hours} hours, {minutes} minutes, {seconds} seconds"
+    await webhooksend(f"Uptime Update", f"{uptime_str}")
+
 
 def load_commands(command_type: str) -> None:
     for file in os.listdir(f"./cogs/{command_type}"):
@@ -138,9 +140,9 @@ async def on_member_unban(guild, user):
 
 @bot.event
 async def on_presence_update(before, after):
-    if before.status != after.status:
+    if before.status != after.status and after.id != 935339228324311040:
         await webhooksend("Presence Changed", f"<@{after.id}> Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}")
-    if before.activity != after.activity:
+    if before.activity != after.activity and after.id != 935339228324311040:
         await webhooksend("Activity Changed", f"<@{after.id}> Changed Activity \n**From:**\n{before.activity}\n**To:**\n{after.activity}")
 
 @bot.event
@@ -195,7 +197,7 @@ async def on_member_remove(member):
     )
     try:
         await member.send(embed=embed)
-    except:
+    except disnake.Forebidden:
         pass
 
     
@@ -254,16 +256,16 @@ async def on_guild_channel_delete(channel):
 
 @bot.event
 async def on_guild_channel_create(channel):
-    await webhooksend("Channel Created", f"<#{channel.name.id}> Was Created")
+    await webhooksend("Channel Created", f"#{channel.mention} Was Created")
 @bot.event
 async def on_guild_channel_update(before, after):
     if before.name != after.name:
         await webhooksend("Channel Name Changed", f"**From:**\n<#{before.id}>\n**To:**\n<#{after.id}>")
-    if before.permissions_for != after.permissions_for:
-        if before.id != after.id or before.name != after.name or before.rtc_region != after.rtc_region or before.position != after.position or before.bitrate != after.bitrate or before.video_quality_mode != after.video_quality_mode or before.user_limit != after.user_limit or before.category_id != after.category_id or before.nsfw != after.nsfw:
-            await webhooksend("Channel Information", f"{after.mention} Was Updated\n**Id Before:**\n{before.id}\n**Id After:**\n{after.id}\n**Name Before:**\n{before.name}\n**Name After:**\n{after.name}\n**Position Before:**\n{before.position}\n**Position After:**\n{after.position}\n**Bitrate Before:**\n{before.bitrate}\n**Bitrate After:**\n{after.bitrate}\n**User Limit Before:**\n{before.user_limit}\n**User Limit After:**\n{after.user_limit}\n**Category Before:**\n{before.category_id}\n**Category After:**\n{after.category_id}\n**NSFW Before:**\n{before.nsfw}\n**NSFW After:**\n{after.nsfw}\n**RTC Region Before:**\n{before.rtc_region}\n**RTC Region After:**\n{after.rtc_region}\n**Video Quality Mode Before:**\n{before.video_quality_mode}\n**Video Quality Mode After:**\n{after.video_quality_mode}")
-    everyone = after.guild.get_role(944297787779072020)
-    if before.permission != after.permissions_for(everyone):
+    if before.changed_roles != after.changed_roles:
+        print(f"{before.changed_roles} -> {after.changed_roles}")
+    if before.overwrites != after.overwrites:
+        print(f"{before.overwrites.PermissionOverwrite } -> {after.overwrites.PermissionOverwrite }")
+        
 
 
 
@@ -272,13 +274,8 @@ async def on_guild_channel_update(before, after):
 
 @bot.event
 async def on_connect():
-    global starttime
-    beforeuptime = datetime.datetime.now()
-    uptime = beforeuptime
-    before1 = beforeuptime.strftime("%I")
-    before2 = beforeuptime.strftime("%M")
-    before3 = beforeuptime.strftime("%S")
-    starttime = (f"{before1}:{before2}:{before3}")
+    global start_time
+    start_time = datetime.datetime.now()
 
 
 @bot.event
