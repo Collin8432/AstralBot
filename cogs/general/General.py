@@ -1,18 +1,16 @@
+import datetime
 import json
 import os
+import platform
 import random
 import sys
-import platform
 
 import aiohttp
-import datetime
 import disnake
-from disnake.ext import commands
-from disnake.ext.commands import Context
 from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.enums import ButtonStyle
 from disnake.ext import commands
-
+from disnake.ext.commands import Context
 from helpers import checks
 
 
@@ -35,60 +33,51 @@ class Buttons(disnake.ui.View):
         await interaction.response.send_message("Cancelled!")
         await interaction.message.delete()
 
-class Help(disnake.ui.Select):
-    def __init__(self):
 
-        options = [
-            disnake.SelectOption(
-                label="General", description="Displays General Commands, For The Bot", emoji="⚙️"
-            ),
-            disnake.SelectOption(
-                label="Fun", description="Displays Fun Commands", emoji="⚙️"
-            ),
-            disnake.SelectOption(
-                label="Moderation", description="Displays Moderation Commands", emoji="⚙️"
-            ),
-        ]
+helpemb = disnake.Embed(
+    title="General ⚙️",
+    description="**/help**, Displays Help Command\n**/Uptime**, Displays Bot Uptime\n **/Shutdown**, Shuts Bot Down(Permissions Required)\n**/randomchoice (choice) (choice)**, Picks A Random Choice, Simlar To Heads/Tails", 
+    color=0xDC143C,
+    timestamp=datetime.datetime.now(),
+)
+funemb = disnake.Embed(
+    title="Fun ⚙️",
+    description="**/nerd**, NerdButton\n**/balls**, BallsButton",
+    color=0xDC143C,
+    timestamp=datetime.datetime.now(),
+)
+modemb = disnake.Embed(
+    title="Moderation ⚙️",
+    description="**/ban**, Bans A User\n**/kick**, Kicks A User\n**/purge**, Purges All The Messages In A Channel\n**/moderatorapplication**, Apply For Mod\n**/rules**, Only Can Be Used By Administrators, Displays Rules"
+)
 
-        super().__init__(
-            placeholder="Choose...",
-            min_values=1,
-            max_values=1,
-            options=options,
-        )
-
-    async def callback(self, interaction: disnake.MessageInteraction):
-        choices = {
-            "general": 0,
-            "fun": 1,
-            "moderation": 2,
-        }
-        user_choice = self.values[0].lower()
-        user_choice_index = choices[user_choice]
-
-        embed = disnake.Embed(
-            color=0xDC143C,
-            timestamp=datetime.datetime.now()
-            )
-        embed.set_author(name=interaction.author.display_name, icon_url=interaction.author.avatar.url)
-
-        if user_choice_index == 0:
-            embed.description = f"**General Help**"
-        elif user_choice_index == 1:
-            embed.description = f"**In Progress**"
-        else:
-            embed.description = f"**In Progress**"
-            embed.colour= 0xDC143C
-            
-        await interaction.response.defer()
-        await interaction.edit_original_message(embed=embed, content=None, view=None)
-
-
-class HelpView(disnake.ui.View):
+class HelpButtons(disnake.ui.View):
     def __init__(self):
         super().__init__()
+        self.value = None
+    @disnake.ui.button(label="General ⚙️", style=disnake.ButtonStyle.success)
+    async def General(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+        await interaction.response.send_message(embed=helpemb, ephemeral=True)
+        self.value + 1
+        if self.value == 3:
+            self.stop()
 
-        self.add_item(Help())
+    @disnake.ui.button(label="Fun 🎉", style=disnake.ButtonStyle.success)
+    async def Fun(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+        await interaction.response.send_message(embed=funemb, ephemeral=True)
+        self.value + 1
+        if self.value == 3:
+            self.stop()
+
+    @disnake.ui.button(label="Moderation 🚩", style=disnake.ButtonStyle.success)
+    async def Moderation(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+        await interaction.response.send_message(embed=modemb, ephemeral=True)
+        self.value + 1
+        if self.value == 3:
+            self.stop()
+            
+
+
 
 
 class General(commands.Cog, name="General Cmds"):
@@ -121,10 +110,15 @@ class General(commands.Cog, name="General Cmds"):
          value=f"/ (Slash Commands)",
          inline=False
       )
+      embed.add_field(
+        name="Disnake Version:",
+        value=f"{disnake.__version__}",
+        inline=False
+      )
       embed.set_footer(
          text=f"Requested by {interaction.author}"
       )
-      await interaction.send(embed=embed, view=HelpView())
+      await interaction.send(embed=embed, view=HelpButtons())
 
 
    @commands.slash_command(

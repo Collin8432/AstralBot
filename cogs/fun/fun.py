@@ -27,7 +27,7 @@ class NerdButton(disnake.ui.View):
     async def first_button(
         self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
     ):
-        await interaction.response.send_message("nigger")
+        await interaction.response.send_message("nerd")
 
 
 
@@ -51,20 +51,13 @@ class Fun(commands.Cog, name="fun cmds"):
     )
     async def nerd(self, interaction):
        await interaction.send(view=NerdButton())
-
+    
     @commands.slash_command(
-       name="test",
-       description="test"
+       name="balls", 
+       description="balls"
     )
-    async def test(self, interaction):
-         await interaction.send(interaction.application_command.qualified_name)
-
-    @test.sub_command(
-       name="sub", 
-       decription="sub"
-    )
-    async def sub(interaction):
-         await interaction.send(interaction.application_command.qualified_name)
+    async def balls(self, interaction):
+       await interaction.send(view=BallsButton())
       
 def setup(bot):
     bot.add_cog(Fun(bot))

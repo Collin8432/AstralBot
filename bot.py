@@ -21,7 +21,6 @@ import asyncio
 from disnake import Webhook
 import aiohttp
 from helpers.webhook import webhooksend
-from helpers.uptime import uptimesend
 from helpers import checks
 import exceptions
 import arrow
@@ -44,8 +43,12 @@ async def status_task() -> None:
     member = channel.guild.member_count
     await channel.edit(name=f"Members: {member}")
 
-@tasks.loop(minutes=10.0)
-async def uptime_task() -> None:
+
+@bot.slash_command(
+    name="uptime",
+    description="Shows the uptime of the bot",
+)
+async def uptime(interaction):
     end_time = datetime.datetime.now()
     diff = end_time - start_time
     seconds = diff.seconds % 60
@@ -53,7 +56,14 @@ async def uptime_task() -> None:
     hours = (diff.seconds // 3600) % 24
     days = diff.days
     uptime_str = f"{days} days, {hours} hours, {minutes} minutes, {seconds} seconds"
-    await uptimesend(f"Uptime Update", f"{uptime_str}")
+    embed = disnake.Embed(
+        title="**Uptime**",
+        description=f"**The bot has been online for: {uptime_str}**",
+        color=0xDC143C,
+        timestamp=datetime.datetime.now()
+    )
+    await interaction.send(embed=embed)
+
 
 
 def load_commands(command_type: str) -> None:
@@ -77,11 +87,10 @@ if __name__ == "__main__":
 async def on_ready():
     print(f"Logged in as {bot.user.name} ")
     status_task.start()
-    uptime_task.start()
 
 @bot.event
 async def on_slash_command(interaction):
-    await webhooksend(f"Command Executed", f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** {interaction.application_command.qualified_name} in <#{interaction.channel.id}>")
+    await webhooksend(f"Command Executed", f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** in <#{interaction.channel.id}>")
 
 @bot.event
 async def on_slash_command_error(interaction: ApplicationCommandInteraction, error: Exception) -> None:
@@ -92,6 +101,7 @@ async def on_slash_command_error(interaction: ApplicationCommandInteraction, err
         timestamp=datetime.datetime.now()
     )
     try:
+        await interaction.response.defer()
         await interaction.edit_original_message(embed=embed, ephemeral=True)
     except:
         await interaction.send(embed=embed, ephemeral=True)
@@ -254,16 +264,16 @@ async def verify(interaction):
 
 @bot.event
 async def on_guild_channel_delete(channel):
-    await webhooksend("Channel Deleted", f"{channel.name} Was Deleted")
+    await webhooksend("Channel Deleted", f"{channel.name} **Was Deleted**")
 
 @bot.event
 async def on_guild_channel_create(channel):
-    await webhooksend("Channel Created", f"#{channel.mention} Was Created")
+    await webhooksend("Channel Created", f"#{channel.mention} **Was Created**")
 
 @bot.event
 async def on_guild_channel_update(before, after):
     if before.name != after.name:
-        await webhooksend("Channel Name Changed", f"**From:**\n<#{before.id}>\n**To:**\n<#{after.id}>")
+        await webhooksend("Channel Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.mention}")
     if before.changed_roles != after.changed_roles:
         print(f"{before.changed_roles} -> {after.changed_roles}")
     roles = after.guild.roles
@@ -271,13 +281,13 @@ async def on_guild_channel_update(before, after):
         if dict(after.overwrites_for(role)) != dict(before.overwrites_for(role)):
             permissions = dict(after.overwrites_for(role))
             finalpermissions = (str(permissions).replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
-            await webhooksend("Channel Permissions Changed", f"\nChannel Permissions Changed For {role.mention} In {after.mention}\n```\n{finalpermissions}```")
+            await webhooksend("Channel Permissions Changed", f"\n**Channel Permissions Changed For** {role.mention} **In** {after.mention}\n```\n{finalpermissions}```")
     members = after.guild.members  
     for member in members:
         if dict(after.overwrites_for(member)) != dict(before.overwrites_for(member)):
             permissions = dict(after.overwrites_for(member))
             finalpermissions = (str(permissions).replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
-            await webhooksend("Channel Permissions Changed", f"\nChannel Permissions Changed For {member.mention} In {after.mention}\n```\n{finalpermissions}```")
+            await webhooksend("Channel Permissions Changed", f"\n**Channel Permissions Changed For** {member.mention} **In** {after.mention}\n```\n{finalpermissions}```")
 
 @bot.event
 async def on_guild_update(before, after):
@@ -294,11 +304,11 @@ async def on_guild_update(before, after):
 
 @bot.event
 async def on_guild_role_create(role):
-    await webhooksend("Role Created", f"{role.mention} Was Created")
+    await webhooksend("Role Created", f"{role.mention} **Was Created**")
 
 @bot.event
 async def on_guild_role_delete(role):
-    await webhooksend("Role Deleted", f"{role.name} Was Deleted")
+    await webhooksend("Role Deleted", f"{role.name} **Was Deleted**")
 
 @bot.event
 async def on_guild_role_update(before, after):
@@ -314,7 +324,7 @@ async def on_guild_role_update(before, after):
         if dict(before.permissions) != dict(after.permissions):
             afterpermissions = dict(after.permissions)
             finalpermissions = (str(afterpermissions).replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
-            await webhooksend("Role Permissions Changed", f"{after.mention}'s Permissions Updated To:```\n{finalpermissions}```")
+            await webhooksend("Role Permissions Changed", f"{after.mention}'s **Permissions Updated To:**```\n{finalpermissions}```")
     if before.position != after.position:
         await webhooksend("Role Position Changed", f"**From:**\n{before.position}\n**To:**\n{after.position}")
 
@@ -328,9 +338,112 @@ async def on_guild_emojis_update(before, after):
 async def on_voice_state_update(member, before, after):
     if before.channel != after.channel:
         if after.channel == None:
-            await webhooksend("Member Left Voice Channel", f"{member.mention} Left {before.channel.name}")
+            await webhooksend("Member Left Voice Channel", f"{member.mention} **Left** {before.channel.mention}")
         else:
-            await webhooksend("Member Joined Voice Channel", f"{member.mention} Joined {after.channel.name}")
+            await webhooksend("Member Joined Voice Channel", f"{member.mention} **Joined** {after.channel.mention}")
+        if before.deaf != after.deaf:
+            if after.deaf:
+                await webhooksend("Member Deafened", f"{member.mention} **Was Server Deafened**")
+            else:
+                await webhooksend("Member Un-Deafened", f"{member.mention} **Was Server Un-Deafened**")
+        if before.mute != after.mute:
+            if after.mute:
+                await webhooksend("Member Muted", f"{member.mention} **Was Server Muted**")
+            else:
+                await webhooksend("Member Un-Muted", f"{member.mention} **Was Server Un-Muted**")
+        if before.self_deaf != after.self_deaf:
+            if after.self_deaf:
+                await webhooksend("Member Self Deafened", f"{member.mention} **Has Self Deafened**")
+            else:
+                await webhooksend("Member Self Un-Deafened", f"{member.mention} **Has Self Un-Deafened**")
+        if before.self_mute != after.self_mute:
+            if after.self_mute:
+                await webhooksend("Member Self Muted", f"{member.mention} **Has Self Muted**")
+            else:
+                await webhooksend("Member Self Un-Muted", f"{member.mention} **Has Self Un-Muted**")
+        if before.self_stream != after.self_stream:
+            if after.self_stream:
+                await webhooksend("Member Streamed", f"{member.mention} **Is Streaming**")
+            else:
+                await webhooksend("Member Stopped Streaming", f"{member.mention} **Stopped Streaming**")
+        if before.self_video != after.self_video:
+            if after.self_video:
+                await webhooksend("Member Started Showing Video", f"{member.mention} **Started Showing Video**")
+            else:
+                await webhooksend("Member Stopped Showing Video", f"{member.mention} **Stopped Showing Video**")
+        if before.suppress != after.suppress:
+            if after.suppress:
+                await webhooksend("Member Suppressed", f"{member.mention} **Was Suppressed**")
+            else:
+                await webhooksend("Member Un-Suppressed", f"{member.mention} **Has Been Un-Suppressed**")
+        if before.requested_to_speak_at != after.requested_to_speak_at:
+            if after.requested_to_speak_at:
+                await webhooksend("Member Requested To Speak", f"{member.mention} **Requested To Speak**")
+            else:
+                await webhooksend("Member Stopped Requesting To Speak", f"{member.mention} **Stopped Requesting To Speak**")
+
+@bot.event
+async def on_guild_scheduled_event_create(event):
+    await webhooksend("Scheduled Event Created", f"**{event.name} Was Created**\n**Description:**\n{event.description}\n**Start:**\n{event.scheduled_start_time}\n**End:**\n{event.scheduled_end_time}\n**Event Channel:**\n{event.channel.mention}")
+
+@bot.event
+async def on_guild_scheduled_event_delete(event):
+    await webhooksend("Scheduled Event Deleted", f"**{event.name} Was Deleted**")
+
+@bot.event
+async def on_guild_scheduled_event_update(before, after):
+    if before.name != after.name:
+        await webhooksend("Scheduled Event Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.name}")
+    if before.description != after.description:
+        await webhooksend("Scheduled Event Description Changed", f"**From:**\n{before.description}\n**To:**\n{after.description}")
+    if before.scheduled_start_time != after.scheduled_start_time:
+        await webhooksend("Scheduled Event Start Changed", f"**From:**\n{before.scheduled_start_time}\n**To:**\n{after.scheduled_start_time}")
+    if before.scheduled_end_time != after.scheduled_end_time:
+        await webhooksend("Scheduled Event End Changed", f"**From:**\n{before.scheduled_end_time}\n**To:**\n{after.scheduled_end_time}")
+    if before.channel != after.channel:
+        await webhooksend("Scheduled Event Channel Changed", f"**From:**\n{before.channel.mention}\n**To:**\n{after.channel.mention}")
+
+@bot.event
+async def on_stage_instance_create(stage_instance):
+    await webhooksend("Stage Instance Created", f"**{stage_instance.name} Was Created**\n**Topic:**\n{stage_instance.Topic}\n**Stage Instance Channel:**\n{stage_instance.channel.mention}")
+
+@bot.event
+async def on_stage_instance_delete(stage_instance):
+    await webhooksend("Stage Instance Deleted", f"**{stage_instance.name} Was Deleted**")
+
+@bot.event
+async def on_stage_instance_update(before, after):
+    if before.name != after.name:
+        await webhooksend("Stage Instance Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.name}")
+    if before.topic != after.topic:
+        await webhooksend("Stage Instance topic Changed", f"**From:**\n{before.topic}\n**To:**\n{after.topic}")
+    if before.channel != after.channel:
+        await webhooksend("Stage Instance Channel Changed", f"**From:**\n{before.channel.mention}\n**To:**\n{after.channel.mention}")
+
+@bot.event
+async def on_invite_create(invite):
+    if invite.max_age == 0:
+        inviteage = "Never"
+    else:
+        inviteage = f"{invite.max_age}"
+    if invite.max_uses == 0:
+        inviteuses = "Unlimited"
+    else:
+        inviteuses = f"{invite.max_uses}"
+    await webhooksend("Invite Created", f"**Invite Created By:\**n{invite.inviter.metnion}\n**Invite Age:**\n{inviteage}**Possible Uses:**\n{inviteuses}\n**Invite Code:**\n{invite.code}\n**Temporary Membership?**\n{invite.temporary}\n**Invite Channel:**\n{invite.channel.mention}\n**Expires At:**\n{invite.expires_at}")
+
+@bot.event
+async def on_invite_delete(invite):
+    await webhooksend("Invite Deleted", f"**Invite Created By:**\n{invite.inviter.metnion}\n**Invite Code:**\n{invite.code}")
+
+@bot.event
+async def on_group_join(channel, user):
+    await webhooksend("Group Joined", f"**{user.mention} **Joined** {channel.mention}**")
+
+@bot.event
+async def on_group_remove(channel, user):
+    await webhooksend("Group Left", f"**{user.mention} **Left** {channel.mention}")
+
 
 @bot.event
 async def on_connect():
@@ -373,7 +486,7 @@ async def on_typing(channel, user, when):
 
 @bot.event
 async def on_bulk_message_delete(messages):
-    await webhooksend("Messages Bulk Deleted/Purged", f"Messages Bulk Deleted/Purged With A Total Of {len(messages)} Messages Deleted")
+    await webhooksend("Messages Bulk Deleted/Purged", f"**Messages Bulk Deleted/Purged With A Total Of {len(messages)} Messages Deleted**")
 
 @bot.event
 async def on_message_edit(before, after):
@@ -382,11 +495,11 @@ async def on_message_edit(before, after):
 
 @bot.event
 async def on_reaction_add(reaction, user):
-    await webhooksend("Reaction Added", f"{reaction.emoji} Was Added To {reaction.message.content} In {reaction.message.channel.mention} By {user.mention}")
+    await webhooksend("Reaction Added", f"{reaction.emoji} **Was Added To** {reaction.message.content} **In** {reaction.message.channel.mention} **By** {user.mention}")
 
 @bot.event
 async def on_reaction_remove(reaction, user):
-    await webhooksend("Reaction Removed", f"{reaction.emoji} Was Removed From {reaction.message.content} In {reaction.message.channel.mention} By {user.mention}")
+    await webhooksend("Reaction Removed", f"{reaction.emoji} **Was Removed From** {reaction.message.content} **In** {reaction.message.channel.mention} **By** {user.mention}")
 
 
 

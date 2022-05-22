@@ -19,6 +19,7 @@ from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.ext import commands
 
 from helpers import checks
+from helpers.webhook import webhooksend
 
 class ModApp(disnake.ui.Modal):
     def __init__(self) -> None:
@@ -53,28 +54,10 @@ class ModApp(disnake.ui.Modal):
         ApplyingFor = interaction.text_values["ApplyingFor"]
         Experience = interaction.text_values["Experience"]
         BR = interaction.text_values["BR"]
-        embed = disnake.Embed(
-           title=f"New Application",
-           description=f"<@{interaction.author.id}> Submitted This Application \n**Appplying For:**\n{ApplyingFor}\n**Experience:**\n{Experience}\n**Why Are You Better Than Others For Your Role:**\n{BR}",
-           color=0xDC143C,
-           timestamp=datetime.datetime.now()
-        )
-        await interaction.response.send_message(embed=embed)
+        await webhooksend("New Application", f"<@{interaction.author.id}> Submitted This Application \n**Appplying For:**\n{ApplyingFor}\n**Experience:**\n{Experience}\n**Why Are You Better Than Others For Your Role:**\n{BR}")
+        await interaction.response.send_message("Application Submitted Successfully!", ephemeral=True)
     async def on_error(self, error: Exception, inter: disnake.ModalInteraction) -> None:
-        await inter.response.send_message("Something Went Wrong Here...", ephemeral=True)
-
-class Counter(disnake.ui.View):
-
-
-    @disnake.ui.button(label="0", style=disnake.ButtonStyle.red)
-    async def count(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
-        number = int(button.label) if button.label else 0
-        if number + 1 >= 5:
-            button.style = disnake.ButtonStyle.green
-            button.disabled = True
-        button.label = str(number + 1)
-        # Make sure to update the message with our updated selves
-        await interaction.response.edit_message(view=self)
+        await inter.response.send_message("Error In Modal Interaction, {error}", ephemeral=True)
 
 
 
@@ -135,11 +118,6 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 except disnake.Forbidden:
                     pass
                 await member.kick(reason=reason)
-                webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
-                embed = DiscordEmbed(title="Member Kicked!", color=0xDC143C)
-                embed.set_description(f"**{member}** Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}")
-                webhook.add_embed(embed)
-                response = webhook.execute()
             except:
                 embed = disnake.Embed(
                     title="Error",
@@ -189,11 +167,6 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                         )
                         await interaction.send(embed=embed)
                         await member.ban(reason=reason)
-                        webhook = DiscordWebhook(url="https://discord.com/api/webhooks/969975055704522814/9KxNw2MNN_tpUWFreon7k5V00f9v4sPxIQ9MJCVVFMhWOXzZy3TWwyNuZkhaoPBIaROG")
-                        embed = DiscordEmbed(title="Member Banned!", color=0xDC143C)
-                        embed.set_description(f"**{member}** Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}")
-                        webhook.add_embed(embed)
-                        response = webhook.execute()
                       except:
                           embed = disnake.Embed(
                               title="Error!",
@@ -202,14 +175,6 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                               timestamp=datetime.datetime.now()
                           )
 
-    @commands.slash_command(
-        name="testcommand",
-        description="This is a testing command that does nothing.",
-    )
-    @checks.not_blacklisted()
-    @checks.is_owner()
-    async def testcommand(self, interaction: ApplicationCommandInteraction):
-        await interaction.send("This is a testing command that does nothing.", view=Counter(), ephemeral=True)
 
 
 
