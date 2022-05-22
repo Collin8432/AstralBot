@@ -54,25 +54,25 @@ modemb = disnake.Embed(
 class HelpButtons(disnake.ui.View):
     def __init__(self):
         super().__init__()
-        self.value = None
+        self.value = 0
     @disnake.ui.button(label="General ⚙️", style=disnake.ButtonStyle.success)
     async def General(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         await interaction.response.send_message(embed=helpemb, ephemeral=True)
-        self.value + 1
+        self.value += 1
         if self.value == 3:
             self.stop()
 
     @disnake.ui.button(label="Fun 🎉", style=disnake.ButtonStyle.success)
     async def Fun(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         await interaction.response.send_message(embed=funemb, ephemeral=True)
-        self.value + 1
+        self.value += 1
         if self.value == 3:
             self.stop()
 
     @disnake.ui.button(label="Moderation 🚩", style=disnake.ButtonStyle.success)
     async def Moderation(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         await interaction.response.send_message(embed=modemb, ephemeral=True)
-        self.value + 1
+        self.value += 1
         if self.value == 3:
             self.stop()
             
