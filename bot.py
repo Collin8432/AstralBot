@@ -5,6 +5,7 @@ import random
 import sys
 from time import time
 import datetime
+from typing import final
 from colorama import Fore
 import random
 from PIL import Image
@@ -20,6 +21,7 @@ import asyncio
 from disnake import Webhook
 import aiohttp
 from helpers.webhook import webhooksend
+from helpers.uptime import uptimesend
 from helpers import checks
 import exceptions
 import arrow
@@ -51,7 +53,7 @@ async def uptime_task() -> None:
     hours = (diff.seconds // 3600) % 24
     days = diff.days
     uptime_str = f"{days} days, {hours} hours, {minutes} minutes, {seconds} seconds"
-    await webhooksend(f"Uptime Update", f"{uptime_str}")
+    await uptimesend(f"Uptime Update", f"{uptime_str}")
 
 
 def load_commands(command_type: str) -> None:
@@ -257,46 +259,64 @@ async def on_guild_channel_delete(channel):
 @bot.event
 async def on_guild_channel_create(channel):
     await webhooksend("Channel Created", f"#{channel.mention} Was Created")
+
 @bot.event
 async def on_guild_channel_update(before, after):
     if before.name != after.name:
         await webhooksend("Channel Name Changed", f"**From:**\n<#{before.id}>\n**To:**\n<#{after.id}>")
     if before.changed_roles != after.changed_roles:
         print(f"{before.changed_roles} -> {after.changed_roles}")
-    if dict(before.overwrites_for(before.guild.get_role(945358876193210381))) != dict(after.overwrites_for(after.guild.get_role(945358876193210381))):
-        permissions = dict(after.overwrites_for(after.guild.get_role(945358876193210381)))
-        # if permissions["send_messages"] == True:
-        #     await webhooksend("Channel Permissions Changed", f"{after.mention} Sendmessages== True")
-        # if permissions["send_messages"] == None:
-        #     await webhooksend("Channel Permissions Changed", f"{after.mention} Sendmessages== None")
-        # if permissions["send_messages"] == False:
-        #     await webhooksend("Channel Permissions Changed", f"{after.mention} Sendmessages== False")
-        # for permission in permissions:
-        finalpermissions = (str(permissions).replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
-        await webhooksend("Channel Permissions Changed", f"```\n{finalpermissions}```")
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        # perms = after.guild.me.guild_permissions
+    roles = after.guild.roles
+    for role in roles:
+        if dict(after.overwrites_for(role)) != dict(before.overwrites_for(role)):
+            permissions = dict(after.overwrites_for(role))
+            finalpermissions = (str(permissions).replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
+            await webhooksend("Channel Permissions Changed", f"\nChannel Permissions Changed For {role.mention} In {after.mention}\n```\n{finalpermissions}```")
+    members = after.guild.members  
+    for member in members:
+        if dict(after.overwrites_for(member)) != dict(before.overwrites_for(member)):
+            permissions = dict(after.overwrites_for(member))
+            finalpermissions = (str(permissions).replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
+            await webhooksend("Channel Permissions Changed", f"\nChannel Permissions Changed For {member.mention} In {after.mention}\n```\n{finalpermissions}```")
 
-        # paginator = commands.Paginator()
-        # max_perm_length = max(len(p[0]) for p in perms) + 1
+@bot.event
+async def on_guild_update(before, after):
+    if before.name != after.name:
+        await webhooksend("Guild Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.name}")
+    if before.afk_timeout != after.afk_timeout:
+        await webhooksend("Guild AFK Timeout Changed", f"**From:**\n{before.afk_timeout}\n**To:**\n{after.afk_timeout}")
+    if before.afk_channel != after.afk_channel:
+        await webhooksend("Guild AFK Channel Changed", f"**From:**\n{before.afk_channel}\n**To:**\n{after.afk_channel}")
+    if before.owner_id != after.owner_id:
+        await webhooksend("Guild Owner Changed", f"**From:**\n{before.owner.mention}\n**To:**\n{after.owner.mention}")
+    if before.description != after.description:
+        await webhooksend("Guild Description Changed", f"**From:**\n{before.description}\n**To:**\n{after.description}")
 
-        # for attr, value in perms:
-        #     indicator = '✅' if value else '❌'
-        #     paginator.add_line(f'{attr: <{max_perm_length}} --> {indicator}')
+@bot.event
+async def on_guild_role_create(role):
+    await webhooksend("Role Created", f"{role.mention} Was Created")
 
-        # for page in paginator.pages:
-        #     await webhooksend("page", page)
+@bot.event
+async def on_guild_role_delete(role):
+    await webhooksend("Role Deleted", f"{role.name} Was Deleted")
 
-
-
+@bot.event
+async def on_guild_role_update(before, after):
+    if before.name != after.name:
+        await webhooksend("Role Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.name}")
+    if before.color != after.color:
+        await webhooksend("Role Color Changed", f"**From:**\n{before.color}\n**To:**\n{after.color}")
+    if before.hoist != after.hoist:
+        await webhooksend("Role Hoist Changed", f"**From:**\n{before.hoist}\n**To:**\n{after.hoist}")
+    if before.mentionable != after.mentionable:
+        await webhooksend("Role Mentionable Changed", f"**From:**\n{before.mentionable}\n**To:**\n{after.mentionable}")
+    if before.permissions != after.permissions:
+        if dict(before.permissions) != dict(after.permissions):
+            afterpermissions = dict(after.permissions)
+            finalpermissions = (str(afterpermissions).replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
+            await webhooksend("Role Permissions Changed", f"{after.mention}'s Permissions Updated To:```\n{finalpermissions}```")
+    if before.position != after.position:
+        await webhooksend("Role Position Changed", f"**From:**\n{before.position}\n**To:**\n{after.position}")
 
 
 @bot.event
@@ -340,7 +360,7 @@ async def on_typing(channel, user, when):
 
 @bot.event
 async def on_bulk_message_delete(messages):
-    await webhooksend("Messages Bulk Deleted/Purged", f"{messages}, With A Total Of {len(messages)} Messages Deleted")
+    await webhooksend("Messages Bulk Deleted/Purged", f"Messages Bulk Deleted/Purged With A Total Of {len(messages)} Messages Deleted")
 
 @bot.event
 async def on_message_edit(before, after):
@@ -355,9 +375,6 @@ async def on_reaction_add(reaction, user):
 async def on_reaction_remove(reaction, user):
     await webhooksend("Reaction Removed", f"{reaction.emoji} Was Removed From {reaction.message.content} In {reaction.message.channel.mention} By {user.mention}")
 
-@bot.slash_command(name="setperms", description="Set Permissions")
-async def setperms(interaction):
-    await interaction.channel.set_permissions(interaction.author, view_channel=True,
-                                                      send_messages=False)
+
 
 bot.run(config["token"])
