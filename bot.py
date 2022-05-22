@@ -320,6 +320,15 @@ async def on_guild_role_update(before, after):
 
 
 @bot.event
+async def on_guild_emojis_update(before, after):
+    if before.name != after.name:
+        await webhooksend("Emoji Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.name}")
+
+@bot.event
+async def on_voice_state_update(member, before, after):
+    if before
+
+@bot.event
 async def on_connect():
     global start_time
     start_time = datetime.datetime.now()
