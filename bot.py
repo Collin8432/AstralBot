@@ -326,7 +326,11 @@ async def on_guild_emojis_update(before, after):
 
 @bot.event
 async def on_voice_state_update(member, before, after):
-    if before
+    if before.channel != after.channel:
+        if after.channel == None:
+            await webhooksend("Member Left Voice Channel", f"{member.mention} Left {before.channel.name}")
+        else:
+            await webhooksend("Member Joined Voice Channel", f"{member.mention} Joined {after.channel.name}")
 
 @bot.event
 async def on_connect():
