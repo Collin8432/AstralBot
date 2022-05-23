@@ -12,14 +12,49 @@ from disnake.enums import ButtonStyle
 from disnake.ext import commands
 from disnake.ext.commands import Context
 from helpers import checks
+from helpers.ticketbutton import Ticketbutton
+from helpers.webhook import webhooksend
+
+class TicketReason(disnake.ui.Modal):
+    def __init__(self) -> None:
+        components = [
+            disnake.ui.TextInput(
+                label="What is the reason for this ticket?",
+                placeholder="Ex. I need help",
+                custom_id="Reason",
+                style=disnake.TextInputStyle.paragraph,
+                min_length=5,
+                max_length=500
+            )
+        ]
+        super().__init__(title="Ticket Reason", custom_id="TicketReason", components=components)
+    async def callback(self, interaction: disnake.ModalInteraction) -> None:
+        global Reason
+        Reason = interaction.text_values["Reason"]
+        await interaction.response.send_message("Ticket Submitted Successfully!", ephemeral=True)
+        ticketchannel = await interaction.guild.create_text_channel(
+        name=f"ticket-{interaction.author.name}",
+        overwrites={
+            interaction.author: disnake.PermissionOverwrite(view_channel=True, send_messages=True, read_messages=True),
+            interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False),
+            interaction.guild.get_role(972988909573242881): disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False)
+            }   
+        )
+        channel = ticketchannel 
+        embed = disnake.Embed(
+            title="Ticket Created!",
+            description=f"{interaction.author.mention} **Created This Ticket**\n**Reason: **\n{Reason}",
+            color=0xDC143C,
+            timestamp=datetime.datetime.now()
+        )
+        await channel.send(embed=embed)
+        await channel.send(view=Ticketbutton())
+        await webhooksend(f"Ticket Created", f"{interaction.author.mention} **Created A Ticket**\n\n**Reason:**{Reason}")
 
 
 class Buttons(disnake.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
-
-    # Creates a row of buttons and when one of them is pressed, it will send a message with the number of the button.
-
     @disnake.ui.button(emoji="✅", style=ButtonStyle.green)
     async def first_button(
         self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
@@ -159,8 +194,15 @@ class General(commands.Cog, name="General Cmds"):
         await interaction.send(embed=embed)
 
 
+   @commands.slash_command(
+       name="ticket",
+       description="Creates A Ticket",
+   )
+   @checks.not_blacklisted()
+   async def ticket(interaction):
+    await interaction.response.send_modal(modal=TicketReason())
 
-
+    
 
    
 

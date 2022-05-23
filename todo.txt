@@ -1,2 +1,0 @@
-finish webhook logging to
-on purge if the channel is verification channel make it send the message again
