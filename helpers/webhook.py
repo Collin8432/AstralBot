@@ -1,7 +1,6 @@
 from disnake import Webhook
 import disnake
 import aiohttp
-import asyncio
 import datetime
 
 async def webhooksend(title: str, description: str) -> None:

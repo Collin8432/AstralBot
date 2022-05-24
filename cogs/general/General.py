@@ -1,11 +1,8 @@
 import datetime
-import json
 import os
 import platform
 import random
-import sys
 
-import aiohttp
 import disnake
 from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.enums import ButtonStyle

@@ -4,7 +4,6 @@ import random
 import sys
 import platform
 
-import asyncio
 import aiohttp
 import datetime
 import disnake

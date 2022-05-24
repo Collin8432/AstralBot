@@ -3,10 +3,7 @@ import json
 import os
 import random
 import sys
-from time import time
 import datetime
-from typing import final
-from colorama import Fore
 import random
 from PIL import Image
 from PIL import ImageDraw
@@ -15,15 +12,8 @@ import disnake
 from disnake import ApplicationCommandInteraction
 from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
-from disnake.ext.commands import Context
-from discord_webhook import DiscordWebhook, DiscordEmbed
-import asyncio
-from disnake import Webhook
-import aiohttp
 from helpers.webhook import webhooksend
-from helpers import checks
-import exceptions
-import arrow
+
 if not os.path.isfile("./secret/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
 else:
@@ -185,7 +175,7 @@ async def on_member_join(member):
     if guild.system_channel is not None:
         img = Image.open("./img/astral.png")
         image = ImageDraw.Draw(img)
-        font = ImageFont.truetype("MomB.ttf", 30)
+        font = ImageFont.truetype("./font/MomB.ttf", 30)
         image.text((160, 275), f"Welcome,", font=font, fill=(43,22,197))
         image.text((160, 325), f"{member.name}", font=font, fill=(43,22,197))
         list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
@@ -237,7 +227,7 @@ async def verify(interaction):
 
         I1 = ImageDraw.Draw(img)
         
-        font = ImageFont.truetype("MomB.ttf", 30)
+        font = ImageFont.truetype("./fonts/MomB.ttf", 30)
         I1.text((150, 275), f"{FileName}", fill=(32,22,197), font=font)
         I1.text((125, 300), f"Please enter the", fill=(43,22,197), font=font)
         I1.text((125, 325), f"letters/numbers", fill=(43,22,197), font=font)

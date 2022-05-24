@@ -1,17 +1,10 @@
-import json
-import os
-import platform
-import random
-import sys
-import asyncio 
+
 
 import disnake
-from disnake import ApplicationCommandInteraction
 from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from disnake.ext.commands import Context
 from discord_webhook import DiscordWebhook, DiscordEmbed
-import traceback
 from disnake.enums import ButtonStyle
 
 
