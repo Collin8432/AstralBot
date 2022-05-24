@@ -1,7 +1,11 @@
-FROM python:3.10.1
+FROM python:3.9
 
-ADD bot.py .
+WORKDIR .
 
-RUN pip install disnake json os random sys time datetime typing colorama random PIL asyncio aiohttp asyncio arrow
+COPY requirements.txt .
 
-CMD ["python", "./bot.py"]
+RUN pip3 install -r requirements.txt
+
+COPY . .
+
+CMD ["python3", "bot.py"]

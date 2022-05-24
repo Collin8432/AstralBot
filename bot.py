@@ -24,10 +24,10 @@ from helpers.webhook import webhooksend
 from helpers import checks
 import exceptions
 import arrow
-if not os.path.isfile("config.json"):
+if not os.path.isfile("./secret/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
 else:
-    with open("config.json") as file:
+    with open("./secret/config.json") as file:
         config = json.load(file)
 
 intents = disnake.Intents.all()
@@ -183,7 +183,7 @@ async def on_user_update(before, after):
 async def on_member_join(member):
     guild = member.guild
     if guild.system_channel is not None:
-        img = Image.open("astral.png")
+        img = Image.open("./img/astral.png")
         image = ImageDraw.Draw(img)
         font = ImageFont.truetype("MomB.ttf", 30)
         image.text((160, 275), f"Welcome,", font=font, fill=(43,22,197))
@@ -233,7 +233,7 @@ async def verify(interaction):
             FileName += (random.choice(list))
             continue
         print(f"{FileName}")
-        img = Image.open('astral.png')
+        img = Image.open('./img/astral.png')
 
         I1 = ImageDraw.Draw(img)
         
