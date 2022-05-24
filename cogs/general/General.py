@@ -46,7 +46,7 @@ class TicketReason(disnake.ui.Modal):
         )
         await channel.send(embed=embed)
         await channel.send(view=Ticketbutton())
-        await webhooksend(f"Ticket Created", f"{interaction.author.mention} **Created A Ticket**\n\n**Reason:**{Reason}")
+        await webhooksend(f"Ticket Created", f"{interaction.author.mention} **Created A Ticket**\n**Reason:**\n{Reason}")
 
 
 class Buttons(disnake.ui.View):
@@ -68,7 +68,7 @@ class Buttons(disnake.ui.View):
 
 helpemb = disnake.Embed(
     title="General ⚙️",
-    description="**/help**, Displays Help Command\n**/Uptime**, Displays Bot Uptime\n **/Shutdown**, Shuts Bot Down(Permissions Required)\n**/randomchoice (choice) (choice)**, Picks A Random Choice, Simlar To Heads/Tails", 
+    description="**/help**, Displays Help Command\n**/Uptime**, Displays Bot Uptime\n **/Shutdown**, Shuts Bot Down(Permissions Required)\n**/randomchoice (choice) (choice)**, Picks A Random Choice, Simlar To Heads/Tails\n**/ticket**, Creates A Support Ticket", 
     color=0xDC143C,
     timestamp=datetime.datetime.now(),
 )
