@@ -2,6 +2,7 @@ import datetime
 import os
 import platform
 import random
+from unicodedata import category
 
 import disnake
 from disnake import ApplicationCommandInteraction, Option, OptionType
@@ -185,7 +186,7 @@ class General(commands.Cog, name="General Cmds"):
 
     
    @commands.slash_command(
-         name="ping",
+        name="ping",
         description="Pings Bot Latency",
    )
    async def ping(interaction):
@@ -199,7 +200,7 @@ class General(commands.Cog, name="General Cmds"):
     )
     await interaction.send(embed=embed)
 
-   
+
 
 def setup(bot):
     bot.add_cog(General(bot))

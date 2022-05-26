@@ -215,8 +215,8 @@ async def on_member_join(member):
         for i in range(5, 15):
             randomnumber += (random.choice(list))
             continue
-        img.save(f"astral{randomnumber}.png")
-        imgfile = disnake.File(f"astral{randomnumber}.png") 
+        img.save(f"./img/astral{randomnumber}.png")
+        imgfile = disnake.File(f"./img/astral{randomnumber}.png") 
         await guild.system_channel.send(file=imgfile)
         await webhooksend("Member Joined", f"<@{member.id}> Joined Astral")
 
@@ -525,5 +525,17 @@ async def on_reaction_remove(reaction, user):
     await webhooksend("Reaction Removed", f"{reaction.emoji} **Was Removed From** {reaction.message.content} **In** {reaction.message.channel.mention} **By** {user.mention}")
 
 
+@bot.slash_command(
+    name="setup",
+    description="Sets Up The Bot",
+)
+async def setup(interaction):
+    await interaction.send("Setup Started")
+    await interaction.send("Please Wait...")
+    category = await interaction.guild.create_category(name="Astral")
+    channel = await category.create_text_channel(name="Astral - Bot Logging")
+    imgfile = disnake.File(f"./img/astral.png") 
+    await channel.create_webhook(name="Astral - Bot Logging")
+    await interaction.send("Setup Complete!")
 
 bot.run(config["token"])
