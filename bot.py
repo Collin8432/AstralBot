@@ -182,7 +182,7 @@ async def on_presence_update(before, after):
 @bot.event
 async def on_member_update(before, after):
     if before.display_name != after.display_name:
-        print(f"{before.display_name} -> {after.display_name}")
+        await webhooksend("Display Name Changed", f"<@{after.id}> **Changed Name**\n**From:**\n{before.display_name}\n**To:**\n{after.display_name}")
     if before.roles != after.roles:
         roles = [role.mention for role in before.roles]
         roles2 = [role.mention for role in after.roles]
@@ -290,14 +290,15 @@ async def on_guild_channel_delete(channel):
 
 @bot.event
 async def on_guild_channel_create(channel):
-    await webhooksend("Channel Created", f"#{channel.mention} **Was Created**")
+    await webhooksend("Channel Created", f"{channel.mention} **Was Created**")
 
 @bot.event
 async def on_guild_channel_update(before, after):
     if before.name != after.name:
         await webhooksend("Channel Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.mention}")
     if before.changed_roles != after.changed_roles:
-        print(f"{before.changed_roles} -> {after.changed_roles}")
+
+        await webhooksend("Channel Roles Changed", f"**From:**\n{before.changed_roles}\n**To:**\n{after.changed_roles}\n\n//idek what this does")
     roles = after.guild.roles
     for role in roles:
         if dict(after.overwrites_for(role)) != dict(before.overwrites_for(role)):
