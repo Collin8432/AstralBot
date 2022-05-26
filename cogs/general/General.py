@@ -11,6 +11,7 @@ from disnake.ext.commands import Context
 from helpers import checks
 from helpers.ticketbutton import Ticketbutton
 from helpers.webhook import webhooksend
+from helpers.helpembeds import helpemb, funemb, modemb
 
 class TicketReason(disnake.ui.Modal):
     def __init__(self) -> None:
@@ -42,7 +43,7 @@ class TicketReason(disnake.ui.Modal):
             title="Ticket Created!",
             description=f"{interaction.author.mention} **Created This Ticket**\n**Reason: **\n{Reason}",
             color=0xDC143C,
-            timestamp=datetime.datetime.now()
+            timestamp=disnake.utils.utcnow()
         )
         await channel.send(embed=embed)
         await channel.send(view=Ticketbutton())
@@ -52,13 +53,13 @@ class TicketReason(disnake.ui.Modal):
 class Buttons(disnake.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
-    @disnake.ui.button(emoji="✅", style=ButtonStyle.green)
+    @disnake.ui.button(emoji="✅", style=ButtonStyle.green, custom_id="shutdowncomfirm")
     async def first_button(
         self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
     ):
         await interaction.response.send_message("Exiting...")
         os._exit(0)
-    @disnake.ui.button(emoji="⛔", style=ButtonStyle.red)
+    @disnake.ui.button(emoji="⛔", style=ButtonStyle.red, custom_id="shutdowncancel")
     async def second_button(
         self, button: disnake.ui.button, interaction: disnake.MessageInteraction
     ):
@@ -66,28 +67,11 @@ class Buttons(disnake.ui.View):
         await interaction.message.delete()
 
 
-helpemb = disnake.Embed(
-    title="General ⚙️",
-    description="**/help**, Displays Help Command\n**/Uptime**, Displays Bot Uptime\n **/Shutdown**, Shuts Bot Down(Permissions Required)\n**/randomchoice (choice) (choice)**, Picks A Random Choice, Simlar To Heads/Tails\n**/ticket**, Creates A Support Ticket", 
-    color=0xDC143C,
-    timestamp=datetime.datetime.now(),
-)
-funemb = disnake.Embed(
-    title="Fun ⚙️",
-    description="**/nerd**, NerdButton\n**/balls**, BallsButton",
-    color=0xDC143C,
-    timestamp=datetime.datetime.now(),
-)
-modemb = disnake.Embed(
-    title="Moderation ⚙️",
-    description="**/ban**, Bans A User\n**/kick**, Kicks A User\n**/purge**, Purges All The Messages In A Channel\n**/moderatorapplication**, Apply For Mod\n**/rules**, Only Can Be Used By Administrators, Displays Rules"
-)
-
 class HelpButtons(disnake.ui.View):
     def __init__(self):
         super().__init__()
         self.value = 0
-    @disnake.ui.button(label="General ⚙️", style=disnake.ButtonStyle.success)
+    @disnake.ui.button(label="General ⚙️", style=disnake.ButtonStyle.success, custom_id="genhelp")
     async def General(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         await interaction.response.send_message(embed=helpemb, ephemeral=True)
         self.value += 1
@@ -95,14 +79,14 @@ class HelpButtons(disnake.ui.View):
             self.stop()
 
     @disnake.ui.button(label="Fun 🎉", style=disnake.ButtonStyle.success)
-    async def Fun(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+    async def Fun(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction, custom_id="funhelp"):
         await interaction.response.send_message(embed=funemb, ephemeral=True)
         self.value += 1
         if self.value == 3:
             self.stop()
 
     @disnake.ui.button(label="Moderation 🚩", style=disnake.ButtonStyle.success)
-    async def Moderation(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+    async def Moderation(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction, custom_id="modhelp"):
         await interaction.response.send_message(embed=modemb, ephemeral=True)
         self.value += 1
         if self.value == 3:
@@ -127,7 +111,7 @@ class General(commands.Cog, name="General Cmds"):
       embed = disnake.Embed(
          description="Astral Bot - Coded by <@935339228324311040>",
          color=0xDC143C,
-         timestamp=datetime.datetime.now()
+         timestamp=disnake.utils.utcnow()
       )
       embed.set_author(
          name="Bot Information/Help"
@@ -200,6 +184,20 @@ class General(commands.Cog, name="General Cmds"):
     await interaction.response.send_modal(modal=TicketReason())
 
     
+   @commands.slash_command(
+         name="ping",
+        description="Pings Bot Latency",
+   )
+   async def ping(interaction):
+    latency = interaction.bot.latency * 1000
+    pong = round(latency, 2)
+    embed = disnake.Embed(
+        title="Pong!",
+        description=f"**Bot Latency:\n{pong} ms**",
+        color=0xDC143C,
+        timestamp=disnake.utils.utcnow()
+    )
+    await interaction.send(embed=embed)
 
    
 

@@ -13,6 +13,8 @@ from disnake import ApplicationCommandInteraction
 from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from helpers.webhook import webhooksend
+from helpers.helpembeds import helpemb, funemb, modemb
+import time
 
 if not os.path.isfile("./secret/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
@@ -39,7 +41,7 @@ async def status_task() -> None:
     description="Shows the uptime of the bot",
 )
 async def uptime(interaction):
-    end_time = datetime.datetime.now()
+    end_time = disnake.utils.utcnow()
     diff = end_time - start_time
     seconds = diff.seconds % 60
     minutes = (diff.seconds // 60) % 60
@@ -50,7 +52,7 @@ async def uptime(interaction):
         title="**Uptime**",
         description=f"**The bot has been online for: {uptime_str}**",
         color=0xDC143C,
-        timestamp=datetime.datetime.now()
+        timestamp=disnake.utils.utcnow()
     )
     await interaction.send(embed=embed)
 
@@ -77,6 +79,36 @@ if __name__ == "__main__":
 async def on_ready():
     print(f"Logged in as {bot.user.name} ")
     status_task.start()
+@bot.event
+async def on_button_click(interaction):
+    custom_id=interaction.component.custom_id
+    if custom_id == "pingstaff":
+        pingrole = interaction.guild.get_member(935339228324311040)
+        await interaction.send(pingrole.mention)
+    elif disnake.errors.HTTPException:
+        pass
+    elif custom_id == "deletechannel":
+        await interaction.channel.delete()
+    elif custom_id == "nerd":
+        await interaction.send("nerd")
+    elif custom_id == "balls":
+        await interaction.send("balls")
+    elif custom_id == "shutdownconfirm":
+        commands.has_permissions(administrator=True)
+        await interaction.send("Exiting...")
+        await os._exit(0)
+    elif custom_id == "shutdowncancel":
+        await interaction.send("Cancelled!")
+        await interaction.message.delete()
+    elif custom_id == "genhelp":
+        await interaction.send(embed=helpemb, ephemeral=True)
+    elif custom_id == "modhelp":
+        await interaction.send(embed=modemb, ephemeral=True)
+    elif custom_id == "funhelp":
+        await interaction.send(embed=funemb, ephemeral=True)
+    else:
+        pass
+
 
 @bot.event
 async def on_slash_command(interaction):
@@ -88,7 +120,7 @@ async def on_slash_command_error(interaction: ApplicationCommandInteraction, err
         title="Error",
         description=f"Error With Command:\n```py\n{error}```",
         color=0xDC143C,
-        timestamp=datetime.datetime.now()
+        timestamp=disnake.utils.utcnow()
     )
     try:
         await interaction.response.defer()
@@ -109,7 +141,7 @@ async def on_message(message):
             title=f"Nickname Changed!",
             description=f"<@{message.author.id}> Changed Nickname To: {message.content}",
             color=0xDC143C,
-            timestamp=datetime.datetime.now()
+            timestamp=disnake.utils.utcnow()
         )
         embed.set_image(url=message.author.display_avatar)
         await message.reply(embed=embed)
@@ -125,7 +157,7 @@ async def on_member_ban(guild, user):
         title="You Were Banned From Astral",
         description=f"<@{user.id}> Was Banned From Astral",
         color=0xDC143C,
-        timestamp=datetime.datetime.now()
+        timestamp=disnake.utils.utcnow()
     )
     await user.send(embed=embed)   
 
@@ -136,7 +168,7 @@ async def on_member_unban(guild, user):
         title="You Were Unbanned From Astral",
         description=f"<@{user.id}> Was Unbanned From Astral\nhttps://discord.gg/uNnJyjaG",
         color=0xDC143C,
-        timestamp=datetime.datetime.now()
+        timestamp=disnake.utils.utcnow()
     )
     await user.send(embed=embed)
 
@@ -195,7 +227,7 @@ async def on_member_remove(member):
         title=f"{member.name}, Sorry Too See You Go!",
         description=f"If you left on accident, please join back!\nhttps://discord.gg/uNnJyjaG",
         color=0xDC143C,
-        timestamp=datetime.datetime.now()
+        timestamp=disnake.utils.utcnow()
     )
     try:
         await member.send(embed=embed)
@@ -222,12 +254,11 @@ async def verify(interaction):
         for i in range(5, 15):
             FileName += (random.choice(list))
             continue
-        print(f"{FileName}")
         img = Image.open('./img/astral.png')
 
         I1 = ImageDraw.Draw(img)
         
-        font = ImageFont.truetype("./fonts/MomB.ttf", 30)
+        font = ImageFont.truetype("./font/MomB.ttf", 30)
         I1.text((150, 275), f"{FileName}", fill=(32,22,197), font=font)
         I1.text((125, 300), f"Please enter the", fill=(43,22,197), font=font)
         I1.text((125, 325), f"letters/numbers", fill=(43,22,197), font=font)
@@ -242,13 +273,14 @@ async def verify(interaction):
 
         await interaction.author.add_roles(disnake.Object(972988909573242881))
         await webhooksend("Member Verified", f"Verified <@{interaction.author.id}>")
+        
         if interaction.channel.id == 972679418763935794:
             await interaction.channel.purge(limit=9999999)
             embed = disnake.Embed(
                 title=f"How To Verify!",
-                description=f"To Verify Yourself, Please Enter /verify, Then Enter The Code, Case InSensitive",
+                description=f"**To Verify Yourself, Please Enter /verify, Then Enter The Code, Case InSensitive**",
                 color=0xDC143C,
-                timestamp=datetime.datetime.now()
+                timestamp=disnake.utils.utcnow()
             )
             await interaction.send(embed=embed)
 
@@ -438,7 +470,7 @@ async def on_group_remove(channel, user):
 @bot.event
 async def on_connect():
     global start_time
-    start_time = datetime.datetime.now()
+    start_time = disnake.utils.utcnow()
 
 
 @bot.event

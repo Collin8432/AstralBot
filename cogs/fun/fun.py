@@ -16,7 +16,7 @@ class NerdButton(disnake.ui.View):
 
     # Creates a row of buttons and when one of them is pressed, it will send a message with the number of the button.
 
-    @disnake.ui.button(emoji="🤓", style=ButtonStyle.red)
+    @disnake.ui.button(emoji="🤓", style=ButtonStyle.red, custom_id="nerd")
     async def first_button(
         self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
     ):
@@ -28,7 +28,7 @@ class BallsButton(disnake.ui.View):
    def __init__(self):
       super().__init__(timeout=None)
 
-   @disnake.ui.button(emoji="<:unknown:957276431916859442>", style=ButtonStyle.red)
+   @disnake.ui.button(emoji="<:unknown:957276431916859442>", style=ButtonStyle.red, custom_id="balls")
    async def first_button(
       self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
    ):

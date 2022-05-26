@@ -94,7 +94,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 title="Error!",
                 description="User has Admin permissions.",
                 color=0xE02B2B,
-                timestamp=datetime.datetime.now()
+                timestamp=disnake.utils.utcnow()
             )
             await interaction.send(embed=embed)
         else:
@@ -103,7 +103,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     title="Member Kicked",
                     description=f"<@{member.id}> Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}",
                     color=0xDC143C,
-                    timestamp=datetime.datetime.now()
+                    timestamp=disnake.utils.utcnow()
                 )
                 await interaction.send(embed=embed)
                 try:
@@ -111,7 +111,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     title="You Were Kicked!",
                     description=f"<@{member.id}> Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}",
                     color=0xDC143C,
-                    timestamp=datetime.datetime.now()
+                    timestamp=disnake.utils.utcnow()
                     )
                     await member.send(embed=embed)
                 except disnake.Forbidden:
@@ -122,7 +122,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     title="Error",
                     description="Error While Kicking Member, Make Sure Member Does Not Have Higher Roles Than Me",
                     color=0xDC143C,
-                    timestamp=datetime.datetime.now()
+                    timestamp=disnake.utils.utcnow()
                 )
                 await interaction.send(embed=embed)
     @commands.slash_command(
@@ -153,7 +153,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                           title="Error!",
                           description="User Has Administrator Permissions",
                           color=0xDC143C,
-                          timestamp=datetime.datetime.now()
+                          timestamp=disnake.utils.utcnow()
                       )
                       await interaction.send(embed=embed)
                   else:
@@ -162,7 +162,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                             title="Member Banned",
                             description=f"<@{member.id}> Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}",
                             color=0xDC143C,
-                            timestamp=datetime.datetime.now()
+                            timestamp=disnake.utils.utcnow()
                         )
                         await interaction.send(embed=embed)
                         await member.ban(reason=reason)
@@ -171,7 +171,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                               title="Error!",
                               description="Error While Banning Member, Make Sure Member Does Not Have Higher Roles Than Me",
                               color=0xDC143C,
-                              timestamp=datetime.datetime.now()
+                              timestamp=disnake.utils.utcnow()
                           )
 
 
@@ -196,7 +196,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             title="Messages Purged",
             description="Purged All Messages In This Channel",
             color=0xDC143C,
-            timestamp=datetime.datetime.now()
+            timestamp=disnake.utils.utcnow()
         )
         await interaction.send(embed=embed, ephemeral=True)
         await interaction.channel.purge(limit=200)
@@ -212,7 +212,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             title="Astral Rules",
             description="1. Dont Be Annoying\n2. Dont Ask For Free Shit/Mod\n3. Be Smart With What You Say And Do\n4. Please Be Kind And Follow Discord TOS",
             color=0xDC143C,
-            timestamp=datetime.datetime.now()
+            timestamp=disnake.utils.utcnow()
         )
         await interaction.send(embed=embed)
 def setup(bot):

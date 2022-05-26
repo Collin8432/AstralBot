@@ -10,6 +10,6 @@ async def webhooksend(title: str, description: str) -> None:
             title=f"{title}",
             description=f"{description}",
             color=0xDC143C,
-            timestamp=datetime.datetime.now()
+            timestamp=disnake.utils.utcnow()
          )
          await webhook.send(embed=embed, username="Astral - Bot Logging")
