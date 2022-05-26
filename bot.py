@@ -351,7 +351,7 @@ async def on_guild_role_update(before, after):
     if before.position != after.position:
         await webhooksend("Role Position Changed", f"**From:**\n{before.position}\n**To:**\n{after.position}")
 
-
+#
 @bot.event
 async def on_guild_emojis_update(before, after):
     if before.name != after.name:
