@@ -14,7 +14,7 @@ from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
-import time
+from helpers.database import on_join_insert, webhook_add, webhook_search
 
 if not os.path.isfile("./secret/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
@@ -285,6 +285,12 @@ async def verify(interaction):
             await interaction.send(embed=embed)
 
 @bot.event
+async def on_guild_join(guild):
+    await on_join_insert(guild.name, guild.id)
+
+
+
+@bot.event
 async def on_guild_channel_delete(channel):
     await webhooksend("Channel Deleted", f"{channel.name} **Was Deleted**")
 
@@ -453,11 +459,11 @@ async def on_invite_create(invite):
         inviteuses = "Unlimited"
     else:
         inviteuses = f"{invite.max_uses}"
-    await webhooksend("Invite Created", f"**Invite Created By:\**n{invite.inviter.metnion}\n**Invite Age:**\n{inviteage}**Possible Uses:**\n{inviteuses}\n**Invite Code:**\n{invite.code}\n**Temporary Membership?**\n{invite.temporary}\n**Invite Channel:**\n{invite.channel.mention}\n**Expires At:**\n{invite.expires_at}")
+    await webhooksend("Invite Created", f"**Invite Created By:**\n{invite.inviter.mention}\n**Invite Age:**\n{inviteage}**Possible Uses:**\n{inviteuses}\n**Invite Code:**\n{invite.code}\n**Temporary Membership?**\n{invite.temporary}\n**Invite Channel:**\n{invite.channel.mention}\n**Expires At:**\n{invite.expires_at}")
 
 @bot.event
 async def on_invite_delete(invite):
-    await webhooksend("Invite Deleted", f"**Invite Created By:**\n{invite.inviter.metnion}\n**Invite Code:**\n{invite.code}")
+    await webhooksend("Invite Deleted", f"**Invite Created By:**\n{invite.inviter.mention}\n**Invite Code:**\n{invite.code}")
 
 @bot.event
 async def on_group_join(channel, user):
@@ -534,8 +540,12 @@ async def setup(interaction):
     await interaction.send("Please Wait...")
     category = await interaction.guild.create_category(name="Astral")
     channel = await category.create_text_channel(name="Astral - Bot Logging")
-    imgfile = disnake.File(f"./img/astral.png") 
-    await channel.create_webhook(name="Astral - Bot Logging")
+    with open("./img/astral.png", "rb") as file:
+        data = file.read()
+    webhook = await channel.create_webhook(name="Astral - Bot Logging", avatar=data)
+    
+    await webhook_add(f"{interaction.guild.id}", f"{webhook.url}")
     await interaction.send("Setup Complete!")
+    
 
 bot.run(config["token"])
