@@ -15,3 +15,5 @@ async def webhook_search(guild_id):
    for result in results:
       return result["webhook"]
 
+async def on_leave_remove(guild_id):
+   db.remove(guild.guild_id == guild_id)
