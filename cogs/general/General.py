@@ -30,13 +30,17 @@ class TicketReason(disnake.ui.Modal):
     async def callback(self, interaction: disnake.ModalInteraction) -> None:
         global Reason
         Reason = interaction.text_values["Reason"]
+        roles = await interaction.guild.fetch_roles()
+        roles = [role.id for role in roles]
+        role = str(roles).replace("]", "").replace("[", "")
         await interaction.response.send_message("Ticket Submitted Successfully!", ephemeral=True)
+        
         ticketchannel = await interaction.guild.create_text_channel(
         name=f"ticket-{interaction.author.name}",
         overwrites={
             interaction.author: disnake.PermissionOverwrite(view_channel=True, send_messages=True, read_messages=True),
             interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False),
-            interaction.guild.get_role(972988909573242881): disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False)
+            # interaction.guild.roles: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False)
             }   
         )
         channel = ticketchannel 
