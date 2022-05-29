@@ -27,36 +27,6 @@ class Events(commands.Cog):
       print(f"Logged in as {self.bot.user.name}")
       
 
-   @commands.Cog.listener()
-   async def on_button_click(self, interaction):
-      custom_id=interaction.component.custom_id
-      if custom_id == "pingstaff":
-         pingrole = interaction.guild.get_member(935339228324311040)
-         await interaction.send(pingrole.mention)
-      elif disnake.errors.HTTPException:
-         pass
-      elif custom_id == "deletechannel":
-         await interaction.channel.delete()
-      elif custom_id == "nerd":
-         await interaction.send("nerd")
-      elif custom_id == "balls":
-         await interaction.send("balls")
-      elif custom_id == "shutdownconfirm":
-         commands.has_permissions(administrator=True)
-         await interaction.send("Exiting...")
-         await os._exit(0)
-      elif custom_id == "shutdowncancel":
-         await interaction.send("Cancelled!")
-         await interaction.message.delete()
-      elif custom_id == "genhelp":
-         await interaction.send(embed=helpemb, ephemeral=True)
-      elif custom_id == "modhelp":
-         await interaction.send(embed=modemb, ephemeral=True)
-      elif custom_id == "funhelp":
-         await interaction.send(embed=funemb, ephemeral=True)
-      else:
-         pass
-
 
    @commands.Cog.listener()
    async def on_slash_command(self, interaction):
@@ -382,7 +352,7 @@ class Events(commands.Cog):
 
    @commands.Cog.listener()  
    async def on_disconnect(self):
-      await webhooksend("Discord Error", "Called when the client has disconnected from Discord, or a connection attempt to Discord has failed. This could happen either through the internet being disconnected, explicit calls to close, or Discord terminating the connection one way or the other.", f"{self.guild.id}")
+      await webhooksend("Discord Error", "Called when the client has disconnected from Discord, or a connection attempt to Discord has failed. This could happen either through the internet being disconnected, explicit calls to close, or Discord terminating the connection one way or the other.", f"{self.bot.guild.id}")
 
    @commands.Cog.listener()
    async def on_shard_disconnect(self, shard_id):
@@ -394,7 +364,7 @@ class Events(commands.Cog):
 
    @commands.Cog.listener()
    async def on_resumed(self):
-      await webhooksend("Resumed", "Called when the client has resumed a connection to Discord.", f"{self.guild.id}")
+      await webhooksend("Resumed", "Called when the client has resumed a connection to Discord.", f"{self.bot.guild.id}")
 
    @commands.Cog.listener()
    async def on_shard_resumed(self, shard_id):

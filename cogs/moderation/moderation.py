@@ -67,7 +67,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
       self.bot = bot
 
     @commands.slash_command(
-        name="Kick",
+        name="kick",
         description="Kicks A Member From The Server",
         options=[
             Option(
@@ -126,7 +126,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 )
                 await interaction.send(embed=embed)
     @commands.slash_command(
-        name="Ban",
+        name="ban",
         description="Bans A Member From The Server",
         options=[
             Option(
@@ -178,7 +178,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
 
 
     @commands.slash_command(
-       name="ModeratorApplication",
+       name="moderatorapplication",
        description="Sends A Moderator Appliction"
     )
     async def Appliction(interaction: disnake.CommandInteraction):

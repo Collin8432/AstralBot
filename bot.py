@@ -81,7 +81,7 @@ async def Checker(filename):
     
 verifychannel = [972679418763935794]
 @bot.slash_command(
-    name="Verify",
+    name="verify",
     description="Verify yourself to gain access to the server"
 )
 async def verify(interaction):
@@ -153,6 +153,38 @@ async def test(interaction):
     roles = await interaction.guild.fetch_roles()
     roles = [role.mention for role in roles]
     await interaction.send(roles)
+
+
+
+@bot.event
+async def on_button_click(interaction):
+    custom_id=interaction.component.custom_id
+    if custom_id == "pingstaff":
+        pingrole = interaction.guild.get_member(935339228324311040)
+        await interaction.send(pingrole.mention)
+    elif disnake.errors.HTTPException:
+        pass
+    elif custom_id == "deletechannel":
+        print("fde")
+        await interaction.channel.delete()
+    elif custom_id == "nerd":
+        await interaction.send("nerd")
+    elif custom_id == "balls":
+        await interaction.send("balls")
+    elif custom_id == "shutdownconfirm":
+        await interaction.send("Exiting...")
+        await os._exit(0)
+    elif custom_id == "shutdowncancel":
+        await interaction.send("Cancelled!")
+        await interaction.message.delete()
+    elif custom_id == "genhelp":
+        await interaction.send(embed=helpemb, ephemeral=True)
+    elif custom_id == "modhelp":
+        await interaction.send(embed=modemb, ephemeral=True)
+    elif custom_id == "funhelp":
+        await interaction.send(embed=funemb, ephemeral=True)
+    else:
+        pass
 
 
 bot.run(config["token"])

@@ -30,17 +30,13 @@ class TicketReason(disnake.ui.Modal):
     async def callback(self, interaction: disnake.ModalInteraction) -> None:
         global Reason
         Reason = interaction.text_values["Reason"]
-        roles = await interaction.guild.fetch_roles()
-        roles = [role.id for role in roles]
-        role = str(roles).replace("]", "").replace("[", "")
         await interaction.response.send_message("Ticket Submitted Successfully!", ephemeral=True)
-        
         ticketchannel = await interaction.guild.create_text_channel(
         name=f"ticket-{interaction.author.name}",
-        overwrites={
+        overwrites={ 
             interaction.author: disnake.PermissionOverwrite(view_channel=True, send_messages=True, read_messages=True),
             interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False),
-            # interaction.guild.roles: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False)
+            # interaction: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False)
             }   
         )
         channel = ticketchannel 
@@ -108,7 +104,7 @@ class General(commands.Cog, name="General Cmds"):
    
 
    @commands.slash_command(
-      name="Help",
+      name="help",
       description="Displays Help Command"
    )
    @checks.not_blacklisted()
@@ -143,7 +139,7 @@ class General(commands.Cog, name="General Cmds"):
 
 
    @commands.slash_command(
-        name="Shutdown",
+        name="shutdown",
         description="Shuts The Bot Down.",
    )
    @checks.is_owner()
@@ -152,7 +148,7 @@ class General(commands.Cog, name="General Cmds"):
 
 
    @commands.slash_command(
-        name="Randomchoice",
+        name="randomchoice",
         description="Picks A Random Choice Out Of 2 Options",
         options=[
             Option(
