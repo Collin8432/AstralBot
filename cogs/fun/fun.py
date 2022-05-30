@@ -6,7 +6,6 @@ from disnake.ext.commands import Bot
 from disnake.ext.commands import Context
 from disnake.enums import ButtonStyle
 
-
 from helpers import checks
 import exceptions
 class NerdButton(disnake.ui.View):
@@ -50,6 +49,9 @@ class Fun(commands.Cog, name="fun cmds"):
     )
     async def balls(self, interaction):
        await interaction.send(view=BallsButton())
+   #  @commands.slash_command(
+   #       name="help",
+   #  )
       
 def setup(bot):
     bot.add_cog(Fun(bot))
