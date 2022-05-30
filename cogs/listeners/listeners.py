@@ -330,7 +330,7 @@ class Events(commands.Cog):
          inviteuses = "Unlimited"
       else:
          inviteuses = f"{invite.max_uses}"
-      await webhooksend("Invite Created", f"**Invite Created By:**\n{invite.inviter.mention}\n**Invite Age:**\n{inviteage}**Possible Uses:**\n{inviteuses}\n**Invite Code:**\n{invite.code}\n**Temporary Membership?**\n{invite.temporary}\n**Invite Channel:**\n{invite.channel.mention}\n**Expires At:**\n{invite.expires_at}", f"{invite.guild.id}")
+      await webhooksend("Invite Created", f"**Invite Created By:**\n{invite.inviter.mention}\n**Invite Age:**\n{inviteage}\n**Possible Uses:**\n{inviteuses}\n**Invite Code:**\n{invite.code}\n**Temporary Membership?**\n{invite.temporary}\n**Invite Channel:**\n{invite.channel.mention}\n**Expires At:**\n{invite.expires_at}", f"{invite.guild.id}")
 
    @commands.Cog.listener()
    async def on_invite_delete(self, invite):

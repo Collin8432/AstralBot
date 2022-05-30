@@ -201,8 +201,12 @@ class General(commands.Cog, name="General Cmds"):
     await interaction.send(embed=embed)
     
    @commands.slash_command()
+   async def command(interaction):
+       pass
+   @command.sub_command_group()
    async def invite(interaction):
        pass
+
     
    @invite.sub_command(
         name="link",
@@ -214,7 +218,8 @@ class General(commands.Cog, name="General Cmds"):
         description=f"https://discord.gg/NdwvUHCDcM",
         color=0xDC143C,
         timestamp=disnake.utils.utcnow()
-    )
+        )
+
     await interaction.send(embed=embed)
    @invite.sub_command(
         name="bot",
