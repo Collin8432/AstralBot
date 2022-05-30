@@ -199,7 +199,35 @@ class General(commands.Cog, name="General Cmds"):
         timestamp=disnake.utils.utcnow()
     )
     await interaction.send(embed=embed)
-
+    
+   @commands.slash_command()
+   async def invite(interaction):
+       pass
+    
+   @invite.sub_command(
+        name="link",
+        description="Gets Invite Link To Astral's Discord Server",
+   )
+   async def link(interaction):
+    embed = disnake.Embed(
+        title="Invite Link",
+        description=f"https://discord.gg/NdwvUHCDcM",
+        color=0xDC143C,
+        timestamp=disnake.utils.utcnow()
+    )
+    await interaction.send(embed=embed)
+   @invite.sub_command(
+        name="bot",
+        description="Gets Invite Link To Astral Bot",
+   )
+   async def bot(interaction):
+    embed = disnake.Embed(
+        title="Invite Link",
+        description=f"https://discord.com/api/oauth2/authorize?client_id=938579223780655145&permissions=8&scope=bot",
+        color=0xDC143C,
+        timestamp=disnake.utils.utcnow()
+    )
+    await interaction.send(embed=embed)
 
 
 def setup(bot):

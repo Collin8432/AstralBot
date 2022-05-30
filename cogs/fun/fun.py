@@ -49,9 +49,7 @@ class Fun(commands.Cog, name="fun cmds"):
     )
     async def balls(self, interaction):
        await interaction.send(view=BallsButton())
-   #  @commands.slash_command(
-   #       name="help",
-   #  )
+
       
 def setup(bot):
     bot.add_cog(Fun(bot))
