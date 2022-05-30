@@ -4,7 +4,6 @@ import disnake
 from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from disnake.ext.commands import Context
-from discord_webhook import DiscordWebhook, DiscordEmbed
 from disnake.enums import ButtonStyle
 
 

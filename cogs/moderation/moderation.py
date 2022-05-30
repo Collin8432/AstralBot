@@ -12,7 +12,6 @@ from disnake.ext.commands import Context
 from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.enums import ButtonStyle
 from disnake.ext import commands
-from discord_webhook import DiscordWebhook, DiscordEmbed
 import disnake
 from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.ext import commands

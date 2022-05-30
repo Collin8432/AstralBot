@@ -350,11 +350,7 @@ class Events(commands.Cog):
    async def on_shard_connect(self, shard_id):
       pass
 
-   @commands.Cog.listener()  
-   async def on_disconnect(self):
-      await webhooksend("Discord Error", "Called when the client has disconnected from Discord, or a connection attempt to Discord has failed. This could happen either through the internet being disconnected, explicit calls to close, or Discord terminating the connection one way or the other.", f"{self.bot.guild.id}")
-
-   @commands.Cog.listener()
+ 
    async def on_shard_disconnect(self, shard_id):
       pass
 
@@ -362,9 +358,6 @@ class Events(commands.Cog):
    async def on_shard_ready(self, shard_id):
       pass
 
-   @commands.Cog.listener()
-   async def on_resumed(self):
-      await webhooksend("Resumed", "Called when the client has resumed a connection to Discord.", f"{self.bot.guild.id}")
 
    @commands.Cog.listener()
    async def on_shard_resumed(self, shard_id):
@@ -381,7 +374,7 @@ class Events(commands.Cog):
 
    @commands.Cog.listener()
    async def on_bulk_message_delete(self, messages):
-      await webhooksend("Messages Bulk Deleted/Purged", f"**Messages Bulk Deleted/Purged With A Total Of {len(messages)} Messages Deleted**", f"{messages.guild.id}")
+      await webhooksend("Messages Bulk Deleted/Purged", f"**Messages Bulk Deleted/Purged With A Total Of {len(messages)} Messages Deleted**", f"{self.bot.guild.id}")
 
    @commands.Cog.listener()
    async def on_message_edit(self, before, after):

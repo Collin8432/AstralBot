@@ -14,7 +14,7 @@ from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
-from helpers.database import on_join_insert, webhook_add, webhook_search, on_leave_remove
+from helpers.database import webhook_add
 
 if not os.path.isfile("./secret/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
@@ -27,10 +27,6 @@ bot = Bot(command_prefix=config["prefix"], intents=intents)
 token = config.get("token")
 
 
-@bot.event
-async def on_connect():
-    global start_time
-    start_time = disnake.utils.utcnow()
 
 @bot.slash_command(
     name="uptime",
@@ -45,11 +41,11 @@ async def uptime(interaction):
     days = diff.days
     uptime_str = f"{days} days, {hours} hours, {minutes} minutes, {seconds} seconds"
     embed = disnake.Embed(
-        title="**Uptime**",
-        description=f"**The bot has been online for: {uptime_str}**",
+        title="Uptime",
+        description=f"**The Bot Has Been Online For: {uptime_str}**",
         color=0xDC143C,
-        timestamp=disnake.utils.utcnow()
-    )
+        timestamp=disnake.utils.utcnow(),
+    ) 
     await interaction.send(embed=embed)
 
 
@@ -71,13 +67,17 @@ if __name__ == "__main__":
     load_commands("moderation")
     load_commands("fun")
     load_commands("listeners")
+    global start_time
+    start_time = disnake.utils.utcnow()
+@bot.event
+async def on_connect():
+    await bot.change_presence(activity=disnake.Activity(name=f"Watching over {len(bot.guilds)} servers"))
 
-
-    
 async def Checker(filename):
     def check(message):
         return message.content == filename.upper() or message.content == filename.lower()
     await bot.wait_for("message", check=check)
+
     
 verifychannel = [972679418763935794]
 @bot.slash_command(
@@ -103,9 +103,10 @@ async def verify(interaction):
         I1.text((125, 325), f"letters/numbers", fill=(43,22,197), font=font)
         I1.text((75, 350), f"above to gain access", fill=(43,22,197), font=font)
         I1.text((150, 375), f"to Astral", fill=(43,22,197), font=font)
-        img.save(f"astral{FileName}.png")
-        await interaction.send(file=disnake.File(f"astral{FileName}.png"))
+        img.save(f"./img/astral{FileName}.png")
+        await interaction.send(file=disnake.File(f"./img/astral{FileName}.png"))
         try:
+            print(FileName)
             await Checker(f"{FileName}")
         except:
             print("fail")
