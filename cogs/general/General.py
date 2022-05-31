@@ -212,7 +212,7 @@ class General(commands.Cog, name="General Cmds"):
         name="link",
         description="Gets Invite Link To Astral's Discord Server",
    )
-   async def link(interaction):
+   async def link(self, interaction):
     embed = disnake.Embed(
         title="Invite Link",
         description=f"https://discord.gg/NdwvUHCDcM",
@@ -225,7 +225,7 @@ class General(commands.Cog, name="General Cmds"):
         name="bot",
         description="Gets Invite Link To Astral Bot",
    )
-   async def bot(interaction):
+   async def bot(self, interaction):
     embed = disnake.Embed(
         title="Invite Link",
         description=f"https://discord.com/api/oauth2/authorize?client_id=938579223780655145&permissions=8&scope=bot",

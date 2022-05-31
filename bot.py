@@ -14,7 +14,7 @@ from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
-from helpers.database import webhook_add
+from helpers.database import webhook_add, verification_add, memberchannel_add
 
 if not os.path.isfile("./secret/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
@@ -69,9 +69,11 @@ if __name__ == "__main__":
     load_commands("listeners")
     global start_time
     start_time = disnake.utils.utcnow()
+
+
 @bot.event
-async def on_connect():
-    await bot.change_presence(activity=disnake.Activity(name=f"Watching over {len(bot.guilds)} servers"))
+async def on_ready():
+    await bot.change_presence(activity=disnake.Activity(name=f"Watching Over {len(bot.guilds)} Servers!"))
 
 async def Checker(filename):
     def check(message):
@@ -146,16 +148,6 @@ async def testhooksend(interaction):
     await webhooksend("Test Message", "Test Message", f"{interaction.guild.id}")
     await interaction.send("Message Sent")
 
-@bot.slash_command(
-    name="test",
-    description="Tests the bot",
-)
-async def test(interaction):
-    roles = await interaction.guild.fetch_roles()
-    roles = [role.mention for role in roles]
-    await interaction.send(roles)
-
-
 
 @bot.event
 async def on_button_click(interaction):
@@ -186,6 +178,24 @@ async def on_button_click(interaction):
         await interaction.send(embed=funemb, ephemeral=True)
     else:
         pass
+
+@bot.slash_command(
+    name="setverification",
+    description="Sets the verification channel",
+)
+@bot.has_permissions(administrator=True)
+async def setverification(interaction):
+    await verification_add(f"{interaction.guild.id}", f"{interaction.channel.id}")
+    await interaction.send("Verification Channel Set!", ephemeral=True)
+
+@bot.slash_command(
+    name="setmembervoicechannel",
+    description="Sets the member voice channel",
+)
+@bot.has_permissions(administrator=True)
+async def setmembervoicechannel(interaction):
+    await memberchannel_add(f"{interaction.guild.id}", f"{interaction.channel.id}")
+    await interaction.send("Member Voice Channel Set!", ephemeral=True)
 
 
 bot.run(config["token"])
