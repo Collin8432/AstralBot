@@ -183,7 +183,7 @@ async def on_button_click(interaction):
     name="setverification",
     description="Sets the verification channel",
 )
-@bot.has_permissions(administrator=True)
+@commands.has_permissions(administrator=True)
 async def setverification(interaction):
     await verification_add(f"{interaction.guild.id}", f"{interaction.channel.id}")
     await interaction.send("Verification Channel Set!", ephemeral=True)
@@ -192,7 +192,7 @@ async def setverification(interaction):
     name="setmembervoicechannel",
     description="Sets the member voice channel",
 )
-@bot.has_permissions(administrator=True)
+@commands.has_permissions(administrator=True)
 async def setmembervoicechannel(interaction):
     await memberchannel_add(f"{interaction.guild.id}", f"{interaction.channel.id}")
     await interaction.send("Member Voice Channel Set!", ephemeral=True)
