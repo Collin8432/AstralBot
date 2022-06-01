@@ -200,8 +200,7 @@ class General(commands.Cog, name="General Cmds"):
     )
     await interaction.send(embed=embed)
     
-   
-   @commands.sub_command_group()
+   @commands.slash_command()
    async def invite(self, interaction):
        pass
 
