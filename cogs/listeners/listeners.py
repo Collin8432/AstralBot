@@ -45,6 +45,8 @@ class Events(commands.Cog):
          await interaction.edit_original_message(embed=embed, ephemeral=True)
       except:
          await interaction.send(embed=embed, ephemeral=True)
+      else:
+         pass
 
    @commands.Cog.listener("on_message")
    async def on_message(self, message):
