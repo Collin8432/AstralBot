@@ -30,8 +30,10 @@ class Events(commands.Cog):
 
    @commands.Cog.listener()
    async def on_slash_command(self, interaction):
-      await webhooksend(f"Command Executed", f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** in <#{interaction.channel.id}>", f"{interaction.guild.id}")
-
+      try:
+         await webhooksend(f"Command Executed", f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** in <#{interaction.channel.id}>", f"{interaction.guild.id}")
+      except:
+         pass
    @commands.Cog.listener()
    async def on_slash_command_error(self, interaction: ApplicationCommandInteraction, error: Exception) -> None:
       embed = disnake.Embed(
@@ -55,16 +57,7 @@ class Events(commands.Cog):
          await message.reply("Please Don't Say That")
          await message.delete()
          await webhooksend("N-Word Logged", f"<@{message.author.id}> Sent An N-Word In <#{message.channel.id}>\n **Content:** \n{message.content}", f"{message.guild.id}")
-      if message.channel.id == 970325969359503460 and message.author.id not in botids:
-         await message.author.edit(nick=f"{message.content}")
-         embed = disnake.Embed(
-               title=f"Nickname Changed!",
-               description=f"<@{message.author.id}> Changed Nickname To: {message.content}",
-               color=0xDC143C,
-               timestamp=disnake.utils.utcnow()
-         )
-         embed.set_image(url=message.author.display_avatar)
-         await message.reply(embed=embed)
+
 
    @commands.Cog.listener()
    async def on_message_delete(self, message):
@@ -240,49 +233,49 @@ class Events(commands.Cog):
    async def on_voice_state_update(self, member, before, after):
       if before.channel != after.channel:
          if after.channel == None:
-               await webhooksend("Member Left Voice Channel", f"{member.mention} **Left** {before.channel.mention}", f"{after.guild.id}")
+               await webhooksend("Member Left Voice Channel", f"{member.mention} **Left** {before.channel.mention}", f"{member.guild.id}")
          else:
-               await webhooksend("Member Joined Voice Channel", f"{member.mention} **Joined** {after.channel.mention}", f"{after.guild.id}")
+               await webhooksend("Member Joined Voice Channel", f"{member.mention} **Joined** {after.channel.mention}", f"{member.guild.id}")
          if before.deaf != after.deaf:
                if after.deaf:
-                  await webhooksend("Member Deafened", f"{member.mention} **Was Server Deafened**", f"{after.guild.id}")
+                  await webhooksend("Member Deafened", f"{member.mention} **Was Server Deafened**", f"{member.guild.id}")
                else:
-                  await webhooksend("Member Un-Deafened", f"{member.mention} **Was Server Un-Deafened**", f"{after.guild.id}")
+                  await webhooksend("Member Un-Deafened", f"{member.mention} **Was Server Un-Deafened**", f"{member.guild.id}")
          if before.mute != after.mute:
                if after.mute:
-                  await webhooksend("Member Muted", f"{member.mention} **Was Server Muted**", f"{after.guild.id}")
+                  await webhooksend("Member Muted", f"{member.mention} **Was Server Muted**", f"{member.guild.id}")
                else:
-                  await webhooksend("Member Un-Muted", f"{member.mention} **Was Server Un-Muted**", f"{after.guild.id}")
+                  await webhooksend("Member Un-Muted", f"{member.mention} **Was Server Un-Muted**", f"{member.guild.id}")
          if before.self_deaf != after.self_deaf:
                if after.self_deaf:
-                  await webhooksend("Member Self Deafened", f"{member.mention} **Has Self Deafened**", f"{after.guild.id}")
+                  await webhooksend("Member Self Deafened", f"{member.mention} **Has Self Deafened**", f"{member.guild.id}")
                else:
-                  await webhooksend("Member Self Un-Deafened", f"{member.mention} **Has Self Un-Deafened**", f"{after.guild.id}")
+                  await webhooksend("Member Self Un-Deafened", f"{member.mention} **Has Self Un-Deafened**", f"{member.guild.id}")
          if before.self_mute != after.self_mute:
                if after.self_mute:
-                  await webhooksend("Member Self Muted", f"{member.mention} **Has Self Muted**", f"{after.guild.id}")
+                  await webhooksend("Member Self Muted", f"{member.mention} **Has Self Muted**", f"{member.guild.id}")
                else:
-                  await webhooksend("Member Self Un-Muted", f"{member.mention} **Has Self Un-Muted**", f"{after.guild.id}")
+                  await webhooksend("Member Self Un-Muted", f"{member.mention} **Has Self Un-Muted**", f"{member.guild.id}")
          if before.self_stream != after.self_stream:
                if after.self_stream:
-                  await webhooksend("Member Streamed", f"{member.mention} **Is Streaming**", f"{after.guild.id}")
+                  await webhooksend("Member Streamed", f"{member.mention} **Is Streaming**", f"{member.guild.id}")
                else:
-                  await webhooksend("Member Stopped Streaming", f"{member.mention} **Stopped Streaming**", f"{after.guild.id}")
+                  await webhooksend("Member Stopped Streaming", f"{member.mention} **Stopped Streaming**", f"{member.guild.id}")
          if before.self_video != after.self_video:
                if after.self_video:
-                  await webhooksend("Member Started Showing Video", f"{member.mention} **Started Showing Video**", f"{after.guild.id}")
+                  await webhooksend("Member Started Showing Video", f"{member.mention} **Started Showing Video**", f"{member.guild.id}")
                else:
-                  await webhooksend("Member Stopped Showing Video", f"{member.mention} **Stopped Showing Video**", f"{after.guild.id}")
+                  await webhooksend("Member Stopped Showing Video", f"{member.mention} **Stopped Showing Video**", f"{member.guild.id}")
          if before.suppress != after.suppress:
                if after.suppress:
-                  await webhooksend("Member Suppressed", f"{member.mention} **Was Suppressed**", f"{after.guild.id}")
+                  await webhooksend("Member Suppressed", f"{member.mention} **Was Suppressed**", f"{member.guild.id}")
                else:
-                  await webhooksend("Member Un-Suppressed", f"{member.mention} **Has Been Un-Suppressed**", f"{after.guild.id}")
+                  await webhooksend("Member Un-Suppressed", f"{member.mention} **Has Been Un-Suppressed**", f"{member.guild.id}")
          if before.requested_to_speak_at != after.requested_to_speak_at:
                if after.requested_to_speak_at:
-                  await webhooksend("Member Requested To Speak", f"{member.mention} **Requested To Speak**", f"{after.guild.id}")
+                  await webhooksend("Member Requested To Speak", f"{member.mention} **Requested To Speak**", f"{member.guild.id}")
                else:
-                  await webhooksend("Member Stopped Requesting To Speak", f"{member.mention} **Stopped Requesting To Speak**", f"{after.guild.id}")
+                  await webhooksend("Member Stopped Requesting To Speak", f"{member.mention} **Stopped Requesting To Speak**", f"{member.guild.id}")
 
    @commands.Cog.listener()
    async def on_guild_scheduled_event_create(self, event):

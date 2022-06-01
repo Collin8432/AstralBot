@@ -214,5 +214,135 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             timestamp=disnake.utils.utcnow()
         )
         await interaction.send(embed=embed)
+    @commands.slash_command(
+        name="mute",
+        description="Mutes A Member",
+        options=[
+            Option(
+                name="user",
+                description="The Member You Want To Mute",
+                type=OptionType.user,
+                required=True
+            ),
+        ]
+    )
+    @commands.has_permissions(manage_roles=True)
+    @checks.not_blacklisted()
+    async def mute(self, interaction: ApplicationCommandInteraction, user: disnake.User):
+        await user.mute()
+        embed = disnake.Embed(
+            title="Member Muted",
+            description=f"<@{user.id}> Was Muted By <@{interaction.author.id}>",
+            color=0xDC143C,
+            timestamp=disnake.utils.utcnow()
+        )
+        await interaction.send(embed=embed)
+    @commands.slash_command(
+        name="unmute",
+        description="Unmutes A Member",
+        options=[
+            Option(
+                name="user",
+                description="The Member You Want To Unmute",
+                type=OptionType.user,
+                required=True
+            ),
+        ]
+    )
+    @commands.has_permissions(manage_roles=True)
+    @checks.not_blacklisted()
+    async def unmute(self, interaction: ApplicationCommandInteraction, user: disnake.User):
+        await user.unmute()
+        embed = disnake.Embed(
+            title="Member Unmuted",
+            description=f"<@{user.id}> Was Unmuted By <@{interaction.author.id}>",
+            color=0xDC143C,
+            timestamp=disnake.utils.utcnow()
+        )
+        await interaction.send(embed=embed)
+    @commands.slash_command(
+        name="deafen",
+        description="Deafens A Member",
+        options=[
+            Option(
+                name="user",
+                description="The Member You Want To Deafen",
+                type=OptionType.user,
+                required=True
+            ),
+        ]
+    )
+    @commands.has_permissions(manage_roles=True)
+    @checks.not_blacklisted()
+    async def deafen(self, interaction: ApplicationCommandInteraction, user: disnake.User):
+        await user.deafen()
+        embed = disnake.Embed(
+            title="Member Deafened",
+            description=f"<@{user.id}> Was Deafened By <@{interaction.author.id}>",
+            color=0xDC143C,
+            timestamp=disnake.utils.utcnow()
+        )
+        await interaction.send(embed=embed)
+    @commands.slash_command(
+        name="undeafen",
+        description="Undeafens A Member",
+        options=[
+            Option(
+                name="user",
+                description="The Member You Want To Undeafen",
+                type=OptionType.user,
+                required=True
+            ),
+        ]
+    )
+    @commands.has_permissions(manage_roles=True)
+    @checks.not_blacklisted()
+    async def undeafen(self, interaction: ApplicationCommandInteraction, user: disnake.User):
+        await user.undeafen()
+        embed = disnake.Embed(
+            title="Member Undeafened",
+            description=f"<@{user.id}> Was Undeafened By <@{interaction.author.id}>",
+            color=0xDC143C,
+            timestamp=disnake.utils.utcnow()
+        )
+        await interaction.send(embed=embed)
+    @commands.slash_command(
+        name="timeout",
+        description="Timeouts A Member",
+        options=[
+            Option(
+                name="user",
+                description="The Member You Want To Timeout",
+                type=OptionType.user,
+                required=True
+            ),
+            Option(
+                name="time",
+                description="The Timeout Time",
+                type=OptionType.integer,
+                required=True
+            ),
+            Option(
+                name="reason",
+                description="The Reason For Timeout",
+                type=OptionType.string,
+                required=True
+            ),
+        ]
+    )
+    @commands.has_permissions(manage_roles=True)
+    @checks.not_blacklisted()
+    async def timeout(self, interaction: ApplicationCommandInteraction, user: disnake.User, time: int, reason: str):
+        await user.timeout(user, time=time)
+        embed = disnake.Embed(
+            title="Member Timeout",
+            description=f"<@{user.id}> Was Timeout By <@{interaction.author.id}>\n**Time:**\n{time}\n**Reason:**\n{reason}",
+            color=0xDC143C,
+            timestamp=disnake.utils.utcnow()
+        )
+        await interaction.send(embed=embed)
+
+    
+                                                    
 def setup(bot):
     bot.add_cog(Moderation(bot))

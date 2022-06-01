@@ -14,7 +14,8 @@ from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
-from helpers.database import webhook_add, verification_add, memberchannel_add
+from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch
+from helpers import checks
 
 if not os.path.isfile("./secret/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
@@ -32,6 +33,7 @@ token = config.get("token")
     name="uptime",
     description="Shows the uptime of the bot",
 )
+@checks.not_blacklisted()
 async def uptime(interaction):
     end_time = disnake.utils.utcnow()
     diff = end_time - start_time
@@ -129,6 +131,8 @@ async def verify(interaction):
     name="setup",
     description="Sets Up The Bot",
 )
+@checks.not_blacklisted()
+@commands.has_permissions(manage_guild=True)
 async def setup(interaction):
     await interaction.send("Setup Started", ephemeral=True)
     category = await interaction.guild.create_category(name="Astral")
@@ -144,6 +148,8 @@ async def setup(interaction):
     name="testhooksend",
     description="Sends a test message to the webhook",
 )
+@checks.not_blacklisted()
+@commands.has_permissions(administrator=True)
 async def testhooksend(interaction):
     await webhooksend("Test Message", "Test Message", f"{interaction.guild.id}")
     await interaction.send("Message Sent")
@@ -184,6 +190,7 @@ async def on_button_click(interaction):
     description="Sets the verification channel",
 )
 @commands.has_permissions(administrator=True)
+@checks.not_blacklisted()
 async def setverification(interaction):
     await verification_add(f"{interaction.guild.id}", f"{interaction.channel.id}")
     await interaction.send("Verification Channel Set!", ephemeral=True)
@@ -193,9 +200,33 @@ async def setverification(interaction):
     description="Sets the member voice channel",
 )
 @commands.has_permissions(administrator=True)
+@checks.not_blacklisted()
 async def setmembervoicechannel(interaction):
     await memberchannel_add(f"{interaction.guild.id}", f"{interaction.channel.id}")
     await interaction.send("Member Voice Channel Set!", ephemeral=True)
 
+
+
+@bot.slash_command(
+    name="database",
+    description="Searches for servers db settings",
+)
+@commands.has_permissions(administrator=True)
+@checks.not_blacklisted()
+async def serversearchs(interaction):
+    results = await serversearch(f"{interaction.guild.id}")
+    for result in results:
+        name = result["guild_name"]
+        guildid = result["guild_id"]
+        webhook = result["webhook"]
+        memberchannel = result["memberchannel"]
+        verificationchannel = result["verification"]
+    embed = disnake.Embed(
+        title=f"Server Database",
+        description=f"**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}",
+        color=0xDC143C,
+        timestamp=disnake.utils.utcnow()
+    )
+    await interaction.send(embed=embed, ephemeral=True)
 
 bot.run(config["token"])
