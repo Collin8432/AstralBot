@@ -9,12 +9,12 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 import disnake
-from disnake import ApplicationCommandInteraction
+from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
-from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, memberchannel_search
+from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search
 from helpers import checks
 
 if not os.path.isfile("./secret/config.json"):
@@ -77,15 +77,15 @@ if __name__ == "__main__":
 async def status_task() -> None:
     statuses = [f"Watching Over {len(bot.guilds)} Servers"]
     await bot.change_presence(activity=disnake.Game(random.choice(statuses)))
-    for guild in bot.guilds:
-        channel1 = await memberchannel_search(f"{guild.id}")
-        if channel1 is not None:    
-            members = guild.member_count
-            ch = bot.get_channel(channel1)
-            try:
-                await ch.edit(name=f"Members: {members}")
-            except:
-                pass
+    # for guild in bot.guilds:
+    #     channel1 = await memberchannel_search(f"{guild.id}")
+    #     if channel1 is not None:    
+    #         members = guild.member_count
+    #         ch = bot.get_channel(channel1)
+    #         try:
+    #             await ch.edit(name=f"Members: {members}")
+    #         except:
+    #             pass
 
 
 @bot.event
@@ -98,14 +98,14 @@ async def Checker(filename):
     await bot.wait_for("message", check=check)
 
     
-verifychannel = [972679418763935794]
 @bot.slash_command(
     name="verify",
     description="Verify yourself to gain access to the server"
 )
 async def verify(interaction):
+    verifychannel = await verification_search(f"{interaction.guild.id}")
     if interaction.channel.id not in verifychannel:
-        await interaction.send("You can only use this command in <#972679418763935794>")
+        await interaction.send(f"You can only use this command in <#{verifychannel}>")
     else:
         list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
         FileName = ""
@@ -125,7 +125,6 @@ async def verify(interaction):
         img.save(f"./img/astral{FileName}.png")
         await interaction.send(file=disnake.File(f"./img/astral{FileName}.png"))
         try:
-            print(FileName)
             await Checker(f"{FileName}")
         except:
             print("fail")
@@ -155,10 +154,29 @@ async def setup(interaction):
     with open("./img/astral.png", "rb") as file:
         data = file.read()
     webhook = await channel.create_webhook(name="Astral - Bot Logging", avatar=data)
-    
+    muterole = await interaction.create_role(name="Mute Role", permissions=disnake.Permissions(speak=False))
+    await muterole_add(interaction.guild.id, muterole.id)
     await webhook_add(f"{interaction.guild.id}", f"{webhook.url}")
     await interaction.send("Setup Complete!", ephemeral=True)
     
+
+# @bot.slash_command(
+#     name="addmute",
+#     description="Mute",
+#     options=[
+#         Option(
+#             name="id",
+#             description="The id you want to add to list",
+#             required=True
+#         ),
+#     ]
+# )
+# @checks.not_blacklisted()
+# @commands.has_permissions(administrator=True)
+# async def addmute(interaction, id):
+#     await muterole_add(f"{interaction.guild.id}", f"{id}")
+#     await interaction.send(f"Added <@{id}> to the Mute List")
+
 @bot.slash_command(
     name="testhooksend",
     description="Sends a test message to the webhook",

@@ -1,9 +1,14 @@
+import dbm
 import mysql.connector
 
-mydb = mysql.connector.connect(
+db = mysql.connector.connect(
   host="localhost",
-  user="yourusername",
-  password="yourpassword"
+  user="root",
+  password="8432",
+  database="testdatabase"
 )
 
-print(mydb)
+cursor = db.cursor()
+
+
+print(db)

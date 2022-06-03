@@ -16,8 +16,10 @@ import disnake
 from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.ext import commands
 
+
 from helpers import checks
 from helpers.webhook import webhooksend
+from helpers.database import muterole_search
 
 class ModApp(disnake.ui.Modal):
     def __init__(self) -> None:
@@ -229,7 +231,17 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.has_permissions(manage_roles=True)
     @checks.not_blacklisted()
     async def mute(self, interaction: ApplicationCommandInteraction, user: disnake.User):
-        await user.mute()
+        muterole = await muterole_search(interaction.guild.id)
+        if muterole is None:
+            embed = disnake.Embed(
+                title="Error!",
+                description="No Mute Role Found",
+                color=0xE02B2B,
+                timestamp=disnake.utils.utcnow()
+            )
+            await interaction.send(embed=embed)
+        else:
+            await user.add_roles(muterole)
         embed = disnake.Embed(
             title="Member Muted",
             description=f"<@{user.id}> Was Muted By <@{interaction.author.id}>",
@@ -237,6 +249,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             timestamp=disnake.utils.utcnow()
         )
         await interaction.send(embed=embed)
+
     @commands.slash_command(
         name="unmute",
         description="Unmutes A Member",
@@ -252,7 +265,17 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.has_permissions(manage_roles=True)
     @checks.not_blacklisted()
     async def unmute(self, interaction: ApplicationCommandInteraction, user: disnake.User):
-        await user.unmute()
+        muterole = await muterole_search(interaction.guild.id)
+        if muterole is None:
+            embed = disnake.Embed(
+                title="Error!",
+                description="No Mute Role Found",
+                color=0xE02B2B,
+                timestamp=disnake.utils.utcnow()
+            )
+            await interaction.send(embed=embed)
+        else:
+            await user.remove_roles(muterole)
         embed = disnake.Embed(
             title="Member Unmuted",
             description=f"<@{user.id}> Was Unmuted By <@{interaction.author.id}>",
@@ -283,29 +306,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             timestamp=disnake.utils.utcnow()
         )
         await interaction.send(embed=embed)
-    @commands.slash_command(
-        name="undeafen",
-        description="Undeafens A Member",
-        options=[
-            Option(
-                name="user",
-                description="The Member You Want To Undeafen",
-                type=OptionType.user,
-                required=True
-            ),
-        ]
-    )
-    @commands.has_permissions(manage_roles=True)
-    @checks.not_blacklisted()
-    async def undeafen(self, interaction: ApplicationCommandInteraction, user: disnake.User):
-        await user.undeafen()
-        embed = disnake.Embed(
-            title="Member Undeafened",
-            description=f"<@{user.id}> Was Undeafened By <@{interaction.author.id}>",
-            color=0xDC143C,
-            timestamp=disnake.utils.utcnow()
-        )
-        await interaction.send(embed=embed)
+   
     @commands.slash_command(
         name="timeout",
         description="Timeouts A Member",

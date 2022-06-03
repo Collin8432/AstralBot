@@ -32,6 +32,17 @@ async def on_leave_remove(guild_id):
 async def muterole_add(guild_id, roleid):
    db.update({"muterole": roleid}, guild.guild_id == guild_id)
 
+async def muterole_search(guild_id):
+   results = db.search(guild.guild_id == guild_id)
+   for result in results:
+      return result["muterole"]
+
 async def serversearch(guild_id):
    results = db.search(guild.guild_id == guild_id)
    return results
+
+async def verification_search(guild_id):
+   results = db.search(guild.guild_id == guild_id)
+   for result in results:
+      return result["verification"]
+      
