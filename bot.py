@@ -14,7 +14,7 @@ from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
-from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch
+from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, memberchannel_search
 from helpers import checks
 
 if not os.path.isfile("./secret/config.json"):
@@ -73,9 +73,24 @@ if __name__ == "__main__":
     start_time = disnake.utils.utcnow()
 
 
+@tasks.loop(minutes=1.0)
+async def status_task() -> None:
+    statuses = [f"Watching Over {len(bot.guilds)} Servers"]
+    await bot.change_presence(activity=disnake.Game(random.choice(statuses)))
+    for guild in bot.guilds:
+        channel1 = await memberchannel_search(f"{guild.id}")
+        if channel1 is not None:    
+            members = guild.member_count
+            ch = bot.get_channel(channel1)
+            try:
+                await ch.edit(name=f"Members: {members}")
+            except:
+                pass
+
+
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=disnake.Activity(name=f"Watching Over {len(bot.guilds)} Servers!"))
+    await status_task.start()
 
 async def Checker(filename):
     def check(message):

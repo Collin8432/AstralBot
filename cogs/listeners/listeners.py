@@ -14,13 +14,7 @@ class Events(commands.Cog):
       self.bot = bot
 
 
-   @tasks.loop(minutes=1.0)
-   async def status_task(self) -> None:
-      statuses = [f"Watching Over {len(self.bot.guilds)} Servers"]
-      await self.bot.change_presence(activity=disnake.Game(random.choice(statuses)))
-      channel = await self.bot.fetch_channel(975404941919260672)
-      member = channel.guild.member_count
-      await channel.edit(name=f"Members: {member}")
+
 
    @commands.Cog.listener()
    async def on_ready(self):
@@ -87,7 +81,7 @@ class Events(commands.Cog):
 
    @commands.Cog.listener()
    async def on_presence_update(self, before, after):
-      if before.status != after.status and after.id != 935339228324311040:
+      if before.status != after.status:
          await webhooksend("Presence Changed", f"<@{after.id}> Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}", f"{after.guild.id}")
       if before.activity != after.activity and after.id != 935339228324311040:
          await webhooksend("Activity Changed", f"<@{after.id}> Changed Activity \n**From:**\n{before.activity}\n**To:**\n{after.activity}", f"{after.guild.id}")
@@ -144,7 +138,7 @@ class Events(commands.Cog):
       )
       try:
          await member.send(embed=embed)
-      except disnake.Forebidden:
+      except disnake.errors.Forbidden or disnake.Forbidden: 
          pass
 
       

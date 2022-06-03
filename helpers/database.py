@@ -16,6 +16,11 @@ async def verification_add(guild_id, channelid):
 async def memberchannel_add(guild_id, channelid):
    db.update({"memberchannel": channelid}, guild.guild_id == guild_id)
 
+async def memberchannel_search(guild_id):
+   results = db.search(guild.guild_id == guild_id)
+   for result in results:
+      return result["memberchannel"]
+
 async def webhook_search(guild_id):
    results = db.search(guild.guild_id == guild_id)
    for result in results:
