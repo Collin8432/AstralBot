@@ -209,7 +209,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.has_permissions(administrator=True)
     async def rules(interaction):
         embed = disnake.Embed(
-            title="Astral Rules",
+            title="Rules",
             description="1. Dont Be Annoying\n2. Dont Ask For Free Shit/Mod\n3. Be Smart With What You Say And Do\n4. Please Be Kind And Follow Discord TOS",
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
@@ -283,32 +283,6 @@ class Moderation(commands.Cog, name="Mod Cmds"):
         embed = disnake.Embed(
             title="Member Unmuted",
             description=f"<@{user.id}> Was Unmuted By <@{interaction.author.id}>",
-            color=0xDC143C,
-            timestamp=disnake.utils.utcnow()
-        )
-        await interaction.send(embed=embed)
-
-
-
-    @commands.slash_command(
-        name="deafen",
-        description="Deafens A Member",
-        options=[
-            Option(
-                name="user",
-                description="The Member You Want To Deafen",
-                type=OptionType.user,
-                required=True
-            ),
-        ]
-    )
-    @commands.has_permissions(manage_roles=True)
-    @checks.not_blacklisted()
-    async def deafen(self, interaction: ApplicationCommandInteraction, user: disnake.User):
-        await user.deafen()
-        embed = disnake.Embed(
-            title="Member Deafened",
-            description=f"<@{user.id}> Was Deafened By <@{interaction.author.id}>",
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
         )

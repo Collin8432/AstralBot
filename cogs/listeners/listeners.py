@@ -76,10 +76,10 @@ class Events(commands.Cog):
 
    @commands.Cog.listener()
    async def on_member_ban(self, guild, user):
-      await webhooksend("Member Banned", f"<@{user.id}> Was Banned From Astral", f"{guild.id}")
+      await webhooksend("Member Banned", f"{user.mention} Was Banned From {guild.name}", f"{guild.id}")
       embed = disnake.Embed(
-         title="You Were Banned From Astral",
-         description=f"<@{user.id}> Was Banned From Astral",
+         title=f"You Were Banned From {guild.name}",
+         description=f"{user.mention} Was Banned From {guild.name}",
          color=0xDC143C,
          timestamp=disnake.utils.utcnow()
       ) 
@@ -91,8 +91,8 @@ class Events(commands.Cog):
    async def on_member_unban(self, guild, user):
       await webhooksend("Member Unbanned", f"<@{user.id}> Was Unbanned From Astral", f"{guild.guild.id}")
       embed = disnake.Embed(
-         title="You Were Unbanned From Astral",
-         description=f"<@{user.id}> Was Unbanned From Astral\nhttps://discord.gg/uNnJyjaG",
+         title=f"You Were Unbanned From {guild.name}",
+         description=f"{guild.name} Unbanned You, Astral discord Server:\nhttps://discord.gg/uNnJyjaG",
          color=0xDC143C,
          timestamp=disnake.utils.utcnow()
       )
@@ -103,16 +103,16 @@ class Events(commands.Cog):
    @commands.Cog.listener()
    async def on_presence_update(self, before, after):
       if before.status != after.status:
-         await webhooksend("Presence Changed", f"<@{after.id}> Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}", f"{after.guild.id}")
-      if before.activity != after.activity and after.id != 935339228324311040:
-         await webhooksend("Activity Changed", f"<@{after.id}> Changed Activity \n**From:**\n{before.activity}\n**To:**\n{after.activity}", f"{after.guild.id}")
+         await webhooksend("Presence Changed", f"{after.mention} Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}", f"{after.guild.id}")
+      if before.activity != after.activity:
+         await webhooksend("Activity Changed", f"{after.mention} Changed Activity \n**From:**\n{before.activity}\n**To:**\n{after.activity}", f"{after.guild.id}")
 
 
 
    @commands.Cog.listener()
    async def on_member_update(self, before, after):
       if before.display_name != after.display_name:
-         await webhooksend("Display Name Changed", f"<@{after.id}> **Changed Name**\n**From:**\n{before.display_name}\n**To:**\n{after.display_name}", f"{after.guild.id}")
+         await webhooksend("Display Name Changed", f"{after.mention} **Changed Name**\n**From:**\n{before.display_name}\n**To:**\n{after.display_name}", f"{after.guild.id}")
       if before.roles != after.roles:
          roles = [role.mention for role in before.roles]
          roles2 = [role.mention for role in after.roles]
@@ -150,16 +150,16 @@ class Events(commands.Cog):
             img.save(f"./img/astral{randomnumber}.png")
             imgfile = disnake.File(f"./img/astral{randomnumber}.png") 
             await guild.system_channel.send(file=imgfile)
-            await webhooksend("Member Joined", f"<@{member.id}> Joined Astral", f"{member.guild.id}")
+            await webhooksend(f"Member Joined", f"{member.mention} Joined {member.guild.name}", f"{member.guild.id}")
 
 
 
    @commands.Cog.listener()
    async def on_member_remove(self, member):
-      await webhooksend("Member Left", f"<@{member.id}> Left Astral", f"{member.guild.id}")
+      await webhooksend("Member Left", f"{member.mention} Left {member.guild.name }", f"{member.guild.id}")
       embed = disnake.Embed(
          title=f"{member.name}, Sorry Too See You Go!",
-         description=f"If you left on accident, please join back!\nhttps://discord.gg/uNnJyjaG",
+         description=f"If you left on accident, please join back!\nAstral Discord Server:\nhttps://discord.gg/uNnJyjaG",
          color=0xDC143C,
          timestamp=disnake.utils.utcnow()
       )

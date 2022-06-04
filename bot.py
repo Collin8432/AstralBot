@@ -22,6 +22,7 @@ from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
 from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search, verifyrole_add, verifyrole_search
 from helpers import checks
+from helpers import (is_owner, not_blacklisted, is_astral_server)
 
 
 # Setting Up Bot
@@ -181,14 +182,15 @@ async def serversearchs(interaction):
         verificationchannel = result["verification"]
         muterole = result["muterole"]
         verifyrole = result["verifyrole"]
-
     embed = disnake.Embed(
         title=f"Server Database",
-        description=f"**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",
+        description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",
         color=0xDC143C,
         timestamp=disnake.utils.utcnow()
     )
     await interaction.send(embed=embed, ephemeral=True)
+    
+
 
 
 
@@ -222,7 +224,7 @@ async def verify(interaction):
         I1.text((125, 300), f"Please enter the", fill=(43,22,197), font=font)
         I1.text((125, 325), f"letters/numbers", fill=(43,22,197), font=font)
         I1.text((75, 350), f"above to gain access", fill=(43,22,197), font=font)
-        I1.text((150, 375), f"to Astral", fill=(43,22,197), font=font)
+        I1.text((150, 375), f"to {interaction.guild.name}", fill=(43,22,197), font=font)
         img.save(f"./img/astral{FileName}.png")
         await interaction.send(file=disnake.File(f"./img/astral{FileName}.png"))
         try:

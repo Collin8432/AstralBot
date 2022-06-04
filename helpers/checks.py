@@ -11,8 +11,10 @@ from disnake.ext import commands
 from exceptions import *
 
 
+
 # Setting Up Callable Functions
 T = TypeVar("T")
+
 
 
 def is_owner() -> Callable[[T], T]:
