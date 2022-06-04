@@ -1,15 +1,11 @@
-
 import json
 import os
 import random
 import sys
-import datetime
-import random
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 import disnake
-from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from helpers.webhook import webhooksend
