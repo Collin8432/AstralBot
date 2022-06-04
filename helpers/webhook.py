@@ -1,8 +1,18 @@
-from disnake import Webhook
+# Imports
 import disnake
+from disnake import Webhook
+
+
+
 import aiohttp
+
+
+
 from helpers.database import webhook_search
 
+
+
+# Function
 async def webhooksend(title: str, description: str, guild_id: str) -> None:
    try:
       async with aiohttp.ClientSession() as session:

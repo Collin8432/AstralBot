@@ -1,21 +1,30 @@
-import disnake
-from disnake.ext import commands, tasks
-from disnake import ApplicationCommandInteraction
-from helpers.webhook import webhooksend
-from helpers.helpembeds import helpemb, funemb, modemb
-from PIL import Image, ImageDraw, ImageFont
-import os
+# Imports
 import random
+
+
+
+import disnake
+from disnake.ext import commands
+from disnake import ApplicationCommandInteraction
+
+
+
+from helpers.webhook import webhooksend
 from helpers.database import on_join_insert, on_leave_remove
 
 
+
+from PIL import Image, ImageDraw, ImageFont
+
+
+
+# Events Cog
 class Events(commands.Cog):
    def __init__(self, bot: commands.Bot):
       self.bot = bot
 
 
-
-
+   #Listeners
    @commands.Cog.listener()
    async def on_ready(self):
       print(f"Logged in as {self.bot.user.name}")
@@ -28,6 +37,9 @@ class Events(commands.Cog):
          await webhooksend(f"Command Executed", f"**<@{interaction.author.id}>** Executed /**{interaction.data.name}** in <#{interaction.channel.id}>", f"{interaction.guild.id}")
       except:
          pass
+
+
+
    @commands.Cog.listener()
    async def on_slash_command_error(self, interaction: ApplicationCommandInteraction, error: Exception) -> None:
       embed = disnake.Embed(
@@ -44,6 +56,8 @@ class Events(commands.Cog):
       else:
          pass
 
+
+
    @commands.Cog.listener("on_message")
    async def on_message(self, message):
       botids = [938579223780655145]
@@ -53,9 +67,12 @@ class Events(commands.Cog):
          await webhooksend("N-Word Logged", f"<@{message.author.id}> Sent An N-Word In <#{message.channel.id}>\n **Content:** \n{message.content}", f"{message.guild.id}")
 
 
+
    @commands.Cog.listener()
    async def on_message_delete(self, message):
       await webhooksend("Message Deleted", f"Chat Deleted In <#{message.channel.id}>\n**Author:** \n<@{message.author.id}>\n**Content:** \n{message.content}", f"{message.guild.id}")
+
+
 
    @commands.Cog.listener()
    async def on_member_ban(self, guild, user):
@@ -68,6 +85,8 @@ class Events(commands.Cog):
       ) 
       await user.send(embed=embed)   
 
+
+
    @commands.Cog.listener()
    async def on_member_unban(self, guild, user):
       await webhooksend("Member Unbanned", f"<@{user.id}> Was Unbanned From Astral", f"{guild.guild.id}")
@@ -79,12 +98,16 @@ class Events(commands.Cog):
       )
       await user.send(embed=embed)
 
+
+
    @commands.Cog.listener()
    async def on_presence_update(self, before, after):
       if before.status != after.status:
          await webhooksend("Presence Changed", f"<@{after.id}> Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}", f"{after.guild.id}")
       if before.activity != after.activity and after.id != 935339228324311040:
          await webhooksend("Activity Changed", f"<@{after.id}> Changed Activity \n**From:**\n{before.activity}\n**To:**\n{after.activity}", f"{after.guild.id}")
+
+
 
    @commands.Cog.listener()
    async def on_member_update(self, before, after):
@@ -108,6 +131,8 @@ class Events(commands.Cog):
       if before.discriminator != after.discriminator:
          await webhooksend(f"Discriminator Changed", f"<@{after.member.id}> Discriminator Changed\n**Before:**\n{before.discriminator}\n**After:**\n{after.discriminator}", f"{after.guild.id}")
 
+
+
    @commands.Cog.listener()
    async def on_member_join(self, member):
       guild = member.guild
@@ -127,6 +152,8 @@ class Events(commands.Cog):
             await guild.system_channel.send(file=imgfile)
             await webhooksend("Member Joined", f"<@{member.id}> Joined Astral", f"{member.guild.id}")
 
+
+
    @commands.Cog.listener()
    async def on_member_remove(self, member):
       await webhooksend("Member Left", f"<@{member.id}> Left Astral", f"{member.guild.id}")
@@ -142,28 +169,36 @@ class Events(commands.Cog):
          pass
 
       
+
    @commands.Cog.listener()
    async def on_guild_join(self, guild):
       await on_join_insert(guild.name, guild.id)
+
+
 
    @commands.Cog.listener()
    async def on_guild_remove(self, guild):
       await on_leave_remove(guild.id)
 
+
+
    @commands.Cog.listener()
    async def on_guild_channel_delete(self, channel):
       await webhooksend("Channel Deleted", f"{channel.name} **Was Deleted**", f"{channel.guild.id}")
 
+
+
    @commands.Cog.listener()
    async def on_guild_channel_create(self, channel):
       await webhooksend("Channel Created", f"{channel.mention} **Was Created**", f"{channel.guild.id}")
+
+
 
    @commands.Cog.listener()
    async def on_guild_channel_update(self, before, after):
       if before.name != after.name:
          await webhooksend("Channel Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.mention}", f"{after.guild.id}")
       if before.changed_roles != after.changed_roles:
-
          await webhooksend("Channel Roles Changed", f"**From:**\n{before.changed_roles}\n**To:**\n{after.changed_roles}\n\n//idek what this does", f"{after.guild.id}")
       roles = after.guild.roles
       for role in roles:
@@ -178,6 +213,8 @@ class Events(commands.Cog):
                finalpermissions = (str(permissions).replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
                await webhooksend("Channel Permissions Changed", f"\n**Channel Permissions Changed For** {member.mention} **In** {after.mention}\n```\n{finalpermissions}```", f"{after.guild.id}")
 
+
+
    @commands.Cog.listener()
    async def on_guild_update(self, before, after):
       if before.name != after.name:
@@ -191,13 +228,19 @@ class Events(commands.Cog):
       if before.description != after.description:
          await webhooksend("Guild Description Changed", f"**From:**\n{before.description}\n**To:**\n{after.description}", f"{after.guild.id}")
 
+
+
    @commands.Cog.listener()
    async def on_guild_role_create(self, role):
       await webhooksend("Role Created", f"{role.mention} **Was Created**", f"{role.guild.id}")
 
+
+
    @commands.Cog.listener()
    async def on_guild_role_delete(self, role):
       await webhooksend("Role Deleted", f"{role.name} **Was Deleted**", f"{role.guild.id}")
+
+
 
    @commands.Cog.listener()
    async def on_guild_role_update(self, before, after):
@@ -218,10 +261,13 @@ class Events(commands.Cog):
          await webhooksend("Role Position Changed", f"**From:**\n{before.position}\n**To:**\n{after.position}", f"{after.guild.id}")
 
    
+
    @commands.Cog.listener()
    async def on_guild_emojis_update(self, before, after):
       if before.name != after.name:
          await webhooksend("Emoji Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.name}", f"{after.guild.id}")
+
+
 
    @commands.Cog.listener()
    async def on_voice_state_update(self, member, before, after):
@@ -271,13 +317,19 @@ class Events(commands.Cog):
                else:
                   await webhooksend("Member Stopped Requesting To Speak", f"{member.mention} **Stopped Requesting To Speak**", f"{member.guild.id}")
 
+
+
    @commands.Cog.listener()
    async def on_guild_scheduled_event_create(self, event):
       await webhooksend("Scheduled Event Created", f"**{event.name} Was Created**\n**Description:**\n{event.description}\n**Start:**\n{event.scheduled_start_time}\n**End:**\n{event.scheduled_end_time}\n**Event Channel:**\n{event.channel.mention}", f"{event.guild.id}")
 
+
+
    @commands.Cog.listener()
    async def on_guild_scheduled_event_delete(self, event):
       await webhooksend("Scheduled Event Deleted", f"**{event.name} Was Deleted**", f"{event.guild.id}")
+
+
 
    @commands.Cog.listener()
    async def on_guild_scheduled_event_update(self, before, after):
@@ -292,13 +344,19 @@ class Events(commands.Cog):
       if before.channel != after.channel:
          await webhooksend("Scheduled Event Channel Changed", f"**From:**\n{before.channel.mention}\n**To:**\n{after.channel.mention}", f"{after.guild.id}")
 
+
+
    @commands.Cog.listener()
    async def on_stage_instance_create(self, stage_instance):
       await webhooksend("Stage Instance Created", f"**{stage_instance.name} Was Created**\n**Topic:**\n{stage_instance.Topic}\n**Stage Instance Channel:**\n{stage_instance.channel.mention}"), f"{stage_instance.guild.id}"
 
+
+
    @commands.Cog.listener()
    async def on_stage_instance_delete(self, stage_instance):
       await webhooksend("Stage Instance Deleted", f"**{stage_instance.name} Was Deleted**", f"{stage_instance.guild.id}")
+
+
 
    @commands.Cog.listener()
    async def on_stage_instance_update(self, before, after):
@@ -308,6 +366,8 @@ class Events(commands.Cog):
          await webhooksend("Stage Instance topic Changed", f"**From:**\n{before.topic}\n**To:**\n{after.topic}", f"{after.guild.id}")
       if before.channel != after.channel:
          await webhooksend("Stage Instance Channel Changed", f"**From:**\n{before.channel.mention}\n**To:**\n{after.channel.mention}", f"{after.guild.id}")
+
+
 
    @commands.Cog.listener()
    async def on_invite_create(self, invite):
@@ -321,13 +381,19 @@ class Events(commands.Cog):
          inviteuses = f"{invite.max_uses}"
       await webhooksend("Invite Created", f"**Invite Created By:**\n{invite.inviter.mention}\n**Invite Age:**\n{inviteage}\n**Possible Uses:**\n{inviteuses}\n**Invite Code:**\n{invite.code}\n**Temporary Membership?**\n{invite.temporary}\n**Invite Channel:**\n{invite.channel.mention}\n**Expires At:**\n{invite.expires_at}", f"{invite.guild.id}")
 
+
+
    @commands.Cog.listener()
    async def on_invite_delete(self, invite):
       await webhooksend("Invite Deleted", f"**Invite Created By:**\n{invite.inviter.mention}\n**Invite Code:**\n{invite.code}", f"{invite.guild.id}")
 
+
+
    @commands.Cog.listener()
    async def on_group_join(self, channel, user):
       await webhooksend("Group Joined", f"**{user.mention} **Joined** {channel.mention}**", f"{channel.guild.id}")
+
+
 
    @commands.Cog.listener()
    async def on_group_remove(self, channel, user):
@@ -340,12 +406,17 @@ class Events(commands.Cog):
       pass
 
  
+
    async def on_shard_disconnect(self, shard_id):
       pass
+
+
 
    @commands.Cog.listener()
    async def on_shard_ready(self, shard_id):
       pass
+
+
 
 
    @commands.Cog.listener()
@@ -353,32 +424,44 @@ class Events(commands.Cog):
       pass
 
 
+
+
    @commands.Cog.listener()
    async def on_socket_event_type(self, event_type):
       pass
+
+
 
    @commands.Cog.listener()
    async def on_typing(self, channel, user, when):
       pass
 
+
+
    @commands.Cog.listener()
    async def on_bulk_message_delete(self, messages):
       await webhooksend("Messages Bulk Deleted/Purged", f"**Messages Bulk Deleted/Purged With A Total Of {len(messages)} Messages Deleted**", f"{self.bot.guild.id}")
+
+
 
    @commands.Cog.listener()
    async def on_message_edit(self, before, after):
       if before.content != after.content:
          await webhooksend("Message Edited", f"**From:**\n{before.content}\n**To:**\n{after.content}", f"{after.guild.id}")
 
+
+
    @commands.Cog.listener()
    async def on_reaction_add(self, reaction, user):
       await webhooksend("Reaction Added", f"{reaction.emoji} **Was Added To** {reaction.message.content} **In** {reaction.message.channel.mention} **By** {user.mention}", f"{user.guild.id}")
+
+
 
    @commands.Cog.listener()
    async def on_reaction_remove(self, reaction, user):
       await webhooksend("Reaction Removed", f"{reaction.emoji} **Was Removed From** {reaction.message.content} **In** {reaction.message.channel.mention} **By** {user.mention}", f"{user.guild.id}")
 
 
-
+#Adding Cog To Bot
 def setup(bot):
    bot.add_cog(Events(bot))

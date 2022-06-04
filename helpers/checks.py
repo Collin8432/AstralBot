@@ -1,10 +1,17 @@
+# Imports
 import json
 from typing import TypeVar, Callable
 
+
+
 from disnake.ext import commands
+
+
 
 from exceptions import *
 
+
+# Setting Up Callable Functions
 T = TypeVar("T")
 
 

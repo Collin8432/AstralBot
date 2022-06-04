@@ -1,8 +1,11 @@
+# Imports 
 import disnake
 from disnake.enums import ButtonStyle
 from disnake.ext import commands
 
 
+
+# Class TicketButton
 class Ticketbutton(disnake.ui.View):
    def __init__(self):
         super().__init__(timeout=None)

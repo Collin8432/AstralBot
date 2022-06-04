@@ -1,11 +1,4 @@
-import json
-import os
-import random
-import sys
-import platform
-
-import aiohttp
-import datetime
+# Imports
 import disnake
 from disnake.ext import commands
 from disnake.ext.commands import Context
@@ -13,14 +6,17 @@ from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.enums import ButtonStyle
 from disnake.ext import commands
 import disnake
-from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.ext import commands
+
 
 
 from helpers import checks
 from helpers.webhook import webhooksend
 from helpers.database import muterole_search
 
+
+
+# Moderator Application Modal
 class ModApp(disnake.ui.Modal):
     def __init__(self) -> None:
         components = [
@@ -60,13 +56,13 @@ class ModApp(disnake.ui.Modal):
         await inter.response.send_message("Error In Modal Interaction, {error}", ephemeral=True)
 
 
-
-
-
+# Moderation Cog
 class Moderation(commands.Cog, name="Mod Cmds"):
     def __init__(self, bot):
       self.bot = bot
 
+
+    # Commands
     @commands.slash_command(
         name="kick",
         description="Kicks A Member From The Server",
@@ -126,6 +122,9 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     timestamp=disnake.utils.utcnow()
                 )
                 await interaction.send(embed=embed)
+
+
+
     @commands.slash_command(
         name="ban",
         description="Bans A Member From The Server",
@@ -177,7 +176,6 @@ class Moderation(commands.Cog, name="Mod Cmds"):
 
 
 
-
     @commands.slash_command(
        name="moderatorapplication",
        description="Sends A Moderator Appliction"
@@ -203,6 +201,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
         await interaction.channel.purge(limit=200)
 
 
+
     @commands.slash_command(
         name="rules",
         description="Sends The Rules",
@@ -216,6 +215,9 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             timestamp=disnake.utils.utcnow()
         )
         await interaction.send(embed=embed)
+
+
+
     @commands.slash_command(
         name="mute",
         description="Mutes A Member",
@@ -250,6 +252,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
         )
         await interaction.send(embed=embed)
 
+
+
     @commands.slash_command(
         name="unmute",
         description="Unmutes A Member",
@@ -283,6 +287,9 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             timestamp=disnake.utils.utcnow()
         )
         await interaction.send(embed=embed)
+
+
+
     @commands.slash_command(
         name="deafen",
         description="Deafens A Member",
@@ -306,6 +313,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             timestamp=disnake.utils.utcnow()
         )
         await interaction.send(embed=embed)
+   
+
    
     @commands.slash_command(
         name="timeout",
@@ -344,6 +353,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
         await interaction.send(embed=embed)
 
     
-                                                    
+
+# Adding Cog To Bot    
 def setup(bot):
     bot.add_cog(Moderation(bot))

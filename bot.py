@@ -1,23 +1,37 @@
+# Imports
 import json
 import os
 import random
 import sys
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImageFont
+
+
+
 import disnake
 from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
+
+
+
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
+
+
+
 from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
 from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search, verifyrole_add, verifyrole_search
 from helpers import checks
 
+
+# Setting Up Bot
 if not os.path.isfile("./secret/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
 else:
     with open("./secret/config.json") as file:
         config = json.load(file)
+
+
 
 intents = disnake.Intents.all()
 bot = Bot(command_prefix=config["prefix"], intents=intents)
@@ -25,6 +39,85 @@ token = config.get("token")
 
 
 
+def load_commands(command_type: str) -> None:
+    for file in os.listdir(f"./cogs/{command_type}"):
+        if file.endswith(".py"):
+            extension = file[:-3]
+            try:
+                bot.load_extension(f"cogs.{command_type}.{extension}")
+                print(f"Loaded (/) {extension} Commands")
+            except Exception as e:
+                exception = f"{type(e).__name__}: {e}"
+                print(f"Failed to load extension {extension}\n{exception}")
+
+
+
+if __name__ == "__main__":
+    load_commands("general")
+    load_commands("moderation")
+    load_commands("fun")
+    load_commands("listeners")
+    global start_time
+    start_time = disnake.utils.utcnow()
+
+
+
+# Tasks and Special Events
+@tasks.loop(minutes=1.0)
+async def status_task() -> None:
+    statuses = [f"Watching Over {len(bot.guilds)} Servers"]
+    await bot.change_presence(activity=disnake.Game(random.choice(statuses)))
+    # for guild in bot.guilds:
+    #     channel1 = await memberchannel_search(f"{guild.id}")
+    #     if channel1 is not None:    
+    #         members = guild.member_count
+    #         ch = bot.get_channel(channel1)
+    #         try:
+    #             await ch.edit(name=f"Members: {members}")
+    #         except:
+    #             pass
+
+
+
+@bot.event
+async def on_ready():
+    await status_task.start()
+
+
+
+@bot.event
+async def on_button_click(interaction):
+    custom_id=interaction.component.custom_id
+    if custom_id == "pingstaff":
+        pingrole = interaction.guild.get_member(935339228324311040)
+        await interaction.send(pingrole.mention)
+    elif disnake.errors.HTTPException:
+        pass
+    elif custom_id == "deletechannel":
+        print("fde")
+        await interaction.channel.delete()
+    elif custom_id == "nerd":
+        await interaction.send("nerd")
+    elif custom_id == "balls":
+        await interaction.send("balls")
+    elif custom_id == "shutdownconfirm":
+        await interaction.send("Exiting...")
+        await os._exit(0)
+    elif custom_id == "shutdowncancel":
+        await interaction.send("Cancelled!")
+        await interaction.message.delete()
+    elif custom_id == "genhelp":
+        await interaction.send(embed=helpemb, ephemeral=True)
+    elif custom_id == "modhelp":
+        await interaction.send(embed=modemb, ephemeral=True)
+    elif custom_id == "funhelp":
+        await interaction.send(embed=funemb, ephemeral=True)
+    else:
+        pass
+
+
+
+# Slash commands
 @bot.slash_command(
     name="uptime",
     description="Shows the uptime of the bot",
@@ -48,45 +141,56 @@ async def uptime(interaction):
 
 
 
-def load_commands(command_type: str) -> None:
-    for file in os.listdir(f"./cogs/{command_type}"):
-        if file.endswith(".py"):
-            extension = file[:-3]
-            try:
-                bot.load_extension(f"cogs.{command_type}.{extension}")
-                print(f"Loaded (/) {extension} Commands")
-            except Exception as e:
-                exception = f"{type(e).__name__}: {e}"
-                print(f"Failed to load extension {extension}\n{exception}")
+@bot.slash_command(
+    name="setverification",
+    description="Sets the verification channel",
+)
+@commands.has_permissions(administrator=True)
+@checks.not_blacklisted()
+async def setverification(interaction):
+    await verification_add(f"{interaction.guild.id}", f"{interaction.channel.id}")
+    await interaction.send("Verification Channel Set!", ephemeral=True)
 
 
-if __name__ == "__main__":
-    load_commands("general")
-    load_commands("moderation")
-    load_commands("fun")
-    load_commands("listeners")
-    global start_time
-    start_time = disnake.utils.utcnow()
+
+@bot.slash_command(
+    name="setmembervoicechannel",
+    description="Sets the member voice channel",
+)
+@commands.has_permissions(administrator=True)
+@checks.not_blacklisted()
+async def setmembervoicechannel(interaction):
+    await memberchannel_add(f"{interaction.guild.id}", f"{interaction.channel.id}")
+    await interaction.send("Member Voice Channel Set!", ephemeral=True)
 
 
-@tasks.loop(minutes=1.0)
-async def status_task() -> None:
-    statuses = [f"Watching Over {len(bot.guilds)} Servers"]
-    await bot.change_presence(activity=disnake.Game(random.choice(statuses)))
-    # for guild in bot.guilds:
-    #     channel1 = await memberchannel_search(f"{guild.id}")
-    #     if channel1 is not None:    
-    #         members = guild.member_count
-    #         ch = bot.get_channel(channel1)
-    #         try:
-    #             await ch.edit(name=f"Members: {members}")
-    #         except:
-    #             pass
+
+@bot.slash_command(
+    name="database",
+    description="Searches for servers db settings",
+)
+@commands.has_permissions(administrator=True)
+@checks.not_blacklisted()
+async def serversearchs(interaction):
+    results = await serversearch(f"{interaction.guild.id}")
+    for result in results:
+        name = result["guild_name"]
+        guildid = result["guild_id"]
+        webhook = result["webhook"]
+        memberchannel = result["memberchannel"]
+        verificationchannel = result["verification"]
+        muterole = result["muterole"]
+        verifyrole = result["verifyrole"]
+
+    embed = disnake.Embed(
+        title=f"Server Database",
+        description=f"**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",
+        color=0xDC143C,
+        timestamp=disnake.utils.utcnow()
+    )
+    await interaction.send(embed=embed, ephemeral=True)
 
 
-@bot.event
-async def on_ready():
-    await status_task.start()
 
 async def Checker(filename):
     def check(message):
@@ -94,6 +198,7 @@ async def Checker(filename):
     await bot.wait_for("message", check=check)
 
     
+
 @bot.slash_command(
     name="verify",
     description="Verify yourself to gain access to the server"
@@ -137,6 +242,7 @@ async def verify(interaction):
         await interaction.send(embed=embed)
 
 
+
 @bot.slash_command(
     name="setup",
     description="Sets Up The Bot",
@@ -156,7 +262,8 @@ async def setup(interaction):
     await muterole_add(interaction.guild.id, muterole.id)
     await webhook_add(f"{interaction.guild.id}", f"{webhook.url}")
     await interaction.send("Setup Complete!", ephemeral=True)
-    
+
+
 
 @bot.slash_command(
     name="testhooksend",
@@ -169,82 +276,6 @@ async def testhooksend(interaction):
     await interaction.send("Message Sent")
 
 
-@bot.event
-async def on_button_click(interaction):
-    custom_id=interaction.component.custom_id
-    if custom_id == "pingstaff":
-        pingrole = interaction.guild.get_member(935339228324311040)
-        await interaction.send(pingrole.mention)
-    elif disnake.errors.HTTPException:
-        pass
-    elif custom_id == "deletechannel":
-        print("fde")
-        await interaction.channel.delete()
-    elif custom_id == "nerd":
-        await interaction.send("nerd")
-    elif custom_id == "balls":
-        await interaction.send("balls")
-    elif custom_id == "shutdownconfirm":
-        await interaction.send("Exiting...")
-        await os._exit(0)
-    elif custom_id == "shutdowncancel":
-        await interaction.send("Cancelled!")
-        await interaction.message.delete()
-    elif custom_id == "genhelp":
-        await interaction.send(embed=helpemb, ephemeral=True)
-    elif custom_id == "modhelp":
-        await interaction.send(embed=modemb, ephemeral=True)
-    elif custom_id == "funhelp":
-        await interaction.send(embed=funemb, ephemeral=True)
-    else:
-        pass
 
-
-@bot.slash_command(
-    name="setverification",
-    description="Sets the verification channel",
-)
-@commands.has_permissions(administrator=True)
-@checks.not_blacklisted()
-async def setverification(interaction):
-    await verification_add(f"{interaction.guild.id}", f"{interaction.channel.id}")
-    await interaction.send("Verification Channel Set!", ephemeral=True)
-
-@bot.slash_command(
-    name="setmembervoicechannel",
-    description="Sets the member voice channel",
-)
-@commands.has_permissions(administrator=True)
-@checks.not_blacklisted()
-async def setmembervoicechannel(interaction):
-    await memberchannel_add(f"{interaction.guild.id}", f"{interaction.channel.id}")
-    await interaction.send("Member Voice Channel Set!", ephemeral=True)
-
-
-
-@bot.slash_command(
-    name="database",
-    description="Searches for servers db settings",
-)
-@commands.has_permissions(administrator=True)
-@checks.not_blacklisted()
-async def serversearchs(interaction):
-    results = await serversearch(f"{interaction.guild.id}")
-    for result in results:
-        name = result["guild_name"]
-        guildid = result["guild_id"]
-        webhook = result["webhook"]
-        memberchannel = result["memberchannel"]
-        verificationchannel = result["verification"]
-        muterole = result["muterole"]
-        verifyrole = result["verifyrole"]
-
-    embed = disnake.Embed(
-        title=f"Server Database",
-        description=f"**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",
-        color=0xDC143C,
-        timestamp=disnake.utils.utcnow()
-    )
-    await interaction.send(embed=embed, ephemeral=True)
-
+# Starting The Bot
 bot.run(config["token"])

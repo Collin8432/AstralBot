@@ -1,19 +1,24 @@
-import datetime
+# Imports
 import os
 import platform
 import random
-from unicodedata import category
+
+
 
 import disnake
 from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.enums import ButtonStyle
 from disnake.ext import commands
-from disnake.ext.commands import Context
+
+
+
 from helpers import checks
 from helpers.ticketbutton import Ticketbutton
 from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
 
+
+# TicketReason Modal
 class TicketReason(disnake.ui.Modal):
     def __init__(self) -> None:
         components = [
@@ -51,7 +56,9 @@ class TicketReason(disnake.ui.Modal):
         await webhooksend(f"Ticket Created", f"{interaction.author.mention} **Created A Ticket**\n**Reason:**\n{Reason}")
 
 
-class Buttons(disnake.ui.View):
+
+# Shutdown View 
+class Shutdown(disnake.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
     @disnake.ui.button(emoji="✅", style=ButtonStyle.green, custom_id="shutdowncomfirm")
@@ -68,6 +75,8 @@ class Buttons(disnake.ui.View):
         await interaction.message.delete()
 
 
+
+# HelpButtons View
 class HelpButtons(disnake.ui.View):
     def __init__(self):
         super().__init__()
@@ -94,60 +103,60 @@ class HelpButtons(disnake.ui.View):
             self.stop()
             
 
-
-
-
+# General Cog
 class General(commands.Cog, name="General Cmds"):
-   def __init__(self, bot):
-      self.bot = bot
+    def __init__(self, bot):
+        self.bot = bot
    
    
+    # Commands
+    @commands.slash_command(
+        name="help",
+        description="Displays Help Command"
+    )
+    @checks.not_blacklisted()
+    async def help(interaction: ApplicationCommandInteraction) -> None:
+        embed = disnake.Embed(
+            description="Astral Bot - Coded by <@935339228324311040>",
+            color=0xDC143C,
+            timestamp=disnake.utils.utcnow()
+        )
+        embed.set_author(
+            name="Bot Information/Help"
+        )
+        embed.add_field(
+            name="Python Version:",
+            value=f"{platform.python_version()}",
+            inline=True
+        )
+        embed.add_field(
+            name="Prefix:",
+            value=f"/ (Slash Commands)",
+            inline=False
+        )
+        embed.add_field(
+            name="Disnake Version:",
+            value=f"{disnake.__version__}",
+            inline=False
+        )
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+         )
+        await interaction.send(embed=embed, view=HelpButtons())
 
-   @commands.slash_command(
-      name="help",
-      description="Displays Help Command"
-   )
-   @checks.not_blacklisted()
-   async def help(interaction: ApplicationCommandInteraction) -> None:
-      embed = disnake.Embed(
-         description="Astral Bot - Coded by <@935339228324311040>",
-         color=0xDC143C,
-         timestamp=disnake.utils.utcnow()
-      )
-      embed.set_author(
-         name="Bot Information/Help"
-      )
-      embed.add_field(
-         name="Python Version:",
-         value=f"{platform.python_version()}",
-         inline=True
-      )
-      embed.add_field(
-         name="Prefix:",
-         value=f"/ (Slash Commands)",
-         inline=False
-      )
-      embed.add_field(
-        name="Disnake Version:",
-        value=f"{disnake.__version__}",
-        inline=False
-      )
-      embed.set_footer(
-         text=f"Requested by {interaction.author}"
-      )
-      await interaction.send(embed=embed, view=HelpButtons())
+ 
 
-
-   @commands.slash_command(
+    @commands.slash_command(
         name="shutdown",
         description="Shuts The Bot Down.",
-   )
-   @checks.is_owner()
-   async def shutdown(interaction):
-      await interaction.send("Are You Sure?", view=Buttons())
+    )
+    @checks.is_owner()
+    async def shutdown(interaction):
+        await interaction.send("Are You Sure?", view=Shutdown())
 
 
-   @commands.slash_command(
+
+    @commands.slash_command(
         name="randomchoice",
         description="Picks A Random Choice Out Of 2 Options",
         options=[
@@ -164,8 +173,8 @@ class General(commands.Cog, name="General Cmds"):
                 required=True
             )
         ]
-   )
-   async def ranchoice(self, interaction: ApplicationCommandInteraction, choiceone: str, choicetwo: str):
+    )
+    async def ranchoice(self, interaction: ApplicationCommandInteraction, choiceone: str, choicetwo: str):
         choices = [choiceone, choicetwo]
         choicechoser = random.choice(choices)
         embed = disnake.Embed(
@@ -176,62 +185,71 @@ class General(commands.Cog, name="General Cmds"):
         await interaction.send(embed=embed)
 
 
-   @commands.slash_command(
+
+    @commands.slash_command(
        name="ticket",
        description="Creates A Ticket",
-   )
-   @checks.not_blacklisted()
-   async def ticket(interaction):
-    await interaction.response.send_modal(modal=TicketReason())
+    )
+    @checks.not_blacklisted()
+    async def ticket(interaction):
+        await interaction.response.send_modal(modal=TicketReason())
 
     
-   @commands.slash_command(
+
+    @commands.slash_command(
         name="ping",
         description="Pings Bot Latency",
-   )
-   async def ping(interaction):
-    latency = interaction.bot.latency * 1000
-    pong = round(latency, 2)
-    embed = disnake.Embed(
-        title="Pong!",
-        description=f"**Bot Latency:\n{pong} ms**",
-        color=0xDC143C,
-        timestamp=disnake.utils.utcnow()
     )
-    await interaction.send(embed=embed)
+    async def ping(interaction):
+        latency = interaction.bot.latency * 1000
+        pong = round(latency, 2)
+        embed = disnake.Embed(
+            title="Pong!",
+            description=f"**Bot Latency:\n{pong} ms**",
+            color=0xDC143C,
+            timestamp=disnake.utils.utcnow()
+        )
+        await interaction.send(embed=embed)
     
-   @commands.slash_command()
-   async def invite(self, interaction):
-       pass
+
+
+    @commands.slash_command()
+    async def invite(self, interaction):
+        pass
+
 
     
-   @invite.sub_command(
+    @invite.sub_command(
         name="link",
         description="Gets Invite Link To Astral's Discord Server",
-   )
-   async def link(self, interaction):
-    embed = disnake.Embed(
-        title="Invite Link",
-        description=f"https://discord.gg/NdwvUHCDcM",
-        color=0xDC143C,
-        timestamp=disnake.utils.utcnow()
+    )
+    async def link(self, interaction):
+        embed = disnake.Embed(
+            title="Invite Link",
+            description=f"https://discord.gg/NdwvUHCDcM",
+            color=0xDC143C,
+            timestamp=disnake.utils.utcnow()
         )
+        await interaction.send(embed=embed)
 
-    await interaction.send(embed=embed)
-   @invite.sub_command(
+
+
+    @invite.sub_command(
         name="bot",
         description="Gets Invite Link To Astral Bot",
-   )
-   async def bot(self, interaction):
-    embed = disnake.Embed(
-        title="Invite Link",
-        description=f"https://discord.com/api/oauth2/authorize?client_id=938579223780655145&permissions=8&scope=bot%20applications.commands",
-        color=0xDC143C,
-        timestamp=disnake.utils.utcnow()
     )
-    await interaction.send(embed=embed)
+    async def bot(self, interaction):
+        embed = disnake.Embed(
+            title="Invite Link",
+            description=f"https://discord.com/api/oauth2/authorize?client_id=938579223780655145&permissions=8&scope=bot%20applications.commands",
+            color=0xDC143C,
+            timestamp=disnake.utils.utcnow()
+        )
+        await interaction.send(embed=embed)
 
 
+
+# Adding Cog To Bot 
 def setup(bot):
     bot.add_cog(General(bot))
 

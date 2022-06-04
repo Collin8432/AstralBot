@@ -1,13 +1,21 @@
-
-
+# Imports
 import disnake
 from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from disnake.ext.commands import Context
 from disnake.enums import ButtonStyle
 
+
+
 from helpers import checks
+
+
+
 import exceptions
+
+
+
+# NerdButton View
 class NerdButton(disnake.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
@@ -22,6 +30,7 @@ class NerdButton(disnake.ui.View):
 
 
 
+# BallsButton View
 class BallsButton(disnake.ui.View):
    def __init__(self):
       super().__init__(timeout=None)
@@ -32,24 +41,34 @@ class BallsButton(disnake.ui.View):
    ):
       await interaction.response.send_message("balls")
 
-class Fun(commands.Cog, name="fun cmds"):
-    def __init__(self, bot):
-        self.bot = bot
 
-    @commands.slash_command(
-       name="nerd",
-       description="nerd"
-    )
-    async def nerd(self, interaction):
-       await interaction.send(view=NerdButton())
-    
-    @commands.slash_command(
-       name="balls", 
-       description="balls"
-    )
-    async def balls(self, interaction):
-       await interaction.send(view=BallsButton())
+
+# Fun Cog
+class Fun(commands.Cog, name="fun cmds"):
+   def __init__(self, bot):
+      self.bot = bot
+
+
+
+   # Commands
+   @commands.slash_command(
+      name="nerd",
+      description="nerd"
+   )
+   async def nerd(self, interaction):
+      await interaction.send(view=NerdButton())
+   
+
+
+   @commands.slash_command(
+      name="balls", 
+      description="balls"
+   )
+   async def balls(self, interaction):
+      await interaction.send(view=BallsButton())
 
       
+
+# Adding Cog To Bot
 def setup(bot):
     bot.add_cog(Fun(bot))
