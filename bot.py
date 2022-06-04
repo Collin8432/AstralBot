@@ -14,7 +14,7 @@ from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
-from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search
+from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search, verifyrole_add, verifyrole_search
 from helpers import checks
 
 if not os.path.isfile("./secret/config.json"):
@@ -128,19 +128,19 @@ async def verify(interaction):
             await Checker(f"{FileName}")
         except:
             print("fail")
+        verifyrole = await verifyrole_search(f"{interaction.guild.id}")
+        await interaction.author.add_roles(disnake.Object(verifyrole))
+        await webhooksend("Member Verified", f"Verified <@{interaction.author.id}>", f"{interaction.guild.id}")        
+        await interaction.channel.purge(limit=9999999)
+        embed = disnake.Embed(
+            title=f"How To Verify!",
+            description=f"**To Verify Yourself, Please Enter /verify, Then Enter The Code, Case InSensitive**",
+            color=0xDC143C,
+            timestamp=disnake.utils.utcnow()
+        )
+        await interaction.send(embed=embed)
 
-        await interaction.author.add_roles(disnake.Object(972988909573242881))
-        await webhooksend("Member Verified", f"Verified <@{interaction.author.id}>", f"{interaction.guild.id}")
-        
-        if interaction.channel.id == 972679418763935794:
-            await interaction.channel.purge(limit=9999999)
-            embed = disnake.Embed(
-                title=f"How To Verify!",
-                description=f"**To Verify Yourself, Please Enter /verify, Then Enter The Code, Case InSensitive**",
-                color=0xDC143C,
-                timestamp=disnake.utils.utcnow()
-            )
-            await interaction.send(embed=embed)
+
 @bot.slash_command(
     name="setup",
     description="Sets Up The Bot",
@@ -155,27 +155,12 @@ async def setup(interaction):
         data = file.read()
     webhook = await channel.create_webhook(name="Astral - Bot Logging", avatar=data)
     muterole = await interaction.create_role(name="Mute Role", permissions=disnake.Permissions(speak=False))
+    verifyrole = await interaction.create_role(name="Verify Role", permissions=disnake.Permissions(view_channels=True))
+    await verifyrole_add(f"{interaction.guild.id}", f"{verifyrole.id}")
     await muterole_add(interaction.guild.id, muterole.id)
     await webhook_add(f"{interaction.guild.id}", f"{webhook.url}")
     await interaction.send("Setup Complete!", ephemeral=True)
     
-
-# @bot.slash_command(
-#     name="addmute",
-#     description="Mute",
-#     options=[
-#         Option(
-#             name="id",
-#             description="The id you want to add to list",
-#             required=True
-#         ),
-#     ]
-# )
-# @checks.not_blacklisted()
-# @commands.has_permissions(administrator=True)
-# async def addmute(interaction, id):
-#     await muterole_add(f"{interaction.guild.id}", f"{id}")
-#     await interaction.send(f"Added <@{id}> to the Mute List")
 
 @bot.slash_command(
     name="testhooksend",
@@ -218,6 +203,7 @@ async def on_button_click(interaction):
     else:
         pass
 
+
 @bot.slash_command(
     name="setverification",
     description="Sets the verification channel",
@@ -254,9 +240,12 @@ async def serversearchs(interaction):
         webhook = result["webhook"]
         memberchannel = result["memberchannel"]
         verificationchannel = result["verification"]
+        muterole = result["muterole"]
+        verifyrole = result["verifyrole"]
+
     embed = disnake.Embed(
         title=f"Server Database",
-        description=f"**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}",
+        description=f"**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",
         color=0xDC143C,
         timestamp=disnake.utils.utcnow()
     )
