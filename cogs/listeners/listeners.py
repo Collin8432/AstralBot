@@ -51,10 +51,13 @@ class Events(commands.Cog):
       try:
          await interaction.response.defer()
          await interaction.edit_original_message(embed=embed, ephemeral=True)
+         print(error)
       except:
          await interaction.send(embed=embed, ephemeral=True)
+         print(error)
       else:
-         pass
+         print(error)
+
 
 
 
@@ -216,7 +219,7 @@ class Events(commands.Cog):
 
 
    @commands.Cog.listener()
-   async def on_guild_update(self, before, after):
+   async def on_guild_update(self, before, after: disnake.guild):
       if before.name != after.name:
          await webhooksend("Guild Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.name}", f"{after.guild.id}")
       if before.afk_timeout != after.afk_timeout:

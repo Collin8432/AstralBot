@@ -22,7 +22,7 @@ from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
 from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search, verifyrole_add, verifyrole_search
 from helpers import checks
-from helpers import (is_owner, not_blacklisted, is_astral_server)
+
 
 
 # Setting Up Bot
@@ -206,8 +206,9 @@ async def Checker(filename):
     description="Verify yourself to gain access to the server"
 )
 async def verify(interaction):
-    verifychannel = await verification_search(f"{interaction.guild.id}")
-    if interaction.channel.id not in verifychannel:
+    verifych = await verification_search(f"{interaction.guild.id}")
+    verifychannel = int(verifych)
+    if interaction.channel.id != verifychannel:
         await interaction.send(f"You can only use this command in <#{verifychannel}>")
     else:
         list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
@@ -217,20 +218,24 @@ async def verify(interaction):
             continue
         img = Image.open('./img/astral.png')
 
-        I1 = ImageDraw.Draw(img)
-        
+        image = ImageDraw.Draw(img)
         font = ImageFont.truetype("./font/MomB.ttf", 30)
-        I1.text((150, 275), f"{FileName}", fill=(32,22,197), font=font)
-        I1.text((125, 300), f"Please enter the", fill=(43,22,197), font=font)
-        I1.text((125, 325), f"letters/numbers", fill=(43,22,197), font=font)
-        I1.text((75, 350), f"above to gain access", fill=(43,22,197), font=font)
-        I1.text((150, 375), f"to {interaction.guild.name}", fill=(43,22,197), font=font)
+
+        guildname= interaction.guild.name
+        widthithink = 150
+        width = widthithink - len(guildname) * 2.75
+        
+        image.text((width, 375), f"to {guildname}", fill=(43,22,197), font=font)
+        image.text((160, 275), f"{FileName}", fill=(32,22,197), font=font)
+        image.text((125, 300), f"Please enter the", fill=(43,22,197), font=font)
+        image.text((125, 325), f"letters/numbers", fill=(43,22,197), font=font)
+        image.text((85, 350), f"above to gain access", fill=(43,22,197), font=font)
         img.save(f"./img/astral{FileName}.png")
         await interaction.send(file=disnake.File(f"./img/astral{FileName}.png"))
         try:
             await Checker(f"{FileName}")
         except:
-            print("fail")
+            pass
         verifyrole = await verifyrole_search(f"{interaction.guild.id}")
         await interaction.author.add_roles(disnake.Object(verifyrole))
         await webhooksend("Member Verified", f"Verified <@{interaction.author.id}>", f"{interaction.guild.id}")        
