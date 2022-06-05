@@ -308,60 +308,7 @@ class Fun(commands.Cog, name="fun cmds"):
 
 
 
-   @commands.slash_command(
-      name="window",
-      description="creates a window",
-   )
-   async def gui(ctx):
-      import sys
-      if sys.platform == "win32":
-         try:
-               import imgui
-               import pygame
-               from imgui.integrations.pygame import PygameRenderer
-         
 
-               # # initilize imgui context (see documentation)
-               imgui.create_context()
-               imgui.get_io().display_size = 100, 100
-               imgui.get_io().fonts.get_tex_data_as_rgba32()
-
-               # start new frame context
-               imgui.new_frame()
-
-               # open new window context
-               imgui.begin("Your first window!", True)
-
-               # draw text label inside of current window
-               imgui.text("Hello world!")
-
-               # close current window context
-               imgui.end()
-
-               # pass all drawing comands to the rendering pipeline
-               # and close frame context
-               
-               pygame.init()
-               # pygame.DOUBLEBUF | pygame.OPENGL
-               pygame.display.set_mode((800, 600), pygame.DOUBLEBUF | pygame.OPENGL)
-               renderer = PygameRenderer()
-               done = False
-               while not done:
-                  for event in pygame.event.get():
-                     if event.type == pygame.QUIT:
-                           done = True
-                     renderer.process_event(event)
-                     imgui.render()
-                     imgui.end_frame()
-                  pygame.display.flip()
-               pygame.quit()
-         except Exception:
-               pass
-      else:
-         print('This only works on Windows!')
-   
-   
-   
 # Adding Cog To Bot
 def setup(bot):
     bot.add_cog(Fun(bot))

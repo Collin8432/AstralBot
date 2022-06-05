@@ -52,7 +52,7 @@ class Events(commands.Cog):
          text=f"Requested by {interaction.author}"
       )
       try:
-         await interaction.response.defer()
+         await interaction.response.defer(with_message=True, emphemeral=True)
          await interaction.edit_original_message(embed=embed, ephemeral=True)  
          print(error)
       except:
