@@ -2,11 +2,12 @@
 import json
 import os
 import random
+from re import X
 import sys
 
 
-
 import disnake
+from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 
@@ -172,25 +173,23 @@ async def setmembervoicechannel(interaction):
 )
 @commands.has_permissions(administrator=True)
 @checks.not_blacklisted()
-async def serversearchs(interaction: disnake.ApplicationCommandInteraction  ):
-    results = await serversearch(f"{interaction.guild.id}") # type: ignore
+async def serversearchs(interaction: disnake.ApplicationCommandInteraction) -> None:
+    results = await serversearch(f"{interaction.guild.id}")  
     for result in results:
-        name = result["guild_name"]
-        guildid = result["guild_id"]
-        webhook = result["webhook"]
-        memberchannel = result["memberchannel"]
-        verificationchannel = result["verification"]
-        muterole = result["muterole"]
-        verifyrole = result["verifyrole"]
+        name: str = result["guild_name"]
+        guildid: int = result["guild_id"]
+        webhook: str = result["webhook"]
+        memberchannel: int = result["memberchannel"]
+        verificationchannel: int = result["verification"]
+        muterole: int = result["muterole"]
+        verifyrole: int = result["verifyrole"]
     embed = disnake.Embed(
         title=f"Server Database",
-        description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}", # type: ignore
+        description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
         color=0xDC143C,
         timestamp=disnake.utils.utcnow()
     )
     await interaction.send(embed=embed, ephemeral=True)
-    
-
 
 
 
@@ -207,7 +206,7 @@ async def Checker(filename):
 )
 async def verify(interaction):
     verifych = await verification_search(f"{interaction.guild.id}")
-    verifychannel = int(verifych) # type: ignore
+    verifychannel = int(verifych)  
     if interaction.channel.id != verifychannel:
         await interaction.send(f"You can only use this command in <#{verifychannel}>")
     else:
@@ -237,7 +236,7 @@ async def verify(interaction):
         except:
             pass
         verifyrole = await verifyrole_search(f"{interaction.guild.id}")
-        await interaction.author.add_roles(disnake.Object(verifyrole)) # type: ignore
+        await interaction.author.add_roles(disnake.Object(verifyrole))  
         await webhooksend("Member Verified", f"Verified <@{interaction.author.id}>", f"{interaction.guild.id}")        
         await interaction.channel.purge(limit=9999999)
         embed = disnake.Embed(
@@ -283,6 +282,53 @@ async def testhooksend(interaction):
     await interaction.send("Message Sent")
 
 
+
+@bot.slash_command(
+    name="emojify",
+    description="emojifies your text",
+    options=[
+        Option(
+            name="text",
+            description="The text to emojify",
+            type=OptionType.string,
+            required=True            
+        )
+    ]
+)
+async def emojify(interaction: ApplicationCommandInteraction, text: str) -> None: 
+    if text != None:
+        out = text.lower()
+        text = out.replace(' ', '   ')\
+                .replace('!', '❗')\
+                .replace('?', '❓')\
+                .replace('a', '\u200B🇦')\
+                .replace('b', '\u200B🇧')\
+                .replace('c', '\u200B🇨')\
+                .replace('d', '\u200B🇩')\
+                .replace('e', '\u200B🇪')\
+                .replace('f', '\u200B🇫')\
+                .replace('g', '\u200B🇬')\
+                .replace('h', '\u200B🇭')\
+                .replace('i', '\u200B🇮')\
+                .replace('j', '\u200B🇯')\
+                .replace('k', '\u200B🇰')\
+                .replace('l', '\u200B🇱')\
+                .replace('m', '\u200B🇲')\
+                .replace('n', '\u200B🇳')\
+                .replace('ñ', '\u200B🇳')\
+                .replace('o', '\u200B🇴')\
+                .replace('p', '\u200B🇵')\
+                .replace('q', '\u200B🇶')\
+                .replace('r', '\u200B🇷')\
+                .replace('s', '\u200B🇸')\
+                .replace('t', '\u200B🇹')\
+                .replace('u', '\u200B🇺')\
+                .replace('v', '\u200B🇻')\
+                .replace('w', '\u200B🇼')\
+                .replace('x', '\u200B🇽')\
+                .replace('y', '\u200B🇾')\
+                .replace('z', '\u200B🇿')
+    await interaction.send(text)
 
 # Starting The Bot
 bot.run(config["token"])
