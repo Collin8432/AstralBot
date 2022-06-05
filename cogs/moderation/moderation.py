@@ -50,7 +50,7 @@ class ModApp(disnake.ui.Modal):
         ApplyingFor = interaction.text_values["ApplyingFor"]
         Experience = interaction.text_values["Experience"]
         BR = interaction.text_values["BR"]
-        await webhooksend("New Application", f"<@{interaction.author.id}> Submitted This Application \n**Appplying For:**\n{ApplyingFor}\n**Experience:**\n{Experience}\n**Why Are You Better Than Others For Your Role:**\n{BR}")
+        await webhooksend("New Application", f"<@{interaction.author.id}> Submitted This Application \n**Appplying For:**\n{ApplyingFor}\n**Experience:**\n{Experience}\n**Why Are You Better Than Others For Your Role:**\n{BR}", f"{interaction.guild.id}") # type: ignore
         await interaction.response.send_message("Application Submitted Successfully!", ephemeral=True)
     async def on_error(self, error: Exception, inter: disnake.ModalInteraction) -> None:
         await inter.response.send_message("Error In Modal Interaction, {error}", ephemeral=True)
@@ -85,8 +85,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @checks.not_blacklisted()
     async def kick(self, interaction: ApplicationCommandInteraction, user: disnake.User,
                    reason: str = "Not specified") -> None:
-        member = await interaction.guild.get_or_fetch_member(user.id)
-        if member.guild_permissions.administrator:
+        member = await interaction.guild.get_or_fetch_member(user.id) # type: ignore
+        if member.guild_permissions.administrator: # type: ignore
             embed = disnake.Embed(
                 title="Error!",
                 description="User has Admin permissions.",
@@ -98,7 +98,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             try:
                 embed = disnake.Embed(
                     title="Member Kicked",
-                    description=f"<@{member.id}> Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}",
+                    description=f"<@{member.id}> Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}", # type: ignore
                     color=0xDC143C,
                     timestamp=disnake.utils.utcnow()
                 )
@@ -106,14 +106,14 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 try:
                     embed = disnake.Embed(
                     title="You Were Kicked!",
-                    description=f"<@{member.id}> Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}",
+                    description=f"<@{member.id}> Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}", # type: ignore
                     color=0xDC143C,
                     timestamp=disnake.utils.utcnow()
                     )
-                    await member.send(embed=embed)
+                    await member.send(embed=embed) # type: ignore
                 except disnake.Forbidden:
                     pass
-                await member.kick(reason=reason)
+                await member.kick(reason=reason) # type: ignore
             except:
                 embed = disnake.Embed(
                     title="Error",
@@ -147,8 +147,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @checks.not_blacklisted()
     async def ban(self, interaction: ApplicationCommandInteraction, user: disnake.User,
                   reason: str = "Not specified") -> None:
-                  member = await interaction.guild.get_or_fetch_member(user.id)
-                  if member.guild_permissions.administrator:
+                  member = await interaction.guild.get_or_fetch_member(user.id) # type: ignore
+                  if member.guild_permissions.administrator: # type: ignore
                       embed = disnake.Embed(
                           title="Error!",
                           description="User Has Administrator Permissions",
@@ -160,12 +160,12 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                       try:
                         embed = disnake.Embed(
                             title="Member Banned",
-                            description=f"<@{member.id}> Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}",
+                            description=f"<@{member.id}> Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}", # type: ignore
                             color=0xDC143C,
                             timestamp=disnake.utils.utcnow()
                         )
                         await interaction.send(embed=embed)
-                        await member.ban(reason=reason)
+                        await member.ban(reason=reason) # type: ignore
                       except:
                           embed = disnake.Embed(
                               title="Error!",
@@ -180,7 +180,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
        name="moderatorapplication",
        description="Sends A Moderator Appliction"
     )
-    async def Appliction(interaction: disnake.CommandInteraction):
+    async def Appliction(interaction: disnake.CommandInteraction): # type: ignore
       await interaction.response.send_modal(modal=ModApp())
 
 
@@ -190,7 +190,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
         description="Purges All Messages In A Channel",
     )
     @commands.has_permissions(manage_messages=True)
-    async def purge(interaction: disnake.CommandInteraction):
+    async def purge(interaction: disnake.CommandInteraction): # type: ignore
         embed = disnake.Embed(
             title="Messages Purged",
             description="Purged All Messages In This Channel",
@@ -214,7 +214,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
         )
-        await interaction.send(embed=embed)
+        await interaction.send(embed=embed) # type: ignore
 
 
 
@@ -233,7 +233,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.has_permissions(manage_roles=True)
     @checks.not_blacklisted()
     async def mute(self, interaction: ApplicationCommandInteraction, user: disnake.User):
-        muterole = await muterole_search(interaction.guild.id)
+        muterole = await muterole_search(interaction.guild.id) # type: ignore
         if muterole is None:
             embed = disnake.Embed(
                 title="Error!",
@@ -243,7 +243,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             )
             await interaction.send(embed=embed)
         else:
-            await user.add_roles(muterole)
+            await user.add_roles(muterole) # type: ignore
         embed = disnake.Embed(
             title="Member Muted",
             description=f"<@{user.id}> Was Muted By <@{interaction.author.id}>",
@@ -269,7 +269,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.has_permissions(manage_roles=True)
     @checks.not_blacklisted()
     async def unmute(self, interaction: ApplicationCommandInteraction, user: disnake.User):
-        muterole = await muterole_search(interaction.guild.id)
+        muterole = await muterole_search(interaction.guild.id) # type: ignore
         if muterole is None:
             embed = disnake.Embed(
                 title="Error!",
@@ -279,7 +279,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             )
             await interaction.send(embed=embed)
         else:
-            await user.remove_roles(muterole)
+            await user.remove_roles(muterole) # type: ignore
         embed = disnake.Embed(
             title="Member Unmuted",
             description=f"<@{user.id}> Was Unmuted By <@{interaction.author.id}>",
@@ -317,7 +317,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.has_permissions(manage_roles=True)
     @checks.not_blacklisted()
     async def timeout(self, interaction: ApplicationCommandInteraction, user: disnake.User, time: int, reason: str):
-        await user.timeout(user, time=time)
+        await user.timeout(user, time=time) # type: ignore
         embed = disnake.Embed(
             title="Member Timeout",
             description=f"<@{user.id}> Was Timeout By <@{interaction.author.id}>\n**Time:**\n{time}\n**Reason:**\n{reason}",

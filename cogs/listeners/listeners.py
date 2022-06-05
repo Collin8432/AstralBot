@@ -50,7 +50,7 @@ class Events(commands.Cog):
       )
       try:
          await interaction.response.defer()
-         await interaction.edit_original_message(embed=embed, ephemeral=True)
+         await interaction.edit_original_message(embed=embed, ephemeral=True) # type: ignore
          print(error)
       except:
          await interaction.send(embed=embed, ephemeral=True)
@@ -104,11 +104,11 @@ class Events(commands.Cog):
 
 
    @commands.Cog.listener()
-   async def on_presence_update(self, before, after):
-      if before.status != after.status:
-         await webhooksend("Presence Changed", f"{after.mention} Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}", f"{after.guild.id}")
-      if before.activity != after.activity:
-         await webhooksend("Activity Changed", f"{after.mention} Changed Activity \n**From:**\n{before.activity}\n**To:**\n{after.activity}", f"{after.guild.id}")
+   async def on_presence_update(self: commands.Bot, before: disnake.guild, after: disnake.guild): # type: ignore
+      if before.status != after.status: # type: ignore
+         await webhooksend("Presence Changed", f"{after.mention} Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}", f"{after.guild.id}") # type: ignore
+      if before.activity != after.activity: # type: ignore
+         await webhooksend("Activity Changed", f"{after.mention} Changed Activity \n**From:**\n{before.activity.name}\n**To:**\n{after.activity.name}", f"{after.guild.id}") # type: ignore
 
 
 
@@ -219,17 +219,17 @@ class Events(commands.Cog):
 
 
    @commands.Cog.listener()
-   async def on_guild_update(self, before, after: disnake.guild):
-      if before.name != after.name:
-         await webhooksend("Guild Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.name}", f"{after.guild.id}")
-      if before.afk_timeout != after.afk_timeout:
-         await webhooksend("Guild AFK Timeout Changed", f"**From:**\n{before.afk_timeout}\n**To:**\n{after.afk_timeout}", f"{after.guild.id}")
-      if before.afk_channel != after.afk_channel:
-         await webhooksend("Guild AFK Channel Changed", f"**From:**\n{before.afk_channel}\n**To:**\n{after.afk_channel}", f"{after.guild.id}")
-      if before.owner_id != after.owner_id:
-         await webhooksend("Guild Owner Changed", f"**From:**\n{before.owner.mention}\n**To:**\n{after.owner.mention}", f"{after.guild.id}")
-      if before.description != after.description:
-         await webhooksend("Guild Description Changed", f"**From:**\n{before.description}\n**To:**\n{after.description}", f"{after.guild.id}")
+   async def on_guild_update(self: commands.Bot, before: disnake.guild, after: disnake.guild): # type: ignore
+      if before.name != after.name: # type: ignore
+         await webhooksend("Guild Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.name}", f"{after.id}") # type: ignore
+      if before.afk_timeout != after.afk_timeout: # type: ignore
+         await webhooksend("Guild AFK Timeout Changed", f"**From:**\n{before.afk_timeout}\n**To:**\n{after.afk_timeout}", f"{after.id}") # type: ignore
+      if before.afk_channel != after.afk_channel: # type: ignore
+         await webhooksend("Guild AFK Channel Changed", f"**From:**\n{before.afk_channel}\n**To:**\n{after.afk_channel}", f"{after.id}") # type: ignore
+      if before.owner_id != after.owner_id: # type: ignore
+         await webhooksend("Guild Owner Changed", f"**From:**\n{before.owner.mention}\n**To:**\n{after.owner.mention}", f"{after.id}") # type: ignore
+      if before.description != after.description: # type: ignore
+         await webhooksend("Guild Description Changed", f"**From:**\n{before.description}\n**To:**\n{after.description}", f"{after.id}") # type: ignore
 
 
 
@@ -350,8 +350,8 @@ class Events(commands.Cog):
 
 
    @commands.Cog.listener()
-   async def on_stage_instance_create(self, stage_instance):
-      await webhooksend("Stage Instance Created", f"**{stage_instance.name} Was Created**\n**Topic:**\n{stage_instance.Topic}\n**Stage Instance Channel:**\n{stage_instance.channel.mention}"), f"{stage_instance.guild.id}"
+   async def on_stage_instance_create(self: commands.Bot, stage_instance: disnake.stage_instance):  # type: ignore
+      await webhooksend("Stage Instance Created", f"**{stage_instance.name} Was Created**\n**Topic:**\n{stage_instance.topic}\n**Stage Instance Channel:**\n{stage_instance.channel.mention}", f"{stage_instance.guild.id}") # type: ignore
 
 
 
@@ -442,8 +442,8 @@ class Events(commands.Cog):
 
 
    @commands.Cog.listener()
-   async def on_bulk_message_delete(self, messages):
-      await webhooksend("Messages Bulk Deleted/Purged", f"**Messages Bulk Deleted/Purged With A Total Of {len(messages)} Messages Deleted**", f"{self.bot.guild.id}")
+   async def on_bulk_message_delete(self: commands.Bot, messages: disnake.messages): # type: ignore
+      await webhooksend("Messages Bulk Deleted/Purged", f"**Messages Bulk Deleted/Purged With A Total Of {len(messages)} Messages Deleted**", f"{self.bot.guild.id}") # type: ignore
 
 
 

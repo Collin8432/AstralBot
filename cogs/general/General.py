@@ -36,12 +36,11 @@ class TicketReason(disnake.ui.Modal):
         global Reason
         Reason = interaction.text_values["Reason"]
         await interaction.response.send_message("Ticket Submitted Successfully!", ephemeral=True)
-        ticketchannel = await interaction.guild.create_text_channel(
-        name=f"ticket-{interaction.author.name}",
+        ticketchannel = await interaction.guild.create_text_channel( # type: ignore
+        name=f"ticket-{interaction.author.name}", 
         overwrites={ 
-            interaction.author: disnake.PermissionOverwrite(view_channel=True, send_messages=True, read_messages=True),
-            interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False),
-            # interaction: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False)
+            interaction.author: disnake.PermissionOverwrite(view_channel=True, send_messages=True, read_messages=True), # type: ignore
+            interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False), # type: ignore
             }   
         )
         channel = ticketchannel 
@@ -53,7 +52,7 @@ class TicketReason(disnake.ui.Modal):
         )
         await channel.send(embed=embed)
         await channel.send(view=Ticketbutton())
-        await webhooksend(f"Ticket Created", f"{interaction.author.mention} **Created A Ticket**\n**Reason:**\n{Reason}")
+        await webhooksend(f"Ticket Created", f"{interaction.author.mention} **Created A Ticket**\n**Reason:**\n{Reason}") # type: ignore
 
 
 
@@ -69,7 +68,7 @@ class Shutdown(disnake.ui.View):
         os._exit(0)
     @disnake.ui.button(emoji="⛔", style=ButtonStyle.red, custom_id="shutdowncancel")
     async def second_button(
-        self, button: disnake.ui.button, interaction: disnake.MessageInteraction
+        self, button: disnake.ui.button, interaction: disnake.MessageInteraction # type: ignore
     ):
         await interaction.response.send_message("Cancelled!")
         await interaction.message.delete()
@@ -106,7 +105,7 @@ class HelpButtons(disnake.ui.View):
 # General Cog
 class General(commands.Cog, name="General Cmds"):
     def __init__(self, bot):
-        self.bot = bot
+        self.bot = bot # type: ignore
    
    
     # Commands
@@ -115,7 +114,7 @@ class General(commands.Cog, name="General Cmds"):
         description="Displays Help Command"
     )
     @checks.not_blacklisted()
-    async def help(interaction: ApplicationCommandInteraction) -> None:
+    async def help(interaction: ApplicationCommandInteraction) -> None: # type: ignore
         embed = disnake.Embed(
             description="Astral Bot - Coded by <@935339228324311040>",
             color=0xDC143C,
@@ -152,7 +151,7 @@ class General(commands.Cog, name="General Cmds"):
     )
     @checks.is_owner()
     async def shutdown(interaction):
-        await interaction.send("Are You Sure?", view=Shutdown())
+        await interaction.send("Are You Sure?", view=Shutdown()) # type: ignore
 
 
 
@@ -192,7 +191,7 @@ class General(commands.Cog, name="General Cmds"):
     )
     @checks.not_blacklisted()
     async def ticket(interaction):
-        await interaction.response.send_modal(modal=TicketReason())
+        await interaction.response.send_modal(modal=TicketReason()) # type: ignore
 
     
 
@@ -201,7 +200,7 @@ class General(commands.Cog, name="General Cmds"):
         description="Pings Bot Latency",
     )
     async def ping(interaction):
-        latency = interaction.bot.latency * 1000
+        latency = interaction.bot.latency * 1000 # type: ignore
         pong = round(latency, 2)
         embed = disnake.Embed(
             title="Pong!",
@@ -209,7 +208,7 @@ class General(commands.Cog, name="General Cmds"):
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
         )
-        await interaction.send(embed=embed)
+        await interaction.send(embed=embed) # type: ignore
     
 
 

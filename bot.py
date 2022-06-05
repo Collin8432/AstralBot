@@ -172,8 +172,8 @@ async def setmembervoicechannel(interaction):
 )
 @commands.has_permissions(administrator=True)
 @checks.not_blacklisted()
-async def serversearchs(interaction):
-    results = await serversearch(f"{interaction.guild.id}")
+async def serversearchs(interaction: disnake.ApplicationCommandInteraction  ):
+    results = await serversearch(f"{interaction.guild.id}") # type: ignore
     for result in results:
         name = result["guild_name"]
         guildid = result["guild_id"]
@@ -184,7 +184,7 @@ async def serversearchs(interaction):
         verifyrole = result["verifyrole"]
     embed = disnake.Embed(
         title=f"Server Database",
-        description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",
+        description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}", # type: ignore
         color=0xDC143C,
         timestamp=disnake.utils.utcnow()
     )
@@ -207,7 +207,7 @@ async def Checker(filename):
 )
 async def verify(interaction):
     verifych = await verification_search(f"{interaction.guild.id}")
-    verifychannel = int(verifych)
+    verifychannel = int(verifych) # type: ignore
     if interaction.channel.id != verifychannel:
         await interaction.send(f"You can only use this command in <#{verifychannel}>")
     else:
@@ -222,8 +222,8 @@ async def verify(interaction):
         font = ImageFont.truetype("./font/MomB.ttf", 30)
 
         guildname= interaction.guild.name
-        widthithink = 150
-        width = widthithink - len(guildname) * 2.75
+        widthithink = 222
+        width = widthithink - len(guildname) * 7.5
         
         image.text((width, 375), f"to {guildname}", fill=(43,22,197), font=font)
         image.text((160, 275), f"{FileName}", fill=(32,22,197), font=font)
@@ -237,7 +237,7 @@ async def verify(interaction):
         except:
             pass
         verifyrole = await verifyrole_search(f"{interaction.guild.id}")
-        await interaction.author.add_roles(disnake.Object(verifyrole))
+        await interaction.author.add_roles(disnake.Object(verifyrole)) # type: ignore
         await webhooksend("Member Verified", f"Verified <@{interaction.author.id}>", f"{interaction.guild.id}")        
         await interaction.channel.purge(limit=9999999)
         embed = disnake.Embed(

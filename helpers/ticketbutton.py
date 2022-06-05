@@ -12,8 +12,8 @@ class Ticketbutton(disnake.ui.View):
       
    @disnake.ui.button(label="Ping Staff ❗", style=disnake.ButtonStyle.success, custom_id="pingstaff")
    async def pingstaff(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
-      pingrole = interaction.guild.get_member(935339228324311040)
-      await interaction.send(pingrole.mention)
+      pingrole = interaction.guild.get_member(935339228324311040) # type: ignore
+      await interaction.send(pingrole.mention) # type: ignore
    
    @disnake.ui.button(label="Delete Channel ❌", style=disnake.ButtonStyle.danger, custom_id="deletechannel")
    @commands.has_permissions(administrator=True)
