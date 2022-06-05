@@ -48,6 +48,9 @@ class Events(commands.Cog):
          color=0xDC143C,
          timestamp=disnake.utils.utcnow()
       )
+      embed.set_footer(
+         text=f"Requested by {interaction.author}"
+      )
       try:
          await interaction.response.defer()
          await interaction.edit_original_message(embed=embed, ephemeral=True)  
@@ -86,6 +89,7 @@ class Events(commands.Cog):
          color=0xDC143C,
          timestamp=disnake.utils.utcnow()
       ) 
+      
       await user.send(embed=embed)   
 
 
@@ -102,12 +106,12 @@ class Events(commands.Cog):
       await user.send(embed=embed)
 
 
-
    @commands.Cog.listener()
-   async def on_presence_update(self: commands.Bot, before: disnake.guild, after: disnake.guild):  
-      if before.status != after.status and after.id != 938579223780655145:  
+   async def on_presence_update(self: commands.Bot, before: disnake.guild, after: disnake.guild):
+      blid = [935339228324311040]  
+      if before.status != after.status and after.id not in blid:  
          await webhooksend("Presence Changed", f"{after.mention} Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}", f"{after.guild.id}")  
-      if before.activity != after.activity and after.id != 938579223780655145:  
+      if before.activity != after.activity and after.id not in blid:  
          try:
             await webhooksend("Activity Changed", f"{after.mention} Changed Activity \n**From:**\n{before.activity.name}, {before.activity.description}\n**To:**\n{after.activity}, {after.activity.description}", f"{after.guild.id}")  
          except:

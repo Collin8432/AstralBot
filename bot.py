@@ -2,12 +2,11 @@
 import json
 import os
 import random
-from re import X
 import sys
+import traceback
 
 
 import disnake
-from disnake import ApplicationCommandInteraction, Option, OptionType
 from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 
@@ -49,6 +48,7 @@ def load_commands(command_type: str) -> None:
                 bot.load_extension(f"cogs.{command_type}.{extension}")
                 print(f"Loaded (/) {extension} Commands")
             except Exception as e:
+                traceback.print_exc()
                 exception = f"{type(e).__name__}: {e}"
                 print(f"Failed to load extension {extension}\n{exception}")
 
@@ -109,11 +109,23 @@ async def on_button_click(interaction):
         await interaction.send("Cancelled!")
         await interaction.message.delete()
     elif custom_id == "genhelp":
-        await interaction.send(embed=helpemb, ephemeral=True)
+        embed = helpemb
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+         )
+        await interaction.send(embed=embed, ephemeral=True)
     elif custom_id == "modhelp":
-        await interaction.send(embed=modemb, ephemeral=True)
+        embed = modemb
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+         )
+        await interaction.send(embed=embed, ephemeral=True)
     elif custom_id == "funhelp":
-        await interaction.send(embed=funemb, ephemeral=True)
+        embed = funemb
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+         )
+        await interaction.send(embed=embed, ephemeral=True)
     else:
         pass
 
@@ -189,6 +201,9 @@ async def serversearchs(interaction: disnake.ApplicationCommandInteraction) -> N
         color=0xDC143C,
         timestamp=disnake.utils.utcnow()
     )
+    embed.set_footer(
+        text=f"Requested by {interaction.author}"
+    )
     await interaction.send(embed=embed, ephemeral=True)
 
 
@@ -215,12 +230,12 @@ async def verify(interaction):
         for i in range(5, 15):
             FileName += (random.choice(list))
             continue
-        img = Image.open('./img/astral.png')
+        img = Image.open('./img/Astral.png')
 
         image = ImageDraw.Draw(img)
         font = ImageFont.truetype("./font/MomB.ttf", 30)
 
-        guildname= interaction.guild.name
+        guildname = interaction.guild.name
         widthithink = 222
         width = widthithink - len(guildname) * 7.5
         
@@ -245,6 +260,12 @@ async def verify(interaction):
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
         )
+        embed.set_image(
+            file=disnake.File(f"C:/Users/astro/Documents/GitHub/AstralBot/img/VerifyVideo.mp4")
+        )
+        embed.set_footer(
+            text=f"Astral Verification"
+         )
         await interaction.send(embed=embed)
 
 
@@ -257,7 +278,10 @@ async def verify(interaction):
 @commands.has_permissions(manage_guild=True)
 async def setup(interaction):
     await interaction.send("Setup Started", ephemeral=True)
-    category = await interaction.guild.create_category(name="Astral")
+    overwrites = {
+        interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False),  
+    }
+    category = await interaction.guild.create_category(name="Astral", overwrites=overwrites)
     channel = await category.create_text_channel(name="Astral - Bot Logging")
     with open("./img/astral.png", "rb") as file:
         data = file.read()
@@ -282,53 +306,7 @@ async def testhooksend(interaction):
     await interaction.send("Message Sent")
 
 
-
-@bot.slash_command(
-    name="emojify",
-    description="emojifies your text",
-    options=[
-        Option(
-            name="text",
-            description="The text to emojify",
-            type=OptionType.string,
-            required=True            
-        )
-    ]
-)
-async def emojify(interaction: ApplicationCommandInteraction, text: str) -> None: 
-    if text != None:
-        out = text.lower()
-        text = out.replace(' ', '   ')\
-                .replace('!', '❗')\
-                .replace('?', '❓')\
-                .replace('a', '\u200B🇦')\
-                .replace('b', '\u200B🇧')\
-                .replace('c', '\u200B🇨')\
-                .replace('d', '\u200B🇩')\
-                .replace('e', '\u200B🇪')\
-                .replace('f', '\u200B🇫')\
-                .replace('g', '\u200B🇬')\
-                .replace('h', '\u200B🇭')\
-                .replace('i', '\u200B🇮')\
-                .replace('j', '\u200B🇯')\
-                .replace('k', '\u200B🇰')\
-                .replace('l', '\u200B🇱')\
-                .replace('m', '\u200B🇲')\
-                .replace('n', '\u200B🇳')\
-                .replace('ñ', '\u200B🇳')\
-                .replace('o', '\u200B🇴')\
-                .replace('p', '\u200B🇵')\
-                .replace('q', '\u200B🇶')\
-                .replace('r', '\u200B🇷')\
-                .replace('s', '\u200B🇸')\
-                .replace('t', '\u200B🇹')\
-                .replace('u', '\u200B🇺')\
-                .replace('v', '\u200B🇻')\
-                .replace('w', '\u200B🇼')\
-                .replace('x', '\u200B🇽')\
-                .replace('y', '\u200B🇾')\
-                .replace('z', '\u200B🇿')
-    await interaction.send(text)
+    
 
 # Starting The Bot
 bot.run(config["token"])

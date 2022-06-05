@@ -50,6 +50,9 @@ class TicketReason(disnake.ui.Modal):
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
         )
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+        )
         await channel.send(embed=embed)
         await channel.send(view=Ticketbutton())
         await webhooksend(f"Ticket Created", f"{interaction.author.mention} **Created A Ticket**\n**Reason:**\n{Reason}")  
@@ -82,24 +85,30 @@ class HelpButtons(disnake.ui.View):
         self.value = 0
     @disnake.ui.button(label="General ⚙️", style=disnake.ButtonStyle.success, custom_id="genhelp")
     async def General(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
-        await interaction.response.send_message(embed=helpemb, ephemeral=True)
-        self.value += 1
-        if self.value == 3:
-            self.stop()
+        embed = helpemb
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
 
     @disnake.ui.button(label="Fun 🎉", style=disnake.ButtonStyle.success)
     async def Fun(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction, custom_id="funhelp"):
-        await interaction.response.send_message(embed=funemb, ephemeral=True)
-        self.value += 1
-        if self.value == 3:
-            self.stop()
+        embed = funemb
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+        )   
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
 
     @disnake.ui.button(label="Moderation 🚩", style=disnake.ButtonStyle.success)
     async def Moderation(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction, custom_id="modhelp"):
-        await interaction.response.send_message(embed=modemb, ephemeral=True)
-        self.value += 1
-        if self.value == 3:
-            self.stop()
+        embed = modemb
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
             
 
 # General Cog
@@ -181,6 +190,9 @@ class General(commands.Cog, name="General Cmds"):
             description=f"{choicechoser}",
             color = 0xDC143C
         )
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+        )
         await interaction.send(embed=embed)
 
 
@@ -208,6 +220,9 @@ class General(commands.Cog, name="General Cmds"):
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
         )
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+        )
         await interaction.send(embed=embed)  
     
 
@@ -229,6 +244,9 @@ class General(commands.Cog, name="General Cmds"):
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
         )
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+        )
         await interaction.send(embed=embed)
 
 
@@ -243,6 +261,9 @@ class General(commands.Cog, name="General Cmds"):
             description=f"https://discord.com/api/oauth2/authorize?client_id=938579223780655145&permissions=8&scope=bot%20applications.commands",
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
+        )
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
         )
         await interaction.send(embed=embed)
 

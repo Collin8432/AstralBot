@@ -24,6 +24,9 @@ async def webhooksend(title: str, description: str, guild_id: str) -> None:
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
          )
+         embed.set_footer(
+            text=f"Astral Discord Bot"
+         )
          await webhook.send(embed=embed, username="Astral - Bot Logging")
    except:
       pass

@@ -4,18 +4,16 @@ from disnake.ext import tasks, commands
 from disnake.ext.commands import Bot
 from disnake.ext.commands import Context
 from disnake.enums import ButtonStyle
+from disnake import ApplicationCommandInteraction, Option, OptionType
 
 
 
 import asyncio
+import random
 
 
 
 from helpers import checks
-
-
-
-import exceptions
 
 
 
@@ -122,7 +120,248 @@ class Fun(commands.Cog, name="fun cmds"):
                | # # # # # # # # # | #
                | # # # # # # # # # |```
    ''')
+
+
+
+   @commands.slash_command(
+      name="emojify",
+      description="emojifies your text",
+      options=[
+         Option(
+               name="text",
+               description="The text to emojify",
+               type=OptionType.string,
+               required=True            
+         )
+      ]
+   )
+   async def emojify(interaction: ApplicationCommandInteraction, text: str) -> None: 
+      if text != None:
+         out = text.lower()
+         text = out.replace(' ', '   ')\
+                  .replace('!', '❗')\
+                  .replace('?', '❓')\
+                  .replace('a', '\u200B🇦')\
+                  .replace('b', '\u200B🇧')\
+                  .replace('c', '\u200B🇨')\
+                  .replace('d', '\u200B🇩')\
+                  .replace('e', '\u200B🇪')\
+                  .replace('f', '\u200B🇫')\
+                  .replace('g', '\u200B🇬')\
+                  .replace('h', '\u200B🇭')\
+                  .replace('i', '\u200B🇮')\
+                  .replace('j', '\u200B🇯')\
+                  .replace('k', '\u200B🇰')\
+                  .replace('l', '\u200B🇱')\
+                  .replace('m', '\u200B🇲')\
+                  .replace('n', '\u200B🇳')\
+                  .replace('ñ', '\u200B🇳')\
+                  .replace('o', '\u200B🇴')\
+                  .replace('p', '\u200B🇵')\
+                  .replace('q', '\u200B🇶')\
+                  .replace('r', '\u200B🇷')\
+                  .replace('s', '\u200B🇸')\
+                  .replace('t', '\u200B🇹')\
+                  .replace('u', '\u200B🇺')\
+                  .replace('v', '\u200B🇻')\
+                  .replace('w', '\u200B🇼')\
+                  .replace('x', '\u200B🇽')\
+                  .replace('y', '\u200B🇾')\
+                  .replace('z', '\u200B🇿')
+      await interaction.send(text)
       
+      
+      
+   @commands.slash_command(
+      name="slots",
+      description="slots in discord"
+   )
+   async def slots(self, interaction):
+      emojis = "🍕🍟🍔🍫🍬🥤🍒🍉"
+      a = random.choice(emojis)
+      b = random.choice(emojis)
+      c = random.choice(emojis)
+      slotmachineoutput = f"{a} {b} {c}"
+      if (a == b == c):
+         description = "Match!, You Win"
+      elif (a == b) or (a == c) or (b == c):
+         description = "Two Matches!, You Win"
+      else:
+         description = "No Matches, You Lose"
+      embed = disnake.Embed(
+         title=f"{slotmachineoutput}",
+         description=description,
+         timestamp=disnake.utils.utcnow(),
+         color=0xDC143C
+      )
+      embed.set_footer(
+         text=f"Requested by {interaction.author}"
+      )
+      await interaction.send(embed=embed)
+      
+      
+      
+   @commands.slash_command(
+      name="minesweeper",
+      description="minesweeper in discord",
+      options=[
+         Option(
+            name="columns",
+            description="The number of columns",
+            type=OptionType.integer,
+            required=False,
+         ),
+         Option(
+            name="rows",
+            description="The number of rows",
+            type=OptionType.integer,
+            required=False,
+         ),
+         Option(
+            name="bombs",
+            description="The number of bombs",
+            type=OptionType.integer,
+            required=False,
+         )
+      ]
+   )
+   async def minesweeper(interaction, columns: int, rows: int, bombs: int) -> None:
+      if columns is not None or rows is not None or bombs is not None:
+         pass
+      else:
+         columns = random.randint(4,13)
+         rows = random.randint(4,13)
+         bombs = columns * rows - 1
+         bombs = bombs / 2.5
+         bombs = round(random.randint(5, round(bombs)))
+      try:
+         columns = int(columns)
+         rows = int(rows)
+         bombs = int(bombs)
+      except ValueError:
+         await interaction.send("Error Getting Values")
+      if columns > 13 or rows > 13:
+         await interaction.send("The limit for the columns and rows are 13 due to discord limits.")
+      if columns < 1 or rows < 1 or bombs < 1:
+         await interaction.send("The provided numbers cannot be zero or negative.")
+      if bombs + 1 > columns * rows:
+         await interaction.send("You have more bombs than spaces on the grid or you attempted to make all of the spaces bombs!")
+
+      grid = [[0 for num in range (columns)] for num in range(rows)]
+
+      loop_count = 0
+      while loop_count < bombs:
+         x = random.randint(0, columns - 1)
+         y = random.randint(0, rows - 1)
+         if grid[y][x] == 0:
+            grid[y][x] = 'B'
+            loop_count = loop_count + 1
+         if grid[y][x] == 'B':
+            pass
+
+      pos_x = 0
+      pos_y = 0
+      while pos_x * pos_y < columns * rows and pos_y < rows:
+         adj_sum = 0
+         for (adj_y, adj_x) in [(0,1),(0,-1),(1,0),(-1,0),(1,1),(-1,1),(1,-1),(-1,-1)]:
+            try:
+                  if grid[adj_y + pos_y][adj_x + pos_x] == 'B' and adj_y + pos_y > -1 and adj_x + pos_x > -1:
+                     adj_sum = adj_sum + 1
+            except:
+                  pass
+         if grid[pos_y][pos_x] != 'B':
+            grid[pos_y][pos_x] = adj_sum
+         if pos_x == columns - 1:
+            pos_x = 0
+            pos_y = pos_y + 1
+         else:
+            pos_x = pos_x + 1
+
+      string_builder = []
+      for the_rows in grid:
+         string_builder.append(''.join(map(str, the_rows)))
+      string_builder = '\n'.join(string_builder)
+      string_builder = string_builder.replace('0', '||:white_large_square:||')
+      string_builder = string_builder.replace('1', '||:one:||')
+      string_builder = string_builder.replace('2', '||:two:||')
+      string_builder = string_builder.replace('3', '||:three:||')
+      string_builder = string_builder.replace('4', '||:four:||')
+      string_builder = string_builder.replace('5', '||:five:||')
+      string_builder = string_builder.replace('6', '||:six:||')
+      string_builder = string_builder.replace('7', '||:seven:||')
+      string_builder = string_builder.replace('8', '||:eight:||')
+      final = string_builder.replace('B', '||:bomb:||')
+
+      percentage = columns * rows
+      percentage = bombs / percentage
+      percentage = 100 * percentage
+      percentage = round(percentage, 2)
+
+      embed = disnake.Embed(title='Minesweeper', description=f'\U0000FEFF{final}', timestamp=disnake.utils.utcnow(), color=0xDC143C)
+      embed.add_field(name='Columns:', value=columns, inline=True)
+      embed.add_field(name='Rows:', value=rows, inline=True)
+      embed.add_field(name='Total Spaces:', value=columns * rows, inline=True)
+      embed.add_field(name='\U0001F4A3 Count:', value=bombs, inline=True)
+      embed.add_field(name='\U0001F4A3 Percentage:', value=f'{percentage}%', inline=True)
+      embed.set_footer(text=f"Requested by {interaction.author}")
+      await interaction.send(embed=embed)
+
+
+
+   @commands.slash_command(
+      name="window",
+      description="creates a window",
+   )
+   async def gui(ctx):
+      import sys
+      if sys.platform == "win32":
+         try:
+               import imgui
+               import pygame
+               from imgui.integrations.pygame import PygameRenderer
+         
+
+               # # initilize imgui context (see documentation)
+               imgui.create_context()
+               imgui.get_io().display_size = 100, 100
+               imgui.get_io().fonts.get_tex_data_as_rgba32()
+
+               # start new frame context
+               imgui.new_frame()
+
+               # open new window context
+               imgui.begin("Your first window!", True)
+
+               # draw text label inside of current window
+               imgui.text("Hello world!")
+
+               # close current window context
+               imgui.end()
+
+               # pass all drawing comands to the rendering pipeline
+               # and close frame context
+               
+               pygame.init()
+               # pygame.DOUBLEBUF | pygame.OPENGL
+               pygame.display.set_mode((800, 600), pygame.DOUBLEBUF | pygame.OPENGL)
+               renderer = PygameRenderer()
+               done = False
+               while not done:
+                  for event in pygame.event.get():
+                     if event.type == pygame.QUIT:
+                           done = True
+                     renderer.process_event(event)
+                     imgui.render()
+                     imgui.end_frame()
+                  pygame.display.flip()
+               pygame.quit()
+         except Exception:
+               pass
+      else:
+         print('This only works on Windows!')
+   
+   
+   
 # Adding Cog To Bot
 def setup(bot):
     bot.add_cog(Fun(bot))
