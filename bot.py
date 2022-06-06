@@ -22,6 +22,7 @@ from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
 from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search, verifyrole_add, verifyrole_search
 from helpers import checks
+from helpers.deleteinteraction import deleteinteraction
 
 
 
@@ -89,46 +90,24 @@ async def on_ready():
 
 @bot.listen("on_button_click")
 async def listener(interaction: disnake.MessageCommandInteraction):
-    custom_id=interaction.component.custom_id
-    if custom_id == "pingstaff":
-        pingrole = interaction.guild.get_member(935339228324311040)
-        await interaction.send(pingrole.mention)
-    elif disnake.errors.HTTPException:
-        pass
-    elif custom_id == "deletechannel":
-        print("fde")
-        await interaction.channel.delete()
-    elif custom_id == "nerd":
-        await interaction.send("nerd")
-    elif custom_id == "balls":
-        await interaction.send("balls")
-    elif custom_id == "shutdownconfirm":
-        await interaction.send("Exiting...")
-        await os._exit(0)
-    elif custom_id == "shutdowncancel":
-        await interaction.send("Cancelled!")
+    if (interaction.component.custom_id) == "deleteinter":
         await interaction.message.delete()
-    elif custom_id == "genhelp":
+    if (interaction.component.custom_id) == "balls":
+        await interaction.send("balls")
+    if (interaction.component.custom_id) == "nerd":
+        await interaction.send("nerd")
+    if (interaction.component.custom_id) == "shutdowncomfirm":
+        os._exit(0)
+    if (interaction.component.custom_id) == "shutdowncancel":
+        await interaction.response.send_message("Cancelled!")
+        await interaction.message.delete()
+    if (interaction.component.custom_id) == "genhelp":
         embed = helpemb
         embed.set_footer(
             text=f"Requested by {interaction.author}"
-         )
-        await interaction.send(embed=embed, ephemeral=True)
-    elif custom_id == "modhelp":
-        embed = modemb
-        embed.set_footer(
-            text=f"Requested by {interaction.author}"
-         )
-        await interaction.send(embed=embed, ephemeral=True)
-    elif custom_id == "funhelp":
-        embed = funemb
-        embed.set_footer(
-            text=f"Requested by {interaction.author}"
-         )
-        await interaction.send(embed=embed, ephemeral=True)
-    else:
-        pass
-
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        
 
 
 # Slash commands
@@ -307,6 +286,17 @@ async def testhooksend(interaction):
 
 
     
+@bot.slash_command(
+    name="testinteraction",
+    description="Sends a test interaction",
+)
+async def testinteraction(interaction):
+    try:
+        await interaction.send("Test Message", view=deleteinteraction())
+    except:
+        traceback.print_exc()
+
+
 
 # Starting The Bot
 bot.run(config["token"])

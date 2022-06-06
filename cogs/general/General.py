@@ -13,9 +13,10 @@ from disnake.ext import commands
 
 
 from helpers import checks
-from helpers.ticketbutton import Ticketbutton
 from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
+from helpers.deleteinteraction import deleteinteraction
+
 
 
 # TicketReason Modal
@@ -54,7 +55,7 @@ class TicketReason(disnake.ui.Modal):
             text=f"Requested by {interaction.author}"
         )
         await channel.send(embed=embed)
-        await channel.send(view=Ticketbutton())
+        await channel.send(view=deleteinteraction())
         await webhooksend(f"Ticket Created", f"{interaction.author.mention} **Created A Ticket**\n**Reason:**\n{Reason}")  
 
 

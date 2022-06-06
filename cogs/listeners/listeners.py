@@ -1,5 +1,6 @@
 # Imports
 import random
+import traceback
 
 
 
@@ -42,9 +43,10 @@ class Events(commands.Cog):
 
    @commands.Cog.listener()
    async def on_slash_command_error(self, interaction: ApplicationCommandInteraction, error: Exception) -> None:
+      errormsg = error 
       embed = disnake.Embed(
          title="Error",
-         description=f"Error With Command:\n```py\n{error}```",
+         description=f"Error With Command:\n```py\n{errormsg}```",
          color=0xDC143C,
          timestamp=disnake.utils.utcnow()
       )
@@ -54,12 +56,12 @@ class Events(commands.Cog):
       try:
          await interaction.response.defer(with_message=True, emphemeral=True)
          await interaction.edit_original_message(embed=embed, ephemeral=True)  
-         print(error)
+         print(errormsg)
       except:
          await interaction.send(embed=embed, ephemeral=True)
-         print(error)
+         print(errormsg)
       else:
-         print(error)
+         print(errormsg)
 
 
 
