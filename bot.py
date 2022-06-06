@@ -87,8 +87,8 @@ async def on_ready():
 
 
 
-@bot.event
-async def on_button_click(interaction):
+@bot.listen("on_button_click")
+async def listener(interaction: disnake.MessageCommandInteraction):
     custom_id=interaction.component.custom_id
     if custom_id == "pingstaff":
         pingrole = interaction.guild.get_member(935339228324311040)
