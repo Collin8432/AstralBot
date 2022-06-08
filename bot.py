@@ -19,8 +19,8 @@ from PIL import ImageFont
 
 
 from helpers.webhook import webhooksend
-from helpers.helpembeds import helpemb, funemb, modemb
-from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search, verifyrole_add, verifyrole_search, memberchannel_search
+from helpers.helpembeds import helpemb, funemb, modemb, setupemb
+from helpers.database import verification_search, verifyrole_search, memberchannel_search
 from helpers import checks
 from helpers.deleteinteraction import deleteinteraction
 
@@ -47,7 +47,7 @@ def load_commands(command_type: str) -> None:
             extension = file[:-3]
             try:
                 bot.load_extension(f"cogs.{command_type}.{extension}")
-                print(f"Loaded (/) {extension} Commands")
+                print(f"Loaded ✅ {extension}.py")
             except Exception as e:
                 traceback.print_exc()
                 exception = f"{type(e).__name__}: {e}"
@@ -60,6 +60,7 @@ if __name__ == "__main__":
     load_commands("moderation")
     load_commands("fun")
     load_commands("listeners")
+    load_commands("setup")
     global start_time
     start_time = disnake.utils.utcnow()
 
@@ -76,7 +77,10 @@ async def status_task() -> None:
         ch = await memberchannel_search(f"{id}")
         if ch is not None:
             gd = await bot.fetch_guild(id)
-            channel = await bot.fetch_channel(ch)
+            try:
+                channel = await bot.fetch_channel(ch)
+            except disnake.NotFound:
+                pass
             try:
                 await channel.edit(name=f"Members: {members}")
             except Exception as e:
@@ -130,6 +134,12 @@ async def listener(interaction: disnake.MessageCommandInteraction):
                 text=f"Requested by {interaction.author}"
             )
             await interaction.response.send_message(embed=embed, ephemeral=True)
+        elif (interaction.component.custom_id) == "setuphelp":
+            embed = setupemb
+            embed.set_footer(
+                text=f"Requested by {interaction.author}"
+            )
+            await interaction.response.send_message(embed=embed, ephemeral=True)
         else:
             await interaction.response.send_message(f"Invalid Button! - {interaction.component.custom_id}")
     except:
@@ -159,59 +169,6 @@ async def uptime(interaction):
         timestamp=disnake.utils.utcnow(),
     ) 
     await interaction.send(embed=embed, view=deleteinteraction())
-
-
-
-@bot.slash_command(
-    name="setverification",
-    description="Sets the verification channel",
-)
-@commands.has_permissions(administrator=True)
-@checks.not_blacklisted()
-async def setverification(interaction):
-    await verification_add(f"{interaction.guild.id}", f"{interaction.channel.id}")
-    await interaction.send("Verification Channel Set!", ephemeral=True)
-
-
-
-@bot.slash_command(
-    name="setmembervoicechannel",
-    description="Sets the member voice channel",
-)
-@commands.has_permissions(administrator=True)
-@checks.not_blacklisted()
-async def setmembervoicechannel(interaction):
-    await memberchannel_add(f"{interaction.guild.id}", f"{interaction.channel.id}")
-    await interaction.send("Member Voice Channel Set!", ephemeral=True)
-
-
-
-@bot.slash_command(
-    name="database",
-    description="Searches for servers db settings",
-)
-@commands.has_permissions(administrator=True)
-@checks.not_blacklisted()
-async def serversearchs(interaction: disnake.ApplicationCommandInteraction) -> None:
-    results = await serversearch(f"{interaction.guild.id}")  
-    for result in results:
-        name: str = result["guild_name"]
-        guildid: int = result["guild_id"]
-        webhook: str = result["webhook"]
-        memberchannel: int = result["memberchannel"]
-        verificationchannel: int = result["verification"]
-        muterole: int = result["muterole"]
-        verifyrole: int = result["verifyrole"]
-    embed = disnake.Embed(
-        title=f"Server Database",
-        description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-        color=0xDC143C,
-        timestamp=disnake.utils.utcnow()
-    )
-    embed.set_footer(
-        text=f"Requested by {interaction.author}"
-    )
-    await interaction.send(embed=embed, ephemeral=True)
 
 
 
@@ -273,45 +230,8 @@ async def verify(interaction):
         embed.set_footer(
             text=f"Astral Verification"
          )
-        await interaction.send(embed=embed, view=deleteinteraction())
-
-
-
-@bot.slash_command(
-    name="setup",
-    description="Sets Up The Bot",
-)
-@checks.not_blacklisted()
-@commands.has_permissions(manage_guild=True)
-async def setup(interaction):
-    await interaction.send("Setup Started", ephemeral=True)
-    overwrites = {
-        interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False),  
-    }
-    category = await interaction.guild.create_category(name="Astral", overwrites=overwrites)
-    channel = await category.create_text_channel(name="Astral - Bot Logging")
-    with open("./img/astral.png", "rb") as file:
-        data = file.read()
-    webhook = await channel.create_webhook(name="Astral - Bot Logging", avatar=data)
-    muterole = await interaction.create_role(name="Mute Role", permissions=disnake.Permissions(speak=False))
-    verifyrole = await interaction.create_role(name="Verify Role", permissions=disnake.Permissions(view_channels=True))
-    await verifyrole_add(f"{interaction.guild.id}", f"{verifyrole.id}")
-    await muterole_add(interaction.guild.id, muterole.id)
-    await webhook_add(f"{interaction.guild.id}", f"{webhook.url}")
-    await interaction.send("Setup Complete!", ephemeral=True)
-
-
-
-@bot.slash_command(
-    name="testhooksend",
-    description="Sends a test message to the webhook",
-)
-@checks.not_blacklisted()
-@commands.has_permissions(administrator=True)
-async def testhooksend(interaction):
-    await webhooksend("Test Message", "Test Message", f"{interaction.guild.id}")
-    await interaction.send("Message Sent", view=deleteinteraction())
-
+        await interaction.send(embed=embed)
+    
 
 
 # Starting The Bot

@@ -18,7 +18,13 @@ funemb = disnake.Embed(
 )
 modemb = disnake.Embed(
     title="Moderation ⚙️",
-    description="**/ban** - Bans A User\n**/kick** - Kicks A User\n**/purge** - Purges All The Messages In A Channel\n**/moderatorapplication** - Apply For Mod\n**/rules** - Only Can Be Used By Administrators - Displays Simple Rules\n**/setup** - Only Can Be Used By Administrators - Sets Up The Bot\n**/Testhooksend** - Sends A Test Message To The Webhook On Your Database\n**/Mute (member)** - Mutes A Selected Member\n**/UnMute (Member)** - Unmutes A Selected Member",
+    description="**/ban** - Bans A User\n**/kick** - Kicks A User\n**/purge** - Purges All The Messages In A Channel\n**/moderatorapplication** - Apply For Mod\n**/rules** - Only Can Be Used By Administrators - Displays Simple Rules\n**/Testhooksend** - Sends A Test Message To The Webhook On Your Database\n**/Mute (member)** - Mutes A Selected Member\n**/UnMute (Member)** - Unmutes A Selected Member",
+    color=0xDC143C,
+    timestamp=disnake.utils.utcnow(),
+)
+setupemb = disnake.Embed(
+    title="Setup ⚙️",
+    description="**/setup** - Only Can Be Used By Administrators - Sets Up The Bot\n**/setmembervoicechannel** - Sets The Member Voice Channel, Which Is Periodcally Updated To Show The Server Member Count\n**/setverification** - Sets The Verification Text Channel, Which /verify Can Be Used In, Verification Can Prevent Server Raids",
     color=0xDC143C,
     timestamp=disnake.utils.utcnow(),
 )

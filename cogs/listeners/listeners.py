@@ -61,8 +61,7 @@ class Events(commands.Cog):
          await interaction.send(embed=embed, ephemeral=True)
          print(errormsg)
       else:
-         print(errormsg)
-
+         pass
 
 
 
@@ -136,11 +135,11 @@ class Events(commands.Cog):
 
 
    @commands.Cog.listener()
-   async def on_user_update(self, before, after):
+   async def on_user_update(self, before: disnake.User, after: disnake.User):
       if before.display_avatar != after.display_avatar:
-         await webhooksend(f"Avatar Changed", f"<@{after.member.id}> Avatar Changed\n**Before:**\n{before.display_avatar}\n**After:**\n{after.display_avatar}", f"{after.id}")
+         await webhooksend(f"Avatar Changed", f"<@{after.id}> Avatar Changed\n**Before:**\n{before.display_avatar}\n**After:**\n{after.display_avatar}", f"{after.guild.id}")
       if before.discriminator != after.discriminator:
-         await webhooksend(f"Discriminator Changed", f"<@{after.member.id}> Discriminator Changed\n**Before:**\n{before.discriminator}\n**After:**\n{after.discriminator}", f"{after.id}")
+         await webhooksend(f"Discriminator Changed", f"<@{after.id}> Discriminator Changed\n**Before:**\n{before.discriminator}\n**After:**\n{after.discriminator}", f"{after.guild.id}")
 
 
 

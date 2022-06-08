@@ -28,5 +28,5 @@ async def webhooksend(title: str, description: str, guild_id: str) -> None:
             text=f"Astral Discord Bot"
          )
          await webhook.send(embed=embed, username="Astral - Bot Logging")
-   except disnake.InvalidArgument:
-      return "InvalidWebhook"
+   except: 
+      pass

@@ -14,7 +14,7 @@ from disnake.ext import commands
 
 from helpers import checks
 from helpers.webhook import webhooksend
-from helpers.helpembeds import helpemb, funemb, modemb
+from helpers.helpembeds import helpemb, funemb, modemb, setupemb
 from helpers.deleteinteraction import deleteinteraction
 
 
@@ -114,6 +114,14 @@ class HelpButtons(disnake.ui.View):
             text=f"Requested by {interaction.author}"
         )
         await interaction.response.send_message(embed=embed, ephemeral=True)
+        
+    @disnake.ui.button(label="Setup ⚙️", style=disnake.ButtonStyle.success, custom_id="setuphelp")
+    async def Setup(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+        embed = setupemb
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
     
     @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
     async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
@@ -136,9 +144,9 @@ class General(commands.Cog, name="General Cmds"):
         description="Displays Help Command"
     )
     @checks.not_blacklisted()
-    async def help(interaction: ApplicationCommandInteraction) -> None:  
+    async def help(self, interaction: ApplicationCommandInteraction) -> None:  
         embed = disnake.Embed(
-            description="Astral Bot - Coded by <@935339228324311040>",
+            description=f"Astral Bot - Coded, Maintained, Hosted, & Owned by <@935339228324311040>",
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
         )

@@ -1,6 +1,6 @@
 # Imports
 import disnake
-from disnake import ApplicationCommandInteraction, Option, OptionType
+from disnake import ApplicationCommandInteraction
 from disnake.enums import ButtonStyle
 
 
@@ -15,3 +15,4 @@ class deleteinteraction(disnake.ui.View):
          await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
       else:
          await interaction.message.delete()
+         

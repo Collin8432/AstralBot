@@ -1,4 +1,3 @@
 set welcome msg..ect
 use length of characters to detemine where the text of the message on an image goes
 eg: for x in len(interaction.guild.name)
-add optional requirements to / commands such as /setmembervoicechannel (id)
