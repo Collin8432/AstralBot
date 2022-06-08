@@ -13,6 +13,7 @@ from disnake.ext import commands
 from helpers import checks
 from helpers.webhook import webhooksend
 from helpers.database import muterole_search
+from helpers.deleteinteraction import deleteinteraction
 
 
 
@@ -53,7 +54,7 @@ class ModApp(disnake.ui.Modal):
         await webhooksend("New Application", f"<@{interaction.author.id}> Submitted This Application \n**Appplying For:**\n{ApplyingFor}\n**Experience:**\n{Experience}\n**Why Are You Better Than Others For Your Role:**\n{BR}", f"{interaction.guild.id}")  
         await interaction.response.send_message("Application Submitted Successfully!", ephemeral=True)
     async def on_error(self, error: Exception, inter: disnake.ModalInteraction) -> None:
-        await inter.response.send_message("Error In Modal Interaction, {error}", ephemeral=True)
+        await inter.response.send_message(f"Error In Modal Interaction, {error}", ephemeral=True)
 
 
 # Moderation Cog
@@ -93,7 +94,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 color=0xE02B2B,
                 timestamp=disnake.utils.utcnow()
             )
-            await interaction.send(embed=embed)
+            await interaction.send(embed=embed, view=deleteinteraction())
         else:
             try:
                 embed = disnake.Embed(
@@ -102,7 +103,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     color=0xDC143C,
                     timestamp=disnake.utils.utcnow()
                 )
-                await interaction.send(embed=embed)
+                await interaction.send(embed=embed, view=deleteinteraction())
                 try:
                     embed = disnake.Embed(
                     title="You Were Kicked!",
@@ -110,7 +111,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     color=0xDC143C,
                     timestamp=disnake.utils.utcnow()
                     )
-                    await member.send(embed=embed)  
+                    await member.send(embed=embed, view=deleteinteraction())  
                 except disnake.Forbidden:
                     pass
                 await member.kick(reason=reason)  
@@ -121,7 +122,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     color=0xDC143C,
                     timestamp=disnake.utils.utcnow()
                 )
-                await interaction.send(embed=embed)
+                await interaction.send(embed=embed, view=deleteinteraction())
 
 
 
@@ -155,7 +156,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                           color=0xDC143C,
                           timestamp=disnake.utils.utcnow()
                       )
-                      await interaction.send(embed=embed)
+                      await interaction.send(embed=embed, view=deleteinteraction())
                   else:
                       try:
                         embed = disnake.Embed(
@@ -164,7 +165,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                             color=0xDC143C,
                             timestamp=disnake.utils.utcnow()
                         )
-                        await interaction.send(embed=embed)
+                        await interaction.send(embed=embed, view=deleteinteraction())
                         await member.ban(reason=reason)  
                       except:
                           embed = disnake.Embed(
@@ -214,7 +215,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
         )
-        await interaction.send(embed=embed)  
+        await interaction.send(embed=embed, view=deleteinteraction())  
 
 
 
@@ -241,7 +242,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 color=0xE02B2B,
                 timestamp=disnake.utils.utcnow()
             )
-            await interaction.send(embed=embed)
+            await interaction.send(embed=embed, view=deleteinteraction())
         else:
             await user.add_roles(muterole)  
         embed = disnake.Embed(
@@ -250,7 +251,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
         )
-        await interaction.send(embed=embed)
+        await interaction.send(embed=embed, view=deleteinteraction())
 
 
 
@@ -277,7 +278,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 color=0xE02B2B,
                 timestamp=disnake.utils.utcnow()
             )
-            await interaction.send(embed=embed)
+            await interaction.send(embed=embed, view=deleteinteraction())
         else:
             await user.remove_roles(muterole)  
         embed = disnake.Embed(
@@ -286,7 +287,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
         )
-        await interaction.send(embed=embed)
+        await interaction.send(embed=embed, view=deleteinteraction())
    
 
    
@@ -324,7 +325,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=0xDC143C,
             timestamp=disnake.utils.utcnow()
         )
-        await interaction.send(embed=embed)
+        await interaction.send(embed=embed, view=deleteinteraction())
 
     
 

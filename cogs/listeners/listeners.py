@@ -54,7 +54,7 @@ class Events(commands.Cog):
          text=f"Requested by {interaction.author}"
       )
       try:
-         await interaction.response.defer(with_message=True, emphemeral=True)
+         await interaction.response.defer(with_message=True, ephemeral=True)
          await interaction.edit_original_message(embed=embed, ephemeral=True)  
          print(errormsg)
       except:
@@ -138,9 +138,9 @@ class Events(commands.Cog):
    @commands.Cog.listener()
    async def on_user_update(self, before, after):
       if before.display_avatar != after.display_avatar:
-         await webhooksend(f"Avatar Changed", f"<@{after.member.id}> Avatar Changed\n**Before:**\n{before.display_avatar}\n**After:**\n{after.display_avatar}", f"{after.guild.id}")
+         await webhooksend(f"Avatar Changed", f"<@{after.member.id}> Avatar Changed\n**Before:**\n{before.display_avatar}\n**After:**\n{after.display_avatar}", f"{after.id}")
       if before.discriminator != after.discriminator:
-         await webhooksend(f"Discriminator Changed", f"<@{after.member.id}> Discriminator Changed\n**Before:**\n{before.discriminator}\n**After:**\n{after.discriminator}", f"{after.guild.id}")
+         await webhooksend(f"Discriminator Changed", f"<@{after.member.id}> Discriminator Changed\n**Before:**\n{before.discriminator}\n**After:**\n{after.discriminator}", f"{after.id}")
 
 
 

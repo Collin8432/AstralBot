@@ -20,7 +20,7 @@ from PIL import ImageFont
 
 from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb
-from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search, verifyrole_add, verifyrole_search
+from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search, verifyrole_add, verifyrole_search, memberchannel_search
 from helpers import checks
 from helpers.deleteinteraction import deleteinteraction
 
@@ -70,17 +70,15 @@ if __name__ == "__main__":
 async def status_task() -> None:
     statuses = [f"Watching Over {len(bot.guilds)} Servers"]
     await bot.change_presence(activity=disnake.Game(random.choice(statuses)))
-    # for guild in bot.guilds:
-    #     channel1 = await memberchannel_search(f"{guild.id}")
-    #     if channel1 is not None:    
-    #         members = guild.member_count
-    #         ch = bot.get_channel(channel1)
-    #         try:
-    #             await ch.edit(name=f"Members: {members}")
-    #         except:
-    #             pass
-
-
+    for guilds in bot.guilds:
+        e = await serversearch(guilds.id)
+        for res in e:
+            ch = res["memberchannel"]
+            print(ch)
+        # try:
+        #     await ch.edit(name=f"Members: {members}")
+        # except Exception as e:
+        #     pass
 
 @bot.event
 async def on_ready():
@@ -90,23 +88,44 @@ async def on_ready():
 
 @bot.listen("on_button_click")
 async def listener(interaction: disnake.MessageCommandInteraction):
-    if (interaction.component.custom_id) == "deleteinter":
-        await interaction.message.delete()
-    if (interaction.component.custom_id) == "balls":
-        await interaction.send("balls")
-    if (interaction.component.custom_id) == "nerd":
-        await interaction.send("nerd")
-    if (interaction.component.custom_id) == "shutdowncomfirm":
-        os._exit(0)
-    if (interaction.component.custom_id) == "shutdowncancel":
-        await interaction.response.send_message("Cancelled!")
-        await interaction.message.delete()
-    if (interaction.component.custom_id) == "genhelp":
-        embed = helpemb
-        embed.set_footer(
-            text=f"Requested by {interaction.author}"
-        )
-        await interaction.response.send_message(embed=embed, ephemeral=True)
+    try:
+        if (interaction.component.custom_id) == "deleteinter":
+            if not interaction.author:
+                await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
+            else:
+                await interaction.message.delete()
+        elif (interaction.component.custom_id) == "balls":
+            await interaction.send("balls", view=deleteinteraction())
+        elif (interaction.component.custom_id) == "nerd":
+            await interaction.send("nerd", view=deleteinteraction())
+        elif (interaction.component.custom_id) == "shutdowncomfirm":
+            os._exit(0)
+        elif (interaction.component.custom_id) == "shutdowncancel":
+            await interaction.response.send_message("Cancelled!")
+            await interaction.message.delete()
+        elif (interaction.component.custom_id) == "genhelp":
+            embed = helpemb
+            embed.set_footer(
+                text=f"Requested by {interaction.author}"
+            )
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+        elif (interaction.component.custom_id) == "funhelp":
+            embed = funemb
+            embed.set_footer(
+                text=f"Requested by {interaction.author}"
+            )   
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+        elif (interaction.component.custom_id) == "modhelp":
+            embed = modemb
+            embed.set_footer(
+                text=f"Requested by {interaction.author}"
+            )
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+        else:
+            await interaction.response.send_message(f"Invalid Button! - {interaction.component.custom_id}")
+    except:
+        pass
+    
         
 
 
@@ -130,7 +149,7 @@ async def uptime(interaction):
         color=0xDC143C,
         timestamp=disnake.utils.utcnow(),
     ) 
-    await interaction.send(embed=embed)
+    await interaction.send(embed=embed, view=deleteinteraction())
 
 
 
@@ -202,7 +221,7 @@ async def verify(interaction):
     verifych = await verification_search(f"{interaction.guild.id}")
     verifychannel = int(verifych)  
     if interaction.channel.id != verifychannel:
-        await interaction.send(f"You can only use this command in <#{verifychannel}>")
+        await interaction.send(f"You can only use this command in <#{verifychannel}>", view=deleteinteraction())
     else:
         list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
         FileName = ""
@@ -224,7 +243,7 @@ async def verify(interaction):
         image.text((125, 325), f"letters/numbers", fill=(43,22,197), font=font)
         image.text((85, 350), f"above to gain access", fill=(43,22,197), font=font)
         img.save(f"./img/astral{FileName}.png")
-        await interaction.send(file=disnake.File(f"./img/astral{FileName}.png"))
+        await interaction.send(file=disnake.File(f"./img/astral{FileName}.png"), view=deleteinteraction())
         try:
             await Checker(f"{FileName}")
         except:
@@ -245,7 +264,7 @@ async def verify(interaction):
         embed.set_footer(
             text=f"Astral Verification"
          )
-        await interaction.send(embed=embed)
+        await interaction.send(embed=embed, view=deleteinteraction())
 
 
 
@@ -282,19 +301,7 @@ async def setup(interaction):
 @commands.has_permissions(administrator=True)
 async def testhooksend(interaction):
     await webhooksend("Test Message", "Test Message", f"{interaction.guild.id}")
-    await interaction.send("Message Sent")
-
-
-    
-@bot.slash_command(
-    name="testinteraction",
-    description="Sends a test interaction",
-)
-async def testinteraction(interaction):
-    try:
-        await interaction.send("Test Message", view=deleteinteraction())
-    except:
-        traceback.print_exc()
+    await interaction.send("Message Sent", view=deleteinteraction())
 
 
 

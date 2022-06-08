@@ -55,7 +55,6 @@ class TicketReason(disnake.ui.Modal):
             text=f"Requested by {interaction.author}"
         )
         await channel.send(embed=embed)
-        await channel.send(view=deleteinteraction())
         await webhooksend(f"Ticket Created", f"{interaction.author.mention} **Created A Ticket**\n**Reason:**\n{Reason}")  
 
 
@@ -76,6 +75,12 @@ class Shutdown(disnake.ui.View):
     ):
         await interaction.response.send_message("Cancelled!")
         await interaction.message.delete()
+    @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
+    async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
+      if not interaction.author:
+         await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
+      else:
+         await interaction.message.delete()
 
 
 
@@ -93,8 +98,8 @@ class HelpButtons(disnake.ui.View):
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
-    @disnake.ui.button(label="Fun 🎉", style=disnake.ButtonStyle.success)
-    async def Fun(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction, custom_id="funhelp"):
+    @disnake.ui.button(label="Fun 🎉", style=disnake.ButtonStyle.success, custom_id="funhelp")
+    async def Fun(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         embed = funemb
         embed.set_footer(
             text=f"Requested by {interaction.author}"
@@ -102,13 +107,20 @@ class HelpButtons(disnake.ui.View):
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
-    @disnake.ui.button(label="Moderation 🚩", style=disnake.ButtonStyle.success)
-    async def Moderation(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction, custom_id="modhelp"):
+    @disnake.ui.button(label="Moderation 🚩", style=disnake.ButtonStyle.success, custom_id="modhelp")
+    async def Moderation(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         embed = modemb
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
         await interaction.response.send_message(embed=embed, ephemeral=True)
+    
+    @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
+    async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
+      if not interaction.author:
+         await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
+      else:
+         await interaction.message.delete()
 
             
 
@@ -161,7 +173,7 @@ class General(commands.Cog, name="General Cmds"):
     )
     @checks.is_owner()
     async def shutdown(interaction):
-        await interaction.send("Are You Sure?", view=Shutdown())  
+        await interaction.send("Are You Sure?", view=Shutdown())
 
 
 
@@ -194,7 +206,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interaction.send(embed=embed)
+        await interaction.send(embed=embed, view=deleteinteraction())
 
 
 
@@ -224,7 +236,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interaction.send(embed=embed)  
+        await interaction.send(embed=embed, view=deleteinteraction())  
     
 
 
@@ -248,7 +260,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interaction.send(embed=embed)
+        await interaction.send(embed=embed, view=deleteinteraction())
 
 
 
@@ -266,7 +278,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interaction.send(embed=embed)
+        await interaction.send(embed=embed, view=deleteinteraction())
 
 
 

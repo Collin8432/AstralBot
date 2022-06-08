@@ -13,7 +13,7 @@ import random
 
 
 
-from helpers import checks
+from helpers.deleteinteraction import deleteinteraction
 
 
 
@@ -29,6 +29,13 @@ class NerdButton(disnake.ui.View):
         self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
     ):
         await interaction.response.send_message("nerd")
+   
+    @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
+    async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
+       if not interaction.author:
+          await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
+       else:
+          await interaction.message.delete()
 
 
 
@@ -42,6 +49,13 @@ class BallsButton(disnake.ui.View):
       self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
    ):
       await interaction.response.send_message("balls")
+      
+   @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
+   async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
+      if not interaction.author:
+         await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
+      else:
+         await interaction.message.delete()
 
 
 
@@ -95,7 +109,7 @@ class Fun(commands.Cog, name="fun cmds"):
             /  /''`--.__; # # # # | #
          _,| ,'  # # # # # # # # #|
          `--|._`.```
-   ''')
+   ''', view=deleteinteraction())
       await asyncio.sleep(.5)
       await interaction.edit_original_message(  
          content=f'''```
@@ -168,7 +182,7 @@ class Fun(commands.Cog, name="fun cmds"):
                   .replace('x', '\u200B🇽')\
                   .replace('y', '\u200B🇾')\
                   .replace('z', '\u200B🇿')
-      await interaction.send(text)
+      await interaction.send(text, view=deleteinteraction())
       
       
       
@@ -197,7 +211,7 @@ class Fun(commands.Cog, name="fun cmds"):
       embed.set_footer(
          text=f"Requested by {interaction.author}"
       )
-      await interaction.send(embed=embed)
+      await interaction.send(embed=embed, view=deleteinteraction())
       
       
       
@@ -226,6 +240,9 @@ class Fun(commands.Cog, name="fun cmds"):
       ]
    )
    async def minesweeper(interaction, columns: int, rows: int, bombs: int) -> None:
+      columns = None
+      rows = None
+      bombs = None
       if columns is not None or rows is not None or bombs is not None:
          pass
       else:
@@ -304,7 +321,7 @@ class Fun(commands.Cog, name="fun cmds"):
       embed.add_field(name='\U0001F4A3 Count:', value=bombs, inline=True)
       embed.add_field(name='\U0001F4A3 Percentage:', value=f'{percentage}%', inline=True)
       embed.set_footer(text=f"Requested by {interaction.author}")
-      await interaction.send(embed=embed)
+      await interaction.send(embed=embed, view=deleteinteraction())
 
 
 
