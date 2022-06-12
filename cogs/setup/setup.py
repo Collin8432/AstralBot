@@ -8,6 +8,7 @@ from disnake.ext import commands
 from helpers import checks
 from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search, verifyrole_add, verifyrole_search, memberchannel_search
 from helpers.webhook import webhooksend
+from helpers.color import color
 
 
 
@@ -72,7 +73,7 @@ class SetupSelect(disnake.ui.Select):
          embed = disnake.Embed(
             title=f"How To Verify!",
             description=f"**To Verify Yourself, Please Enter /verify, Then Enter The Code, Case InSensitive**",
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
          )
          embed.set_image(
@@ -102,7 +103,7 @@ class SetupSelect(disnake.ui.Select):
          embed = disnake.Embed(
             title=f"Server Database",
             description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
          )
          embed.set_footer(
@@ -138,7 +139,7 @@ class SetupSelect(disnake.ui.Select):
          embed = disnake.Embed(
             title=f"Server Database",
             description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
          )
          embed.set_footer(
@@ -161,7 +162,7 @@ class SetupSelect(disnake.ui.Select):
          embed = disnake.Embed(
             title=f"How To Verify!",
             description=f"**To Verify Yourself, Please Enter /verify, Then Enter The Code, Case InSensitive**",
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
          )
          embed.set_image(
@@ -187,7 +188,7 @@ class SetupSelect(disnake.ui.Select):
          embed = disnake.Embed(
             title=f"Server Database",
             description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
          )
          embed.set_footer(
@@ -213,7 +214,7 @@ class SetupSelect(disnake.ui.Select):
          embed = disnake.Embed(
             title=f"Server Database",
             description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
          )
          embed.set_footer(
@@ -240,7 +241,7 @@ class SetupSelect(disnake.ui.Select):
          embed = disnake.Embed(
             title=f"Server Database",
             description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
          )
          embed.set_footer(
@@ -288,7 +289,7 @@ class setupcmds(commands.Cog, name="Setup cmd"):
       embed = disnake.Embed(
          title=f"Server Database",
          description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-         color=0xDC143C,
+         color=color,
          timestamp=disnake.utils.utcnow()
       )
       embed.set_footer(

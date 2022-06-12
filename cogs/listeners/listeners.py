@@ -14,6 +14,7 @@ from helpers.webhook import webhooksend
 from helpers.database import on_join_insert, on_leave_remove
 from helpers.helpembeds import helpemb, funemb, modemb, setupemb
 from helpers.deleteinteraction import deleteinteraction
+from helpers.color import color
 
 
 
@@ -97,7 +98,7 @@ class Events(commands.Cog):
       embed = disnake.Embed(
          title="Error",
          description=f"Error With Command:\n```py\n{errormsg}```",
-         color=0xDC143C,
+         color=color,
          timestamp=disnake.utils.utcnow()
       )
       embed.set_footer(
@@ -141,7 +142,7 @@ class Events(commands.Cog):
       embed = disnake.Embed(
          title=f"You Were Banned From {guild.name}",
          description=f"{user.mention} Was Banned From {guild.name}",
-         color=0xDC143C,
+         color=color,
          timestamp=disnake.utils.utcnow()
       ) 
       
@@ -155,7 +156,7 @@ class Events(commands.Cog):
       embed = disnake.Embed(
          title=f"You Were Unbanned From {guild.name}",
          description=f"{guild.name} Unbanned You, Astral discord Server:\nhttps://discord.gg/uNnJyjaG",
-         color=0xDC143C,
+         color=color,
          timestamp=disnake.utils.utcnow()
       )
       await user.send(embed=embed)
@@ -219,7 +220,7 @@ class Events(commands.Cog):
       embed = disnake.Embed(
          title=f"{member.name}, Sorry Too See You Go!",
          description=f"If you left on accident, please join back!\nAstral Discord Server:\nhttps://discord.gg/uNnJyjaG",
-         color=0xDC143C,
+         color=color,
          timestamp=disnake.utils.utcnow()
       )
       try:

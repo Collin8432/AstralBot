@@ -16,6 +16,7 @@ from helpers import checks
 from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb, setupemb
 from helpers.deleteinteraction import deleteinteraction
+from helpers.color import color
 
 
 
@@ -53,7 +54,7 @@ class TicketReason(disnake.ui.Modal):
         embed = disnake.Embed(
             title="Ticket Created!",
             description=f"{interaction.author.mention} **Created This Ticket**\n**Reason: **\n{Reason}",
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
         )
         embed.set_footer(
@@ -152,7 +153,7 @@ class General(commands.Cog, name="General Cmds"):
     async def help(self, interaction: ApplicationCommandInteraction) -> None:  
         embed = disnake.Embed(
             description=f"Astral Bot - Coded, Maintained, Hosted, & Owned by <@935339228324311040>",
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
         )
         embed.set_author(
@@ -214,7 +215,7 @@ class General(commands.Cog, name="General Cmds"):
         embed = disnake.Embed(
             title="Choice Selected!",
             description=f"{choicechoser}",
-            color=0xDC143C
+            color=color
         )
         embed.set_footer(
             text=f"Requested by {interaction.author}"
@@ -243,7 +244,7 @@ class General(commands.Cog, name="General Cmds"):
         embed = disnake.Embed(
             title="Pong!",
             description=f"**Bot Latency:\n{pong} ms**",
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
         )
         embed.set_footer(
@@ -267,7 +268,7 @@ class General(commands.Cog, name="General Cmds"):
         embed = disnake.Embed(
             title="Invite Link",
             description=f"https://discord.gg/NdwvUHCDcM",
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
         )
         embed.set_footer(
@@ -278,14 +279,14 @@ class General(commands.Cog, name="General Cmds"):
 
 
     @astral.sub_command(
-        name="bot",
+        name="invite",
         description="Gets Invite Link To Astral Bot",
     )
     async def bot(self, interaction):
         embed = disnake.Embed(
             title="Invite Link",
             description=f"https://discord.com/api/oauth2/authorize?client_id=938579223780655145&permissions=8&scope=bot%20applications.commands",
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
         )
         embed.set_footer(
@@ -312,7 +313,7 @@ class General(commands.Cog, name="General Cmds"):
         embed = disnake.Embed(
             title="Uptime",
             description=f"**The Bot Has Been Online For: {uptime_str}**",
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow(),
         ) 
         await interaction.send(embed=embed, view=deleteinteraction())

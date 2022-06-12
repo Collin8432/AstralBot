@@ -9,6 +9,7 @@ import aiohttp
 
 
 from helpers.database import webhook_search
+from helpers.color import color
 
 
 
@@ -21,7 +22,7 @@ async def webhooksend(title: str, description: str, guild_id: str) -> None:
          embed = disnake.Embed(
             title=f"{title}",
             description=f"{description}",
-            color=0xDC143C,
+            color=color,
             timestamp=disnake.utils.utcnow()
          )
          embed.set_footer(

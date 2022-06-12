@@ -7,6 +7,8 @@ from disnake.ext import commands
 from helpers.database import verification_search, verifyrole_search
 from helpers.webhook import webhooksend
 from helpers.deleteinteraction import deleteinteraction
+from helpers.color import color
+
 
 
 from PIL import Image
@@ -76,7 +78,7 @@ class Verification(commands.Cog, name="Verification"):
          embed = disnake.Embed(
                title=f"How To Verify!",
                description=f"**To Verify Yourself, Please Enter /verify, Then Enter The Code, Case InSensitive**",
-               color=0xDC143C,
+               color=color,
                timestamp=disnake.utils.utcnow()
          )
          embed.set_image(

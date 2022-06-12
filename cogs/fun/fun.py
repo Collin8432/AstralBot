@@ -14,6 +14,7 @@ import random
 
 
 from helpers.deleteinteraction import deleteinteraction
+from helpers.color import color
 
 
 
@@ -206,7 +207,7 @@ class Fun(commands.Cog, name="fun cmds"):
          title=f"{slotmachineoutput}",
          description=description,
          timestamp=disnake.utils.utcnow(),
-         color=0xDC143C
+         color=color
       )
       embed.set_footer(
          text=f"Requested by {interaction.author}"
@@ -314,7 +315,7 @@ class Fun(commands.Cog, name="fun cmds"):
       percentage = 100 * percentage
       percentage = round(percentage, 2)
 
-      embed = disnake.Embed(title='Minesweeper', description=f'\U0000FEFF{final}', timestamp=disnake.utils.utcnow(), color=0xDC143C)
+      embed = disnake.Embed(title='Minesweeper', description=f'\U0000FEFF{final}', timestamp=disnake.utils.utcnow(), color=color)
       embed.add_field(name='Columns:', value=columns, inline=True)
       embed.add_field(name='Rows:', value=rows, inline=True)
       embed.add_field(name='Total Spaces:', value=columns * rows, inline=True)
