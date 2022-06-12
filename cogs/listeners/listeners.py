@@ -1,6 +1,6 @@
 # Imports
 import random
-import traceback
+import os
 
 
 
@@ -12,6 +12,8 @@ from disnake import ApplicationCommandInteraction
 
 from helpers.webhook import webhooksend
 from helpers.database import on_join_insert, on_leave_remove
+from helpers.helpembeds import helpemb, funemb, modemb, setupemb
+from helpers.deleteinteraction import deleteinteraction
 
 
 
@@ -26,6 +28,54 @@ class Events(commands.Cog):
 
 
    #Listeners
+   @commands.Cog.listener()
+   async def on_button_click(self, interaction: disnake.MessageCommandInteraction):
+      try:
+         if (interaction.component.custom_id) == "deleteinter":
+               if not interaction.author:
+                  await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
+               else:
+                  await interaction.message.delete()
+         elif (interaction.component.custom_id) == "balls":
+               await interaction.send("balls", view=deleteinteraction())
+         elif (interaction.component.custom_id) == "nerd":
+               await interaction.send("nerd", view=deleteinteraction())
+         elif (interaction.component.custom_id) == "shutdowncomfirm":
+               os._exit(0)
+         elif (interaction.component.custom_id) == "shutdowncancel":
+               await interaction.response.send_message("Cancelled!")
+               await interaction.message.delete()
+         elif (interaction.component.custom_id) == "genhelp":
+               embed = helpemb
+               embed.set_footer(
+                  text=f"Requested by {interaction.author}"
+               )
+               await interaction.response.send_message(embed=embed, ephemeral=True)
+         elif (interaction.component.custom_id) == "funhelp":
+               embed = funemb
+               embed.set_footer(
+                  text=f"Requested by {interaction.author}"
+               )   
+               await interaction.response.send_message(embed=embed, ephemeral=True)
+         elif (interaction.component.custom_id) == "modhelp":
+               embed = modemb
+               embed.set_footer(
+                  text=f"Requested by {interaction.author}"
+               )
+               await interaction.response.send_message(embed=embed, ephemeral=True)
+         elif (interaction.component.custom_id) == "setuphelp":
+               embed = setupemb
+               embed.set_footer(
+                  text=f"Requested by {interaction.author}"
+               )
+               await interaction.response.send_message(embed=embed, ephemeral=True)
+         else:
+               await interaction.response.send_message(f"Invalid Button! - {interaction.component.custom_id}")
+      except:
+         pass
+     
+     
+     
    @commands.Cog.listener()
    async def on_ready(self):
       print(f"Logged in as {self.bot.user.name}")
@@ -77,7 +127,11 @@ class Events(commands.Cog):
 
    @commands.Cog.listener()
    async def on_message_delete(self, message):
-      await webhooksend("Message Deleted", f"Chat Deleted In <#{message.channel.id}>\n**Author:** \n<@{message.author.id}>\n**Content:** \n{message.content}", f"{message.guild.id}")
+      if message.content == None or "" or " ":
+         content = "**Message Content Unable To Be Retrieved, Likely Due To An Embeded Message**"
+      else:
+         content = message.content
+      await webhooksend("Message Deleted", f"Chat Deleted In <#{message.channel.id}>\n**Author:** \n<@{message.author.id}>\n**Content:** \n{content}", f"{message.guild.id}")
 
 
 
@@ -131,11 +185,6 @@ class Events(commands.Cog):
          await webhooksend(f"Roles Changed", f"<@{after.id}> Roles Changed\n**Before:**\n{beforeroles}\n**After:**\n{afterroles}", f"{after.guild.id}")
       if before.current_timeout != after.current_timeout:
          await webhooksend(f"Timeout!", f"<@{after.id}> Timeout Changed\n**Before:**\n{before.current_timeout}\n**After:**\n{after.current_timeout}", f"{after.guild.id}")
-
-
-
-   @commands.Cog.listener()
-   async def on_user_update(self, before: disnake.User, after: disnake.User):
       if before.display_avatar != after.display_avatar:
          await webhooksend(f"Avatar Changed", f"<@{after.id}> Avatar Changed\n**Before:**\n{before.display_avatar}\n**After:**\n{after.display_avatar}", f"{after.guild.id}")
       if before.discriminator != after.discriminator:
@@ -237,6 +286,7 @@ class Events(commands.Cog):
          await webhooksend("Guild Owner Changed", f"**From:**\n{before.owner.mention}\n**To:**\n{after.owner.mention}", f"{after.id}")  
       if before.description != after.description:  
          await webhooksend("Guild Description Changed", f"**From:**\n{before.description}\n**To:**\n{after.description}", f"{after.id}")  
+      
 
 
 

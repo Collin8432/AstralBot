@@ -19,6 +19,11 @@ from helpers.deleteinteraction import deleteinteraction
 
 
 
+global starttime
+starttime = disnake.utils.utcnow()
+
+
+
 # TicketReason Modal
 class TicketReason(disnake.ui.Modal):
     def __init__(self) -> None:
@@ -209,7 +214,7 @@ class General(commands.Cog, name="General Cmds"):
         embed = disnake.Embed(
             title="Choice Selected!",
             description=f"{choicechoser}",
-            color = 0xDC143C
+            color=0xDC143C
         )
         embed.set_footer(
             text=f"Requested by {interaction.author}"
@@ -249,13 +254,13 @@ class General(commands.Cog, name="General Cmds"):
 
 
     @commands.slash_command()
-    async def invite(self, interaction):
+    async def astral(self, interaction):
         pass
 
 
     
-    @invite.sub_command(
-        name="link",
+    @astral.sub_command(
+        name="support",
         description="Gets Invite Link To Astral's Discord Server",
     )
     async def link(self, interaction):
@@ -272,7 +277,7 @@ class General(commands.Cog, name="General Cmds"):
 
 
 
-    @invite.sub_command(
+    @astral.sub_command(
         name="bot",
         description="Gets Invite Link To Astral Bot",
     )
@@ -287,7 +292,45 @@ class General(commands.Cog, name="General Cmds"):
             text=f"Requested by {interaction.author}"
         )
         await interaction.send(embed=embed, view=deleteinteraction())
-
+        
+        
+    
+    
+    @astral.sub_command(
+        name="uptime",
+        description="Shows the uptime of the bot",
+    )
+    @checks.not_blacklisted()
+    async def uptime(self, interaction):
+        end_time = disnake.utils.utcnow()
+        diff = end_time - starttime
+        seconds = diff.seconds % 60
+        minutes = (diff.seconds // 60) % 60
+        hours = (diff.seconds // 3600) % 24
+        days = diff.days
+        uptime_str = f"{days} days, {hours} hours, {minutes} minutes, {seconds} seconds"
+        embed = disnake.Embed(
+            title="Uptime",
+            description=f"**The Bot Has Been Online For: {uptime_str}**",
+            color=0xDC143C,
+            timestamp=disnake.utils.utcnow(),
+        ) 
+        await interaction.send(embed=embed, view=deleteinteraction())
+        
+        
+    
+    @astral.sub_command(
+        name="credits",
+        description="Shows Credits For The Bot",
+    )
+    @checks.not_blacklisted()
+    async def credits(self, interaction):
+        disnakesite = "https://disnake.dev/"
+        embed = disnake.Embed(
+            title="Credits",
+            description=f"**Astral Bot**\n[**Disnake - Discord API Wrapper**](https://disnake.dev)\n[**Original Template - Credits To kkrypt0nn**](https://github.com/kkrypt0nn/Python-Discord-Bot-Template)\n**Coded By <@935339228324311040>**",
+        )
+        await interaction.send(embed=embed, view=deleteinteraction())
 
 
 # Adding Cog To Bot 
