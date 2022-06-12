@@ -209,18 +209,18 @@ class Events(commands.Cog):
       if before.name != after.name:
          await webhooksend("Channel Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.mention}", f"{after.guild.id}")
       if before.changed_roles != after.changed_roles:
-         await webhooksend("Channel Roles Changed", f"**From:**\n{before.changed_roles}\n**To:**\n{after.changed_roles}\n\n//idek what this does", f"{after.guild.id}")
+         await webhooksend("Channel Roles Changed", f"**From:**\n{before.changed_roles}\n**To:**\n{after.changed_roles}", f"{after.guild.id}")
       roles = after.guild.roles
       for role in roles:
          if dict(after.overwrites_for(role)) != dict(before.overwrites_for(role)):
                permissions = dict(after.overwrites_for(role))
-               finalpermissions = (str(permissions).replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
+               finalpermissions = (str(permissions).replace(" ", "").replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
                await webhooksend("Channel Permissions Changed", f"\n**Channel Permissions Changed For** {role.mention} **In** {after.mention}\n```\n{finalpermissions}```", f"{after.guild.id}")
       members = after.guild.members  
       for member in members:
          if dict(after.overwrites_for(member)) != dict(before.overwrites_for(member)):
                permissions = dict(after.overwrites_for(member))
-               finalpermissions = (str(permissions).replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
+               finalpermissions = (str(permissions).replace(" ", "").replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
                await webhooksend("Channel Permissions Changed", f"\n**Channel Permissions Changed For** {member.mention} **In** {after.mention}\n```\n{finalpermissions}```", f"{after.guild.id}")
 
 
@@ -265,7 +265,7 @@ class Events(commands.Cog):
       if before.permissions != after.permissions:
          if dict(before.permissions) != dict(after.permissions):
                afterpermissions = dict(after.permissions)
-               finalpermissions = (str(afterpermissions).replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
+               finalpermissions = (str(afterpermissions).replace(" ", "").replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
                await webhooksend("Role Permissions Changed", f"{after.mention}'s **Permissions Updated To:**```\n{finalpermissions}```", f"{after.guild.id}")
       if before.position != after.position:
          await webhooksend("Role Position Changed", f"**From:**\n{before.position}\n**To:**\n{after.position}", f"{after.guild.id}")

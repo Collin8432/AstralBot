@@ -51,7 +51,7 @@ def load_commands(command_type: str) -> None:
             except Exception as e:
                 traceback.print_exc()
                 exception = f"{type(e).__name__}: {e}"
-                print(f"Failed to load extension {extension}\n{exception}")
+                print(f"Failed to load extension ❌ {extension}.py\n{exception}")
 
 
 
@@ -232,7 +232,7 @@ async def verify(interaction):
          )
         await interaction.send(embed=embed)
     
-
+ 
 
 # Starting The Bot
 bot.run(config["token"])
