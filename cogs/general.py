@@ -316,6 +316,9 @@ class General(commands.Cog, name="General Cmds"):
             color=color,
             timestamp=disnake.utils.utcnow(),
         ) 
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+        )
         await interaction.send(embed=embed, view=deleteinteraction())
         
         
@@ -326,10 +329,12 @@ class General(commands.Cog, name="General Cmds"):
     )
     @checks.not_blacklisted()
     async def credits(self, interaction):
-        disnakesite = "https://disnake.dev/"
         embed = disnake.Embed(
             title="Credits",
             description=f"**Astral Bot**\n[**Disnake - Discord API Wrapper**](https://disnake.dev)\n[**Original Template - Credits To kkrypt0nn**](https://github.com/kkrypt0nn/Python-Discord-Bot-Template)\n**Coded By <@935339228324311040>**",
+        )
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
         )
         await interaction.send(embed=embed, view=deleteinteraction())
 

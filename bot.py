@@ -25,13 +25,15 @@ token = config.get("token")
 
 
 
-def load_commands(command_type: str) -> None:
-    for file in os.listdir(f"./cogs/{command_type}"):
+def load_commands(file: str) -> None:
+    for file in os.listdir(f"./cogs/"):
         if file.endswith(".py"):
             extension = file[:-3]
             try:
-                bot.load_extension(f"cogs.{command_type}.{extension}")
+                bot.load_extension(f"cogs.{extension}")
                 print(f"Loaded ✅ {extension}.py")
+            except disnake.ext.commands.errors.ExtensionAlreadyLoaded:
+                pass
             except Exception as e:
                 traceback.print_exc()
                 exception = f"{type(e).__name__}: {e}"
