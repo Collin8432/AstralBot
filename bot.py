@@ -49,8 +49,9 @@ if __name__ == "__main__":
     load_commands("setup")
     load_commands("tasks")
     load_commands("verification")
+    load_commands("nsfw")
 
- 
+
 
 # Starting The Bot
 bot.run(config["token"])

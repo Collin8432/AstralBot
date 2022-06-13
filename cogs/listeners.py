@@ -94,15 +94,26 @@ class Events(commands.Cog):
 
    @commands.Cog.listener()
    async def on_slash_command_error(self, interaction: ApplicationCommandInteraction, error: Exception) -> None:
-      errormsg = error 
-      embed = disnake.Embed(
-         title="Error",
-         description=f"Error With Command:\n```py\n{errormsg}```",
-         color=color,
-         timestamp=disnake.utils.utcnow()
-      )
+      errormsg = error
+      for errors in disnake.ext.commands.errors.__all__:
+         if errors == type(error).__name__:
+            err = errors
+      if interaction.author.id == 935339228324311040:
+         embed = disnake.Embed(
+            title=f"{err}",
+            description=f"{errormsg}",
+            color=color,
+            timestamp=disnake.utils.utcnow()
+         )
+      else:
+         embed = disnake.Embed(
+            title="Error",
+            description=f"Error With Command:\n```{errormsg}```",
+            color=color,
+            timestamp=disnake.utils.utcnow()
+         )
       embed.set_footer(
-         text=f"Requested by {interaction.author}"
+         text=f"Command Error!"
       )
       try:
          await interaction.response.defer(with_message=True, ephemeral=True)
@@ -500,8 +511,8 @@ class Events(commands.Cog):
 
 
    @commands.Cog.listener()
-   async def on_bulk_message_delete(self: commands.Bot, messages: disnake.MessageCommandInteraction):  
-      await webhooksend("Messages Bulk Deleted/Purged", f"**Messages Bulk Deleted/Purged With A Total Of {len(messages)} Messages Deleted**", f"{self.bot.guild.id}")  
+   async def on_bulk_message_delete(self, messages: disnake.Message):  
+      await webhooksend("Messages Bulk Deleted/Purged", f"**Messages Bulk Deleted/Purged With A Total Of {len(messages)} Messages Deleted**", f"{messages[0].guild.id}")  
 
 
 

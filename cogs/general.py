@@ -70,13 +70,13 @@ class Shutdown(disnake.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
     @disnake.ui.button(emoji="✅", style=ButtonStyle.green, custom_id="shutdowncomfirm")
-    async def first_button(
+    async def Confirm(
         self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
     ):
         await interaction.response.send_message("Exiting...")
         os._exit(0)
     @disnake.ui.button(emoji="⛔", style=ButtonStyle.red, custom_id="shutdowncancel")
-    async def second_button(
+    async def Deny(
         self, button: disnake.ui.button, interaction: disnake.MessageInteraction  
     ):
         await interaction.response.send_message("Cancelled!")
