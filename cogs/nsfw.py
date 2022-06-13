@@ -24,6 +24,7 @@ class nsfw(commands.Cog, name="NSFW"):
    # Commands
    @commands.slash_command(
       name="nsfw",
+      description="ass, tits, thighs"
    )
    async def nsfw(self, interaction):
       pass

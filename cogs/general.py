@@ -254,7 +254,10 @@ class General(commands.Cog, name="General Cmds"):
     
 
 
-    @commands.slash_command()
+    @commands.slash_command(
+        name="astral",
+        description="support, invite, uptime, credits"
+    )
     async def astral(self, interaction):
         pass
 
