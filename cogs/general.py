@@ -340,6 +340,40 @@ class General(commands.Cog, name="General Cmds"):
             text=f"Requested by {interaction.author}"
         )
         await interaction.send(embed=embed, view=deleteinteraction())
+        
+        
+        
+    @commands.slash_command(
+        name="allcmds",
+        description="all commands"
+    )
+    async def allcmds(self, interaction):
+        embed = disnake.Embed(
+            title="All Commands",
+            color=color,
+            timestamp=disnake.utils.utcnow(),
+        )
+        for cmd in self.bot.slash_commands:
+            embed.add_field(
+                name=f"/{cmd.name}",
+                value=f"{cmd.description}",
+                inline=False,
+            )
+        embed.set_footer(
+            text=f"Total of {len(self.bot.slash_commands)} commands",
+        )
+        await interaction.send(embed=embed)
+    
+    
+    
+    # @commands.slash_command(
+    #     name="serverinfo",
+    #     description="displays server info",
+    # )
+    # async def info(self, interaction: ApplicationCommandInteraction):
+    #     nitrotype = interaction.author.premium_type   
+         
+    
 
 
 # Adding Cog To Bot 
