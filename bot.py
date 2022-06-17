@@ -1,9 +1,8 @@
 # Imports
-from ast import excepthandler
 import json
 import os
 import sys
-import traceback
+
 
 
 import disnake
@@ -23,6 +22,7 @@ else:
 intents = disnake.Intents.all()
 bot = Bot(command_prefix=config["prefix"], intents=intents)
 token = config.get("token")
+bot.remove_command("help")
 
 
 
