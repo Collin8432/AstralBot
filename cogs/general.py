@@ -362,7 +362,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Total of {len(self.bot.slash_commands)} commands",
         )
-        await interaction.send(embed=embed)
+        await interaction.send(embed=embed, view=deleteinteraction())
     
     
     

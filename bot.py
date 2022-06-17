@@ -1,4 +1,5 @@
 # Imports
+from ast import excepthandler
 import json
 import os
 import sys
@@ -25,35 +26,18 @@ token = config.get("token")
 
 
 
-def load_commands(file: str) -> None:
-    for file in os.listdir(f"./cogs/"):
-        if file.endswith(".py"):
-            extension = file[:-3]
-            try:
-                bot.load_extension(f"cogs.{extension}")
-                print(f"Loaded ✅ {extension}.py")
-            except disnake.ext.commands.errors.ExtensionAlreadyLoaded:
-                pass
-            except Exception as e:
-                traceback.print_exc()
-                exception = f"{type(e).__name__}: {e}"
-                print(f"Failed to load extension ❌ {extension}.py\n{exception}")
+def loadCogs():
+    if os.path.isfile("./cogs/__init__.py"):
+        try:
+            bot.load_extension(f"cogs.__init__")
+            print("Loaded Cogs ✅")
+        except Exception as e:
+            pass
 
 
 
 if __name__ == "__main__":
-    load_commands("general")
-    load_commands("moderation")
-    load_commands("fun")
-    load_commands("listeners")
-    load_commands("setup")
-    load_commands("tasks")
-    load_commands("verification")
-    load_commands("nsfw")
-
-
-
-print(bot.premium_type)
+    loadCogs()
 
 
 

@@ -15,6 +15,17 @@ from helpers.color import color
 
 # Function
 async def webhooksend(title: str, description: str, guild_id: str) -> None:
+   """
+   Args:
+       title (str): _description_
+       description (str): _description_
+       guild_id (str): _description_
+   
+   See Also:
+         * :func:`helpers.database.webhook_search`
+         
+   Used To Send Messages To A Database 
+   """
    try:
       async with aiohttp.ClientSession() as session:
          hook = await webhook_search(guild_id)
