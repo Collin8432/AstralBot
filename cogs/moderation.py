@@ -95,7 +95,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 color=0xE02B2B,
                 timestamp=disnake.utils.utcnow()
             )
-            await interaction.send(embed=embed, view=deleteinteraction())
+            await interactionsend(interaction, embed=embed, view=deleteinteraction())
         else:
             try:
                 embed = disnake.Embed(
@@ -104,7 +104,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     color=color,
                     timestamp=disnake.utils.utcnow()
                 )
-                await interaction.send(embed=embed, view=deleteinteraction())
+                await interactionsend(interaction, embed=embed, view=deleteinteraction())
                 try:
                     embed = disnake.Embed(
                     title="You Were Kicked!",
@@ -123,7 +123,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     color=color,
                     timestamp=disnake.utils.utcnow()
                 )
-                await interaction.send(embed=embed, view=deleteinteraction())
+                await interactionsend(interaction, embed=embed, view=deleteinteraction())
 
 
 
@@ -157,7 +157,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                           color=color,
                           timestamp=disnake.utils.utcnow()
                       )
-                      await interaction.send(embed=embed, view=deleteinteraction())
+                      await interactionsend(interaction, embed=embed, view=deleteinteraction())
                   else:
                       try:
                         embed = disnake.Embed(
@@ -166,7 +166,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                             color=color,
                             timestamp=disnake.utils.utcnow()
                         )
-                        await interaction.send(embed=embed, view=deleteinteraction())
+                        await interactionsend(interaction, embed=embed, view=deleteinteraction())
                         await member.ban(reason=reason)  
                       except:
                           embed = disnake.Embed(
@@ -199,7 +199,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=color,
             timestamp=disnake.utils.utcnow()
         )
-        await interaction.send(embed=embed, ephemeral=True)
+        await interactionsend(interaction, embed=embed, ephemeral=True)
         await interaction.channel.purge(limit=200)
 
 
@@ -216,7 +216,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=color,
             timestamp=disnake.utils.utcnow()
         )
-        await interaction.send(embed=embed, view=deleteinteraction())  
+        await interactionsend(interaction, embed=embed, view=deleteinteraction())  
 
 
 
@@ -243,7 +243,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 color=0xE02B2B,
                 timestamp=disnake.utils.utcnow()
             )
-            await interaction.send(embed=embed, view=deleteinteraction())
+            await interactionsend(interaction, embed=embed, view=deleteinteraction())
         else:
             await user.add_roles(muterole)  
         embed = disnake.Embed(
@@ -252,7 +252,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=color,
             timestamp=disnake.utils.utcnow()
         )
-        await interaction.send(embed=embed, view=deleteinteraction())
+        await interactionsend(interaction, embed=embed, view=deleteinteraction())
 
 
 
@@ -279,7 +279,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 color=0xE02B2B,
                 timestamp=disnake.utils.utcnow()
             )
-            await interaction.send(embed=embed, view=deleteinteraction())
+            await interactionsend(interaction, embed=embed, view=deleteinteraction())
         else:
             await user.remove_roles(muterole)  
         embed = disnake.Embed(
@@ -288,7 +288,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=color,
             timestamp=disnake.utils.utcnow()
         )
-        await interaction.send(embed=embed, view=deleteinteraction())
+        await interactionsend(interaction, embed=embed, view=deleteinteraction())
    
 
    
@@ -326,7 +326,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=color,
             timestamp=disnake.utils.utcnow()
         )
-        await interaction.send(embed=embed, view=deleteinteraction())
+        await interactionsend(interaction, embed=embed, view=deleteinteraction())
 
     
 

@@ -84,7 +84,7 @@ class Shutdown(disnake.ui.View):
     @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
     async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
-         await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
+         await interactionsend(interaction, "You Must Be The Author To Delete The Interaction", ephemeral=True)
       else:
          await interaction.message.delete()
 
@@ -132,7 +132,7 @@ class HelpButtons(disnake.ui.View):
     @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
     async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
-         await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
+         await interactionsend(interaction, "You Must Be The Author To Delete The Interaction", ephemeral=True)
       else:
          await interaction.message.delete()
 
@@ -177,7 +177,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
          )
-        await interaction.send(embed=embed, view=HelpButtons())
+        await interactionsend(interaction, embed=embed, view=HelpButtons())
 
  
 
@@ -187,7 +187,7 @@ class General(commands.Cog, name="General Cmds"):
     )
     @checks.is_owner()
     async def shutdown(interaction):
-        await interaction.send("Are You Sure?", view=Shutdown())
+        await interactionsend(interaction, "Are You Sure?", view=Shutdown())
 
 
 
@@ -220,7 +220,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interaction.send(embed=embed, view=deleteinteraction())
+        await interactionsend(interaction, embed=embed, view=deleteinteraction())
 
 
 
@@ -250,7 +250,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interaction.send(embed=embed, view=deleteinteraction())  
+        await interactionsend(interaction, embed=embed, view=deleteinteraction())  
     
 
 
@@ -277,7 +277,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interaction.send(embed=embed, view=deleteinteraction())
+        await interactionsend(interaction, embed=embed, view=deleteinteraction())
 
 
 
@@ -295,7 +295,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interaction.send(embed=embed, view=deleteinteraction())
+        await interactionsend(interaction, embed=embed, view=deleteinteraction())
         
         
     
@@ -322,7 +322,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interaction.send(embed=embed, view=deleteinteraction())
+        await interactionsend(interaction, embed=embed, view=deleteinteraction())
         
         
     
@@ -339,7 +339,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interaction.send(embed=embed, view=deleteinteraction())
+        await interactionsend(interaction, embed=embed, view=deleteinteraction())
         
         
         
@@ -362,7 +362,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Total of {len(self.bot.slash_commands)} commands",
         )
-        await interaction.send(embed=embed, view=deleteinteraction())
+        await interactionsend(interaction, embed=embed, view=deleteinteraction())
     
     
     

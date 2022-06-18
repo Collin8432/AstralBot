@@ -44,7 +44,7 @@ class Verification(commands.Cog, name="Verification"):
       verifych = await verification_search(f"{interaction.guild.id}")
       verifychannel = int(verifych)  
       if interaction.channel.id != verifychannel:
-         await interaction.send(f"You can only use this command in <#{verifychannel}>", view=deleteinteraction())
+         await interactionsend(interaction, f"You can only use this command in <#{verifychannel}>", view=deleteinteraction())
       else:
          list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
          FileName = ""
@@ -66,7 +66,7 @@ class Verification(commands.Cog, name="Verification"):
          image.text((125, 325), f"letters/numbers", fill=(43,22,197), font=font)
          image.text((85, 350), f"above to gain access", fill=(43,22,197), font=font)
          img.save(f"./img/astral{FileName}.png")
-         await interaction.send(file=disnake.File(f"./img/astral{FileName}.png"), view=deleteinteraction())
+         await interactionsend(interaction, file=disnake.File(f"./img/astral{FileName}.png"), view=deleteinteraction())
          try:
                await Checker(f"{FileName}")
          except:
@@ -87,7 +87,7 @@ class Verification(commands.Cog, name="Verification"):
          embed.set_footer(
                text=f"Astral Verification"
             )
-         await interaction.send(embed=embed)
+         await interactionsend(interaction, embed=embed)
    
 
 

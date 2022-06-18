@@ -34,13 +34,13 @@ class Events(commands.Cog):
       try:
          if (interaction.component.custom_id) == "deleteinter":
                if not interaction.author:
-                  await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
+                  await interactionsend(interaction, "You Must Be The Author To Delete The Interaction", ephemeral=True)
                else:
                   await interaction.message.delete()
          elif (interaction.component.custom_id) == "balls":
-               await interaction.send("balls", view=deleteinteraction())
+               await interactionsend(interaction, "balls", view=deleteinteraction())
          elif (interaction.component.custom_id) == "nerd":
-               await interaction.send("nerd", view=deleteinteraction())
+               await interactionsend(interaction, "nerd", view=deleteinteraction())
          elif (interaction.component.custom_id) == "shutdowncomfirm":
                os._exit(0)
          elif (interaction.component.custom_id) == "shutdowncancel":
@@ -75,12 +75,40 @@ class Events(commands.Cog):
       except:
          pass
      
-     
+   @commands.Cog.listener()
+   async def on_connect(self):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_disconnect(self):
+      await webhooksend("Disconnected", "Disconnected From Discord", f"{self.bot.guild.id}")
+   
+   
      
    @commands.Cog.listener()
    async def on_ready(self):
       print(f"Logged in as {self.bot.user.name}")
-      
+      # s = await self.bot.application_info()
+      # print(s.id)
+      # print(s.name)
+      # print(s.owner)
+      # print(s.team)
+      # print(s.description)
+      # print(s.bot_public)
+      # print(s.bot_require_code_grant)
+      # print(s.rpc_origins)
+      # print(s.verify_key)
+      # print(s.guild_id)
+      # print(s.primary_sku_id)
+      # print(s.slug)
+      # print(s.terms_of_service_url)
+      # print(s.privacy_policy_url)
+      # print(s.flags.embedded)
+      # print(s.install_params)
+      # print(s.custom_install_url)
+        
 
 
    @commands.Cog.listener()
@@ -120,7 +148,7 @@ class Events(commands.Cog):
          await interaction.edit_original_message(embed=embed, ephemeral=True)  
          print(errormsg)
       except:
-         await interaction.send(embed=embed, ephemeral=True)
+         await interactionsend(interaction, embed=embed, ephemeral=True)
          print(errormsg)
       else:
          pass
@@ -490,11 +518,9 @@ class Events(commands.Cog):
 
 
 
-
    @commands.Cog.listener()
    async def on_shard_resumed(self, shard_id):
       pass
-
 
 
 
@@ -502,7 +528,13 @@ class Events(commands.Cog):
    async def on_socket_event_type(self, event_type):
       pass
 
-
+   
+   
+   @commands.Cog.listener()
+   async def on_socket_raw_receive(self, msg):
+      pass
+   
+   
 
    @commands.Cog.listener()
    async def on_typing(self, channel, user, when):
@@ -534,6 +566,128 @@ class Events(commands.Cog):
       await webhooksend("Reaction Removed", f"{reaction.emoji} **Was Removed From** {reaction.message.content} **In** {reaction.message.channel.mention} **By** {user.mention}", f"{user.guild.id}")
 
 
-#Adding Cog To Bot
+
+   @commands.Cog.listener()
+   async def on_error(self, error: Exception, event, *args, **kwargs):
+      await webhooksend("Error At Event", f"{event}\n{args}\n{kwargs}")
+      
+      
+   
+   @commands.Cog.listener()
+   async def on_socket_raw_send(self, payload):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_raw_typing(self, data):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_raw_message_delete(self, payload):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_raw_bulk_message_delete(self, payload):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_raw_message_edit(self, payload):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_raw_reaction_add(self, payload):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_raw_reaction_remove(self, payload):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_raw_reaction_clear(self, payload):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_raw_reaction_clear_emoji(self, payload):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_application_command_permissions_update(self, permissions):
+      await webhooksend("Command Permissions Updated", f"**Command Permissions Updated**", f"{permissions.guild.id}")
+      
+      
+   @commands.Cog.listener()
+   async def on_interaction(interaction):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_message_interaction(interaction):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_dropdown(interaction):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_application_command(interaction):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_application_command_autocomplete(interaction):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_modal_submit(interaction):
+      pass
+   
+   
+   
+   @commands.Cog.listener()
+   async def on_private_channel_update(before, after):
+      if before.name != after.name:
+         await webhooksend("Channel Name Changed", f"**From:**\n{before.name}\n**To:**\n{after.mention}", f"{after.guild.id}")
+      if before.changed_roles != after.changed_roles:
+         await webhooksend("Channel Roles Changed", f"**From:**\n{before.changed_roles}\n**To:**\n{after.changed_roles}", f"{after.guild.id}")
+      roles = after.guild.roles
+      for role in roles:
+         if dict(after.overwrites_for(role)) != dict(before.overwrites_for(role)):
+               permissions = dict(after.overwrites_for(role))
+               finalpermissions = (str(permissions).replace(" ", "").replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
+               await webhooksend("Channel Permissions Changed", f"\n**Channel Permissions Changed For** {role.mention} **In** {after.mention}\n```\n{finalpermissions}```", f"{after.guild.id}")
+      members = after.guild.members  
+      for member in members:
+         if dict(after.overwrites_for(member)) != dict(before.overwrites_for(member)):
+               permissions = dict(after.overwrites_for(member))
+               finalpermissions = (str(permissions).replace(" ", "").replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
+               await webhooksend("Channel Permissions Changed", f"\n**Channel Permissions Changed For** {member.mention} **In** {after.mention}\n```\n{finalpermissions}```", f"{after.guild.id}")
+   
+
+
 def setup(bot):
    bot.add_cog(Events(bot))

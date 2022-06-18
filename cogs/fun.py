@@ -34,7 +34,7 @@ class NerdButton(disnake.ui.View):
     @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
     async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
        if not interaction.author:
-          await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
+          await interactionsend(interaction, "You Must Be The Author To Delete The Interaction", ephemeral=True)
        else:
           await interaction.message.delete()
 
@@ -54,7 +54,7 @@ class BallsButton(disnake.ui.View):
    @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
    async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
-         await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
+         await interactionsend(interaction, "You Must Be The Author To Delete The Interaction", ephemeral=True)
       else:
          await interaction.message.delete()
 
@@ -73,7 +73,7 @@ class Fun(commands.Cog, name="fun cmds"):
       description="nerd"
    )
    async def nerd(self, interaction):
-      await interaction.send(view=NerdButton())
+      await interactionsend(interaction, view=NerdButton())
    
 
 
@@ -82,14 +82,14 @@ class Fun(commands.Cog, name="fun cmds"):
       description="balls"
    )
    async def balls(self, interaction):
-      await interaction.send(view=BallsButton())
+      await interactionsend(interaction, view=BallsButton())
 
    @commands.slash_command(
       name="9-11",
       description="9-11 in discord"
       )
    async def nine_eleven(interaction):
-      message = await interaction.send(  
+      message = await interactionsend(interaction,   
          f'''``` #
                         ,-------------------. 
                      ,'                    ;
@@ -183,7 +183,7 @@ class Fun(commands.Cog, name="fun cmds"):
                   .replace('x', '\u200B🇽')\
                   .replace('y', '\u200B🇾')\
                   .replace('z', '\u200B🇿')
-      await interaction.send(text, view=deleteinteraction())
+      await interactionsend(interaction, text, view=deleteinteraction())
       
       
       
@@ -212,7 +212,7 @@ class Fun(commands.Cog, name="fun cmds"):
       embed.set_footer(
          text=f"Requested by {interaction.author}"
       )
-      await interaction.send(embed=embed, view=deleteinteraction())
+      await interactionsend(interaction, embed=embed, view=deleteinteraction())
       
       
       
@@ -257,13 +257,13 @@ class Fun(commands.Cog, name="fun cmds"):
          rows = int(rows)
          bombs = int(bombs)
       except ValueError:
-         await interaction.send("Error Getting Values")
+         await interactionsend(interaction, "Error Getting Values")
       if columns > 13 or rows > 13:
-         await interaction.send("The limit for the columns and rows are 13 due to discord limits.")
+         await interactionsend(interaction, "The limit for the columns and rows are 13 due to discord limits.")
       if columns < 1 or rows < 1 or bombs < 1:
-         await interaction.send("The provided numbers cannot be zero or negative.")
+         await interactionsend(interaction, "The provided numbers cannot be zero or negative.")
       if bombs + 1 > columns * rows:
-         await interaction.send("You have more bombs than spaces on the grid or you attempted to make all of the spaces bombs!")
+         await interactionsend(interaction, "You have more bombs than spaces on the grid or you attempted to make all of the spaces bombs!")
 
       grid = [[0 for num in range (columns)] for num in range(rows)]
 
@@ -322,7 +322,7 @@ class Fun(commands.Cog, name="fun cmds"):
       embed.add_field(name='\U0001F4A3 Count:', value=bombs, inline=True)
       embed.add_field(name='\U0001F4A3 Percentage:', value=f'{percentage}%', inline=True)
       embed.set_footer(text=f"Requested by {interaction.author}")
-      await interaction.send(embed=embed, view=deleteinteraction())
+      await interactionsend(interaction, embed=embed, view=deleteinteraction())
 
 
 
