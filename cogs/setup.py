@@ -9,6 +9,7 @@ from helpers import checks
 from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search, verifyrole_add, verifyrole_search, memberchannel_search
 from helpers.webhook import webhooksend
 from helpers.color import color
+from helpers.message import interactionsend
 
 
 
@@ -51,7 +52,7 @@ class SetupSelect(disnake.ui.Select):
       
    async def callback(self, interaction: disnake.MessageInteraction):
       if self.values[0] == "Complete Setup - Reccomended":
-         await interactionsend(interaction, "Setup Started", ephemeral=True)
+         await interactionsend(interaction=interaction, msg="Setup Started", ephemeral=True)
          overwrites = {
             interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False),  
          }
@@ -89,7 +90,7 @@ class SetupSelect(disnake.ui.Select):
          await memberchannel_add(f"{interaction.guild.id}", f"{membervoicechannel.id}")
          await verification_add(f"{interaction.guild.id}", f"{verificationchannel.id}")
          await webhooksend("Test Webhook Message", "If This Message Is Sent, The Webhook Is Working, Further Use Of The Bot Can Be Accessed With /help", f"{interaction.guild.id}")
-         await interactionsend(interaction, "Setup Complete!", ephemeral=True)
+         await interactionsend(interaction=interaction, msg="Setup Complete!", ephemeral=True)
          
          results = await serversearch(f"{interaction.guild.id}")  
          for result in results:
@@ -109,12 +110,12 @@ class SetupSelect(disnake.ui.Select):
          embed.set_footer(
             text=f"Requested by {interaction.author}"
          )
-         await interactionsend(interaction, embed=embed, ephemeral=True)
+         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
          
          
          
       elif self.values[0] == "Logging Only":
-         await interactionsend(interaction, "Setup Started", ephemeral=True)
+         await interactionsend(interaction=interaction, msg="Setup Started", ephemeral=True)
          overwrites = {
             interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False),  
          }
@@ -125,10 +126,10 @@ class SetupSelect(disnake.ui.Select):
          webhook = await channel.create_webhook(name="Astral - Bot Logging", avatar=data)         
          await webhook_add(f"{interaction.guild.id}", f"{webhook.url}")
          await webhooksend("Test Webhook Message", "If This Message Is Sent, The Webhook Is Working, Further Use Of The Bot Can Be Accessed With /help", f"{interaction.guild.id}")
-         await interactionsend(interaction, "Setup Complete!", ephemeral=True)
+         await interactionsend(interaction=interaction, msg="Setup Complete!", ephemeral=True)
          
          results = await serversearch(f"{interaction.guild.id}")  
-         for result in results:
+         for result in results: 
             name: str = result["guild_name"]
             guildid: int = result["guild_id"]
             webhook: str = result["webhook"]
@@ -145,12 +146,12 @@ class SetupSelect(disnake.ui.Select):
          embed.set_footer(
             text=f"Requested by {interaction.author}"
          )
-         await interactionsend(interaction, embed=embed, ephemeral=True)
+         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
          
          
          
       elif self.values[0] == "Verification Only":
-         await interactionsend(interaction, "Setup Started", ephemeral=True)
+         await interactionsend(interaction=interaction, msg="Setup Started", ephemeral=True)
          verifyrole = await interaction.guild.create_role(name="Verified", permissions=disnake.Permissions(view_channel=True))
          voverwrites = {
             interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=True, send_messages=True, read_messages=True),
@@ -174,7 +175,7 @@ class SetupSelect(disnake.ui.Select):
          await ch.send(embed=embed)
          await verifyrole_add(f"{interaction.guild.id}", f"{verifyrole.id}")
          await verification_add(f"{interaction.guild.id}", f"{verificationchannel.id}")
-         await interactionsend(interaction, "Setup Complete!", ephemeral=True)
+         await interactionsend(interaction=interaction, msg="Setup Complete!", ephemeral=True)
          
          results = await serversearch(f"{interaction.guild.id}")  
          for result in results:
@@ -194,14 +195,14 @@ class SetupSelect(disnake.ui.Select):
          embed.set_footer(
             text=f"Requested by {interaction.author}"
          )
-         await interactionsend(interaction, embed=embed, ephemeral=True)
+         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
          
          
       elif self.values[0] == "Member Voice Channel Display Only":
-         await interactionsend(interaction, "Setup Started", ephemeral=True)
+         await interactionsend(interaction=interaction, msg="Setup Started", ephemeral=True)
          membervoicechannel = await interaction.guild.create_voice_channel(name=f"Members: {interaction.guild.member_count}")
          await memberchannel_add(f"{interaction.guild.id}", f"{membervoicechannel.id}")
-         await interactionsend(interaction, "Setup Complete!", ephemeral=True)
+         await interactionsend(interaction=interaction, msg="Setup Complete!", ephemeral=True)
          results = await serversearch(f"{interaction.guild.id}")  
          for result in results:
             name: str = result["guild_name"]
@@ -220,14 +221,14 @@ class SetupSelect(disnake.ui.Select):
          embed.set_footer(
             text=f"Requested by {interaction.author}"
          )
-         await interactionsend(interaction, embed=embed, ephemeral=True)
+         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
    
    
       elif self.values[0] == "Mute Only":
-         await interactionsend(interaction, "Setup Started", ephemeral=True)
+         await interactionsend(interaction=interaction, msg="Setup Started", ephemeral=True)
          muterole = await interaction.guild.create_role(name="Mute Role", permissions=disnake.Permissions(speak=False))
          await muterole_add(f"{interaction.guild.id}", f"{muterole.id}")
-         await interactionsend(interaction, "Setup Complete!", ephemeral=True)
+         await interactionsend(interaction=interaction, msg="Setup Complete!", ephemeral=True)
       
          results = await serversearch(f"{interaction.guild.id}")  
          for result in results:
@@ -247,7 +248,7 @@ class SetupSelect(disnake.ui.Select):
          embed.set_footer(
             text=f"Requested by {interaction.author}"
          )
-         await interactionsend(interaction, embed=embed, ephemeral=True)
+         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
    async def on_error(self, error: Exception):
       print(error)
          
@@ -295,7 +296,7 @@ class setupcmds(commands.Cog, name="Setup cmd"):
       embed.set_footer(
          text=f"Requested by {interaction.author}"
       )
-      await interactionsend(interaction, embed=embed, ephemeral=True) 
+      await interactionsend(interaction=interaction, embed=embed, ephemeral=True) 
 
       
       
@@ -305,7 +306,7 @@ class setupcmds(commands.Cog, name="Setup cmd"):
    )
    @commands.has_permissions(administrator=True)
    async def test(self, interaction):
-      await interactionsend(interaction, "Choose The Correct Option, As This Cannot Be Undone.", view=SetupSelectView(), ephemeral=True)
+      await interactionsend(interaction=interaction, msg="Choose The Correct Option, As This Cannot Be Undone.", view=SetupSelectView(), ephemeral=True)
       
 
 

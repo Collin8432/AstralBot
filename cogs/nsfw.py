@@ -1,13 +1,18 @@
 # Imports
-from time import time
 import disnake
 from disnake.ext import commands
+
+
 
 from helpers.color import color
 from helpers.deleteinteraction import deleteinteraction
 from helpers import checks
+from helpers.message import interactionsend
+
+
 
 import aiohttp
+
 
 
 class nsfw(commands.Cog, name="NSFW"):
@@ -41,7 +46,7 @@ class nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=ass") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await interactionsend(interaction, embed=embed, view=deleteinteraction())
+                await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
 
     @nsfw.sub_command(
         name="hentai",
@@ -62,7 +67,7 @@ class nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=hentai") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await interactionsend(interaction, embed=embed, view=deleteinteraction())
+                await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
 
 
     @nsfw.sub_command(
@@ -84,7 +89,7 @@ class nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=tits") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await interactionsend(interaction, embed=embed, view=deleteinteraction())
+                await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
 
     @nsfw.sub_command(
         name="thighs",
@@ -105,7 +110,7 @@ class nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=thighs") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await interactionsend(interaction, embed=embed, view=deleteinteraction())
+                await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
 
 
 def setup(bot):

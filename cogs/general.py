@@ -17,6 +17,7 @@ from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb, setupemb
 from helpers.deleteinteraction import deleteinteraction
 from helpers.color import color
+from helpers.message import interactionsend
 
 
 
@@ -61,7 +62,7 @@ class TicketReason(disnake.ui.Modal):
             text=f"Requested by {interaction.author}"
         )
         await channel.send(embed=embed)
-        await webhooksend(f"Ticket Created", f"{interaction.author.mention} **Created A Ticket**\n**Reason:**\n{Reason}")  
+        await webhooksend(f"Ticket Created", f"{interaction.author.mention} **Created A Ticket**\n**Reason:**\n{Reason}", f"{interaction.guild.id}")  
 
 
 
@@ -84,7 +85,7 @@ class Shutdown(disnake.ui.View):
     @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
     async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
-         await interactionsend(interaction, "You Must Be The Author To Delete The Interaction", ephemeral=True)
+         await interactionsend(interaction=interaction, msg="You Must Be The Author To Delete The Interaction", ephemeral=True)
       else:
          await interaction.message.delete()
 
@@ -132,7 +133,7 @@ class HelpButtons(disnake.ui.View):
     @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
     async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
-         await interactionsend(interaction, "You Must Be The Author To Delete The Interaction", ephemeral=True)
+         await interactionsend(interaction=interaction, msg="You Must Be The Author To Delete The Interaction", ephemeral=True)
       else:
          await interaction.message.delete()
 
@@ -177,7 +178,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
          )
-        await interactionsend(interaction, embed=embed, view=HelpButtons())
+        await interactionsend(interaction=interaction, embed=embed, view=HelpButtons())
 
  
 
@@ -187,7 +188,7 @@ class General(commands.Cog, name="General Cmds"):
     )
     @checks.is_owner()
     async def shutdown(interaction):
-        await interactionsend(interaction, "Are You Sure?", view=Shutdown())
+        await interactionsend(interaction=interaction, msg="Are You Sure?", view=Shutdown())
 
 
 
@@ -220,7 +221,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interactionsend(interaction, embed=embed, view=deleteinteraction())
+        await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
 
 
 
@@ -230,7 +231,7 @@ class General(commands.Cog, name="General Cmds"):
     )
     @checks.not_blacklisted()
     async def ticket(interaction):
-        await interaction.response.send_modal(modal=TicketReason())  
+        await interactionsend(interaction=interaction, modal=TicketReason())  
 
     
 
@@ -250,7 +251,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interactionsend(interaction, embed=embed, view=deleteinteraction())  
+        await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())  
     
 
 
@@ -277,7 +278,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interactionsend(interaction, embed=embed, view=deleteinteraction())
+        await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
 
 
 
@@ -295,7 +296,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interactionsend(interaction, embed=embed, view=deleteinteraction())
+        await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
         
         
     
@@ -322,7 +323,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interactionsend(interaction, embed=embed, view=deleteinteraction())
+        await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
         
         
     
@@ -339,7 +340,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interactionsend(interaction, embed=embed, view=deleteinteraction())
+        await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
         
         
         
@@ -362,7 +363,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Total of {len(self.bot.slash_commands)} commands",
         )
-        await interactionsend(interaction, embed=embed, view=deleteinteraction())
+        await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
     
     
     

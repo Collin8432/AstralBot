@@ -15,13 +15,14 @@ from helpers.database import on_join_insert, on_leave_remove
 from helpers.helpembeds import helpemb, funemb, modemb, setupemb
 from helpers.deleteinteraction import deleteinteraction
 from helpers.color import color
+from helpers.message import interactionsend
 
 
 
 from PIL import Image, ImageDraw, ImageFont
 
 
-
+ 
 # Events Cog
 class Events(commands.Cog):
    def __init__(self, bot: commands.Bot):
@@ -34,13 +35,13 @@ class Events(commands.Cog):
       try:
          if (interaction.component.custom_id) == "deleteinter":
                if not interaction.author:
-                  await interactionsend(interaction, "You Must Be The Author To Delete The Interaction", ephemeral=True)
+                  await interactionsend(interaction=interaction, msg="You Must Be The Author To Delete The Interaction", ephemeral=True)
                else:
                   await interaction.message.delete()
          elif (interaction.component.custom_id) == "balls":
-               await interactionsend(interaction, "balls", view=deleteinteraction())
+               await interactionsend(interaction=interaction, msg="balls", view=deleteinteraction())
          elif (interaction.component.custom_id) == "nerd":
-               await interactionsend(interaction, "nerd", view=deleteinteraction())
+               await interactionsend(interaction=interaction, msg="nerd", view=deleteinteraction())
          elif (interaction.component.custom_id) == "shutdowncomfirm":
                os._exit(0)
          elif (interaction.component.custom_id) == "shutdowncancel":
@@ -148,7 +149,7 @@ class Events(commands.Cog):
          await interaction.edit_original_message(embed=embed, ephemeral=True)  
          print(errormsg)
       except:
-         await interactionsend(interaction, embed=embed, ephemeral=True)
+         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
          print(errormsg)
       else:
          pass
@@ -633,37 +634,37 @@ class Events(commands.Cog):
       
       
    @commands.Cog.listener()
-   async def on_interaction(interaction):
+   async def on_interaction(self, interaction):
       pass
    
    
    
    @commands.Cog.listener()
-   async def on_message_interaction(interaction):
+   async def on_message_interaction(self, interaction):
       pass
    
    
    
    @commands.Cog.listener()
-   async def on_dropdown(interaction):
+   async def on_dropdown(self, interaction):
       pass
    
    
    
    @commands.Cog.listener()
-   async def on_application_command(interaction):
+   async def on_application_command(self, interaction):
       pass
    
    
    
    @commands.Cog.listener()
-   async def on_application_command_autocomplete(interaction):
+   async def on_application_command_autocomplete(self, interaction):
       pass
    
    
    
    @commands.Cog.listener()
-   async def on_modal_submit(interaction):
+   async def on_modal_submit(self, interaction):
       pass
    
    
