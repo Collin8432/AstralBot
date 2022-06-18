@@ -6,6 +6,7 @@ import sys
 
 
 import disnake
+from disnake import ApplicationCommandInteraction
 from disnake.ext.commands import Bot
 
 
