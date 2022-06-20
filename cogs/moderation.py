@@ -328,9 +328,3 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             timestamp=disnake.utils.utcnow()
         )
         await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
-
-    
-
-# Adding Cog To Bot    
-def setup(bot):
-    bot.add_cog(Moderation(bot))

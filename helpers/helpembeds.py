@@ -32,3 +32,9 @@ setupemb = disnake.Embed(
     color=color,
     timestamp=disnake.utils.utcnow(),
 )
+nsfwemb = disnake.Embed(
+    title = "NSFW 🔞",
+    description = "**/nsfw** (ass, tits, thighs, or hentai)",
+    color=color,
+    timestamp=disnake.utils.utcnow(),
+)

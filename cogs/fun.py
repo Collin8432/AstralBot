@@ -324,10 +324,3 @@ class Fun(commands.Cog, name="fun cmds"):
       embed.add_field(name='\U0001F4A3 Percentage:', value=f'{percentage}%', inline=True)
       embed.set_footer(text=f"Requested by {interaction.author}")
       await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
-
-
-
-
-# Adding Cog To Bot
-def setup(bot):
-    bot.add_cog(Fun(bot))

@@ -89,8 +89,3 @@ class Verification(commands.Cog, name="Verification"):
                text=f"Astral Verification"
             )
          await interactionsend(interaction=interaction, embed=embed)
-   
-
-
-def setup(bot):
-   bot.add_cog(Verification(bot))

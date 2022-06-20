@@ -307,8 +307,3 @@ class setupcmds(commands.Cog, name="Setup cmd"):
    @commands.has_permissions(administrator=True)
    async def test(self, interaction):
       await interactionsend(interaction=interaction, msg="Choose The Correct Option, As This Cannot Be Undone.", view=SetupSelectView(), ephemeral=True)
-      
-
-
-def setup(bot):
-   bot.add_cog(setupcmds(bot))

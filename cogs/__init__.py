@@ -5,6 +5,7 @@ Astral cogs
 
 
 # Imports
+from email.quoprimime import body_check
 from .fun import *
 from .general import *
 from .listeners import *
@@ -14,7 +15,7 @@ from .setup import *
 from .tasks import *
 from .verification import *
 from .astral import *
-
+from .info import *
 
 
 def setup(bot):
@@ -27,3 +28,4 @@ def setup(bot):
    bot.add_cog(setupcmds(bot))
    bot.add_cog(Tasks(bot))
    bot.add_cog(Verification(bot))
+   bot.add_cog(Info(bot))

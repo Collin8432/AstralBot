@@ -22,7 +22,7 @@ class nsfw(commands.Cog, name="NSFW"):
     # Commands
     @commands.slash_command(
         name="nsfw",
-        description="ass, tits, thighs"
+        description="ass, tits, thighs, hentai"
     )
     async def nsfw(self, interaction):
         pass
@@ -56,7 +56,7 @@ class nsfw(commands.Cog, name="NSFW"):
     @checks.not_blacklisted()
     async def hentai(self, interaction):
         embed = disnake.Embed(
-            title="Hentai!",
+            title="hentai",
             color=color,
             timestamp=disnake.utils.utcnow(),
         )
@@ -99,7 +99,7 @@ class nsfw(commands.Cog, name="NSFW"):
     @checks.not_blacklisted()
     async def thighs(self, interaction):
         embed = disnake.Embed(
-            title="Tits",
+            title="Thighs",
             color=color,
             timestamp=disnake.utils.utcnow(),
         )
@@ -111,7 +111,3 @@ class nsfw(commands.Cog, name="NSFW"):
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
                 await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
-
-
-def setup(bot):
-    bot.add_cog(nsfw(bot))

@@ -1,16 +1,14 @@
-# Imports
-import json
-import os
-import sys
-
-
-
 import disnake
 from disnake import ApplicationCommandInteraction
 from disnake.ext.commands import Bot
 
 
- 
+import os 
+import sys
+import json  
+
+
+
 # Setting Up Bot
 if not os.path.isfile("./secret/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
@@ -25,29 +23,12 @@ bot = Bot(command_prefix=config["prefix"], intents=intents, case_insensitive=Fal
 token = config.get("token")
 bot.remove_command("help")
 
-
-
-def loadCogs():
-    if os.path.isfile("./cogs/__init__.py"):
-        try:
-            bot.load_extension(f"cogs.__init__")
-            print("Loaded Cogs ✅")
-        except Exception as e:
-            print(e)
-            
-
-
-
-if __name__ == "__main__":
-    loadCogs()
-
-
-
-@bot.user_command(name="test")
-async def usercmd(interaction):
-    await interaction.send("test")
-
-
-    
+async def on_connect() -> None:
+   print("ready")
+   app = await bot.application_info()
+   ciu = app.custom_install_url
+   print(ciu)
+   
+   
 # Starting The Bot
 bot.run(config["token"])

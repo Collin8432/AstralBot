@@ -12,7 +12,7 @@ from disnake import ApplicationCommandInteraction
 
 from helpers.webhook import webhooksend
 from helpers.database import on_join_insert, on_leave_remove
-from helpers.helpembeds import helpemb, funemb, modemb, setupemb
+from helpers.helpembeds import helpemb, funemb, modemb, setupemb, nsfwemb
 from helpers.deleteinteraction import deleteinteraction
 from helpers.color import color
 from helpers.message import interactionsend
@@ -71,6 +71,12 @@ class Events(commands.Cog):
                   text=f"Requested by {interaction.author}"
                )
                await interaction.response.send_message(embed=embed, ephemeral=True)
+         elif (interaction.component.custom_id) == "nsfwhelp":
+            embed = nsfwemb
+            embed.set_footer(
+               text=f"Requested by {interaction.author}"
+            )
+            await interaction.response.send_message(embed=embed, ephemeral=True)
          else:
                await interaction.response.send_message(f"Invalid Button! - {interaction.component.custom_id}")
       except:
@@ -84,32 +90,15 @@ class Events(commands.Cog):
    
    @commands.Cog.listener()
    async def on_disconnect(self):
-      await webhooksend("Disconnected", "Disconnected From Discord", f"{self.bot.guild.id}")
+      print("Disconnected From Discord")
    
    
      
    @commands.Cog.listener()
    async def on_ready(self):
       print(f"Logged in as {self.bot.user.name}")
-      # s = await self.bot.application_info()
-      # print(s.id)
-      # print(s.name)
-      # print(s.owner)
-      # print(s.team)
-      # print(s.description)
-      # print(s.bot_public)
-      # print(s.bot_require_code_grant)
-      # print(s.rpc_origins)
-      # print(s.verify_key)
-      # print(s.guild_id)
-      # print(s.primary_sku_id)
-      # print(s.slug)
-      # print(s.terms_of_service_url)
-      # print(s.privacy_policy_url)
-      # print(s.flags.embedded)
-      # print(s.install_params)
-      # print(s.custom_install_url)
-        
+   
+
 
 
    @commands.Cog.listener()
@@ -203,7 +192,7 @@ class Events(commands.Cog):
 
 
    @commands.Cog.listener()
-   async def on_presence_update(self: commands.Bot, before: disnake.guild, after: disnake.guild):
+   async def on_presence_update(self: commands.Bot, before: disnake.Member, after: disnake.Member):
       blid = [935339228324311040]  
       if before.status != after.status and after.id not in blid:  
          await webhooksend("Presence Changed", f"{after.mention} Changed Status \n**From:**\n{before.status}\n**To:**\n{after.status}", f"{after.guild.id}")  
@@ -687,8 +676,3 @@ class Events(commands.Cog):
                permissions = dict(after.overwrites_for(member))
                finalpermissions = (str(permissions).replace(" ", "").replace("{", "").replace("}", "").replace("'", "").replace(":", " -> ").replace("None", "/").replace("True", "✅").replace("False", "❌").replace(",", "\n"))
                await webhooksend("Channel Permissions Changed", f"\n**Channel Permissions Changed For** {member.mention} **In** {after.mention}\n```\n{finalpermissions}```", f"{after.guild.id}")
-   
-
-
-def setup(bot):
-   bot.add_cog(Events(bot))

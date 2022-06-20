@@ -50,8 +50,3 @@ class Tasks(commands.Cog, name="Tasks And Special Events"):
    @commands.Cog.listener()
    async def on_ready(self):
       await status_task.start(self)
-      
-
-
-def setup(bot):
-   bot.add_cog(Tasks(bot))

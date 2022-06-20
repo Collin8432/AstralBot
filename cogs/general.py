@@ -14,7 +14,7 @@ from disnake.ext import commands
 
 from helpers import checks
 from helpers.webhook import webhooksend
-from helpers.helpembeds import helpemb, funemb, modemb, setupemb
+from helpers.helpembeds import helpemb, funemb, modemb, setupemb, nsfwemb
 from helpers.deleteinteraction import deleteinteraction
 from helpers.color import color
 from helpers.message import interactionsend
@@ -125,6 +125,14 @@ class HelpButtons(disnake.ui.View):
     @disnake.ui.button(label="Setup ⚙️", style=disnake.ButtonStyle.success, custom_id="setuphelp")
     async def Setup(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         embed = setupemb
+        embed.set_footer(
+            text=f"Requested by {interaction.author}"
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        
+    @disnake.ui.button(label="NSFW 🔞", style=disnake.ButtonStyle.success, custom_id="nsfwhelp")
+    async def nsfw(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+        embed = nsfwemb  
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
@@ -364,20 +372,3 @@ class General(commands.Cog, name="General Cmds"):
             text=f"Total of {len(self.bot.slash_commands)} commands",
         )
         await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
-    
-    
-    
-    # @commands.slash_command(
-    #     name="serverinfo",
-    #     description="displays server info",
-    # )
-    # async def info(self, interaction: ApplicationCommandInteraction):
-    #     nitrotype = interaction.author.premium_type   
-         
-    
-
-
-# Adding Cog To Bot 
-def setup(bot):
-    bot.add_cog(General(bot))
-
