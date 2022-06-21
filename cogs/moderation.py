@@ -1,4 +1,5 @@
 # Imports
+import time
 import disnake
 from disnake.ext import commands
 from disnake.ext.commands import Context
@@ -235,26 +236,31 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     )
     @commands.has_permissions(manage_roles=True)
     @checks.not_blacklisted()
-    async def mute(self, interaction: ApplicationCommandInteraction, user: disnake.User):
-        muterole = await muterole_search(interaction.guild.id)  
-        if muterole is None:
+    async def mute(self, interaction: ApplicationCommandInteraction, user: disnake.User) -> None:
+        muterole = await muterole_search(f"{interaction.guild.id}")
+        muterole = interaction.guild.get_role(muterole)
+        try:
+            await user.add_roles(muterole)  
             embed = disnake.Embed(
-                title="Error!",
-                description="No Mute Role Found",
-                color=0xE02B2B,
+                title="Member Muted",
+                description=f"<@{user.id}> Was Muted By <@{interaction.author.id}>",
+                color=color,
                 timestamp=disnake.utils.utcnow()
             )
+            embed.set_footer(
+                text="Requested by {}".format(interaction.author)
+            )
             await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
-        else:
-            await user.add_roles(muterole)  
-        embed = disnake.Embed(
-            title="Member Muted",
-            description=f"<@{user.id}> Was Muted By <@{interaction.author.id}>",
-            color=color,
-            timestamp=disnake.utils.utcnow()
-        )
-        await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
-
+        except Exception as e:
+            embed = disnake.Embed(
+                title="Error!",
+                description=f"Error While Muting Member, Make Sure Member Does Not Have Higher Roles Than Me\n{e}",
+                color=color,
+                timestamp=disnake.utils.utcnow()
+            )
+            embed.set_footer(
+                text="Requested by {}".format(interaction.author)
+            )
 
 
     @commands.slash_command(
@@ -272,24 +278,25 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.has_permissions(manage_roles=True)
     @checks.not_blacklisted()
     async def unmute(self, interaction: ApplicationCommandInteraction, user: disnake.User):
-        muterole = await muterole_search(interaction.guild.id)  
-        if muterole is None:
+        muterole = await muterole_search(f"{interaction.guild.id}")  
+        muterole = interaction.guild.get_role(muterole)
+        try:
+            await user.remove_roles(muterole)
+            embed = disnake.Embed(
+                title="Member Unmuted",
+                description=f"{user.mention} was unmuted by {interaction.author.mention}",
+                color=color,
+                timestamp=disnake.utils.utcnow(),
+            )
+            await interactionsend(interaction=interaction, embed=embed)
+        except Exception as e:
             embed = disnake.Embed(
                 title="Error!",
-                description="No Mute Role Found",
-                color=0xE02B2B,
-                timestamp=disnake.utils.utcnow()
+                description=f"Error While Unmuting Member, Make Sure Member Does Not Have Higher Roles Than Me\n{e}",
+                color=color,
+                timestamp=disnake.utils.utcnow(),
             )
-            await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
-        else:
-            await user.remove_roles(muterole)  
-        embed = disnake.Embed(
-            title="Member Unmuted",
-            description=f"<@{user.id}> Was Unmuted By <@{interaction.author.id}>",
-            color=color,
-            timestamp=disnake.utils.utcnow()
-        )
-        await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
+            await interactionsend(interaction=interaction, embed=embed)
    
 
    

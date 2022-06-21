@@ -57,7 +57,7 @@ async def muterole_add(guild_id, roleid):
 async def muterole_search(guild_id):
    results = db.search(guild.guild_id == guild_id)
    for result in results:
-      return result["muterole"]
+      return int(result["muterole"])
 
 
 

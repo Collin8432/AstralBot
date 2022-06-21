@@ -48,6 +48,6 @@ async def usercmd(interaction):
     await interaction.send("test")
 
 
-    
+     
 # Starting The Bot
 bot.run(config["token"])
