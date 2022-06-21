@@ -1,6 +1,4 @@
 # Imports
-from time import time
-from click import option
 import disnake
 from disnake import Option, OptionType
 from disnake.ext import commands
@@ -105,7 +103,7 @@ class Info(commands.Cog, name="Info Cmds"):
    # Commands
    @commands.slash_command(
       name="appinfo",
-      description="Shows info about the bot",
+      description="shows info about the bot",
    )
    async def appinfo(self, interaction):
       app = await self.bot.application_info()

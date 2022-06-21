@@ -5,7 +5,6 @@ Astral cogs
 
 
 # Imports
-from email.quoprimime import body_check
 from .fun import *
 from .general import *
 from .listeners import *

@@ -29,6 +29,7 @@ class Events(commands.Cog):
       self.bot = bot
 
 
+
    #Listeners
    @commands.Cog.listener()
    async def on_button_click(self, interaction: disnake.MessageCommandInteraction):
@@ -39,48 +40,51 @@ class Events(commands.Cog):
                else:
                   await interaction.message.delete()
          elif (interaction.component.custom_id) == "balls":
-               await interactionsend(interaction=interaction, msg="balls", view=deleteinteraction())
+               await interactionsend(interaction=interaction, msg="balls")
          elif (interaction.component.custom_id) == "nerd":
-               await interactionsend(interaction=interaction, msg="nerd", view=deleteinteraction())
+               await interactionsend(interaction=interaction, msg="nerd")
          elif (interaction.component.custom_id) == "shutdowncomfirm":
+               await interactionsend(interaction=interaction, msg="exiting")   
                os._exit(0)
          elif (interaction.component.custom_id) == "shutdowncancel":
-               await interaction.response.send_message("Cancelled!")
+               await interactionsend(interaction=interaction, msg="cancelled")
                await interaction.message.delete()
          elif (interaction.component.custom_id) == "genhelp":
                embed = helpemb
                embed.set_footer(
                   text=f"Requested by {interaction.author}"
                )
-               await interaction.response.send_message(embed=embed, ephemeral=True)
+               await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
          elif (interaction.component.custom_id) == "funhelp":
                embed = funemb
                embed.set_footer(
                   text=f"Requested by {interaction.author}"
                )   
-               await interaction.response.send_message(embed=embed, ephemeral=True)
+               await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
          elif (interaction.component.custom_id) == "modhelp":
                embed = modemb
                embed.set_footer(
                   text=f"Requested by {interaction.author}"
                )
-               await interaction.response.send_message(embed=embed, ephemeral=True)
+               await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
          elif (interaction.component.custom_id) == "setuphelp":
                embed = setupemb
                embed.set_footer(
                   text=f"Requested by {interaction.author}"
                )
-               await interaction.response.send_message(embed=embed, ephemeral=True)
+               await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
          elif (interaction.component.custom_id) == "nsfwhelp":
             embed = nsfwemb
             embed.set_footer(
                text=f"Requested by {interaction.author}"
             )
-            await interaction.response.send_message(embed=embed, ephemeral=True)
+            await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
          else:
-               await interaction.response.send_message(f"Invalid Button! - {interaction.component.custom_id}")
+               await interactionsend(interaction=interaction, msg=f"Invalid Button! - {interaction.component.custom_id}")
       except:
          pass
+     
+     
      
    @commands.Cog.listener()
    async def on_connect(self):
@@ -98,7 +102,6 @@ class Events(commands.Cog):
    async def on_ready(self):
       print(f"Logged in as {self.bot.user.name}")
    
-
 
 
    @commands.Cog.listener()
@@ -189,7 +192,8 @@ class Events(commands.Cog):
          timestamp=disnake.utils.utcnow()
       )
       await user.send(embed=embed)
-
+      
+      
 
    @commands.Cog.listener()
    async def on_presence_update(self: commands.Bot, before: disnake.Member, after: disnake.Member):
@@ -201,6 +205,7 @@ class Events(commands.Cog):
             await webhooksend("Activity Changed", f"{after.mention} Changed Activity \n**From:**\n{before.activity.name}, {before.activity.description}\n**To:**\n{after.activity}, {after.activity.description}", f"{after.guild.id}")  
          except:
             await webhooksend("Activity Changed", f"{after.mention} Changed Activity \n**From:**\n{before.activity}\n**To:**\n{after.activity}", f"{after.guild.id}")  
+
 
 
    @commands.Cog.listener()
@@ -317,7 +322,6 @@ class Events(commands.Cog):
       if before.description != after.description:  
          await webhooksend("Guild Description Changed", f"**From:**\n{before.description}\n**To:**\n{after.description}", f"{after.id}")  
       
-
 
 
    @commands.Cog.listener()

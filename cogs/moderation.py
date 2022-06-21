@@ -1,13 +1,8 @@
 # Imports
-import time
 import disnake
 from disnake.ext import commands
-from disnake.ext.commands import Context
 from disnake import ApplicationCommandInteraction, Option, OptionType
-from disnake.enums import ButtonStyle
-from disnake.ext import commands
-import disnake
-from disnake.ext import commands
+
 
 
  
@@ -50,14 +45,20 @@ class ModApp(disnake.ui.Modal):
         ]
         super().__init__(title="Moderator Application", custom_id="ModApp", components=components)
 
+
+
     async def callback(self, interaction: disnake.ModalInteraction) -> None:
         ApplyingFor = interaction.text_values["ApplyingFor"]
         Experience = interaction.text_values["Experience"]
         BR = interaction.text_values["BR"]
         await webhooksend("New Application", f"<@{interaction.author.id}> Submitted This Application \n**Appplying For:**\n{ApplyingFor}\n**Experience:**\n{Experience}\n**Why Are You Better Than Others For Your Role:**\n{BR}", f"{interaction.guild.id}")  
-        await interaction.response.send_message("Application Submitted Successfully!", ephemeral=True)
+        await interactionsend(interaction=interaction, msg="Application Submitted Successfully!", ephemeral=True)
+        
+        
+        
     async def on_error(self, error: Exception, inter: disnake.ModalInteraction) -> None:
-        await inter.response.send_message(f"Error In Modal Interaction, {error}", ephemeral=True)
+        await interactionsend(interaction=inter, msg=f"Error In Modal Interaction, {error}", ephemeral=True)
+
 
 
 # Moderation Cog
@@ -66,20 +67,21 @@ class Moderation(commands.Cog, name="Mod Cmds"):
       self.bot = bot
 
 
+
     # Commands
     @commands.slash_command(
         name="kick",
-        description="Kicks A Member From The Server",
+        description="kicks a member from the server",
         options=[
             Option(
                 name="user",
-                description="The Member You Want To Kick",
+                description="the member you want to kick",
                 type=OptionType.user,
                 required=True
             ),
             Option(
                 name="reason",
-                description="Reason To Kick Member",
+                description="reason to kick member",
                 type=OptionType.string,
                 required=False
             )
@@ -97,7 +99,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 color=0xE02B2B,
                 timestamp=disnake.utils.utcnow()
             )
-            await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
+            await interactionsend(interaction=interaction, embed=embed)
         else:
             try:
                 embed = disnake.Embed(
@@ -106,7 +108,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     color=color,
                     timestamp=disnake.utils.utcnow()
                 )
-                await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
+                await interactionsend(interaction=interaction, embed=embed)
                 try:
                     embed = disnake.Embed(
                     title="You Were Kicked!",
@@ -114,7 +116,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     color=color,
                     timestamp=disnake.utils.utcnow()
                     )
-                    await member.send(embed=embed, view=deleteinteraction())  
+                    await member.send(embed=embed)  
                 except disnake.Forbidden:
                     pass
                 await member.kick(reason=reason)  
@@ -125,23 +127,23 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     color=color,
                     timestamp=disnake.utils.utcnow()
                 )
-                await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
+                await interactionsend(interaction=interaction, embed=embed)
 
 
 
     @commands.slash_command(
         name="ban",
-        description="Bans A Member From The Server",
+        description="bans a member from the server",
         options=[
             Option(
                 name="user",
-                description="The Member You Want To Ban",
+                description="the member you want to ban",
                 type=OptionType.user,
                 required=True
             ),
             Option(
                 name="reason",
-                description="Reason To Ban Member",
+                description="reason to ban member",
                 type=OptionType.string,
                 required=False
             )
@@ -159,7 +161,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                           color=color,
                           timestamp=disnake.utils.utcnow()
                       )
-                      await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
+                      await interactionsend(interaction=interaction, embed=embed)
                   else:
                       try:
                         embed = disnake.Embed(
@@ -168,7 +170,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                             color=color,
                             timestamp=disnake.utils.utcnow()
                         )
-                        await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
+                        await interactionsend(interaction=interaction, embed=embed)
                         await member.ban(reason=reason)  
                       except:
                           embed = disnake.Embed(
@@ -182,16 +184,16 @@ class Moderation(commands.Cog, name="Mod Cmds"):
 
     @commands.slash_command(
        name="moderatorapplication",
-       description="Sends A Moderator Appliction"
+       description="sends a moderator appliction"
     )
     async def Appliction(interaction: disnake.CommandInteraction):  
-      await interaction.response.send_modal(modal=ModApp())
+      await interactionsend(interaction=interaction, modal=ModApp())
 
 
 
     @commands.slash_command(
         name="purge",
-        description="Purges All Messages In A Channel",
+        description="purges all messages in a channel",
     )
     @commands.has_permissions(manage_messages=True)
     async def purge(interaction: disnake.CommandInteraction):  
@@ -208,7 +210,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
 
     @commands.slash_command(
         name="rules",
-        description="Sends The Rules",
+        description="sends basic rules",
     )
     @commands.has_permissions(administrator=True)
     async def rules(interaction):
@@ -218,17 +220,17 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=color,
             timestamp=disnake.utils.utcnow()
         )
-        await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())  
+        await interactionsend(interaction=interaction, embed=embed)  
 
 
 
     @commands.slash_command(
         name="mute",
-        description="Mutes A Member",
+        description="mutes a member",
         options=[
             Option(
                 name="user",
-                description="The Member You Want To Mute",
+                description="the member you want to mute",
                 type=OptionType.user,
                 required=True
             ),
@@ -250,7 +252,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             embed.set_footer(
                 text="Requested by {}".format(interaction.author)
             )
-            await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
+            await interactionsend(interaction=interaction, embed=embed)
         except Exception as e:
             embed = disnake.Embed(
                 title="Error!",
@@ -263,13 +265,14 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             )
 
 
+
     @commands.slash_command(
         name="unmute",
-        description="Unmutes A Member",
+        description="unmutes a member",
         options=[
             Option(
                 name="user",
-                description="The Member You Want To Unmute",
+                description="the member you want to unmute",
                 type=OptionType.user,
                 required=True
             ),
@@ -302,7 +305,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
    
     @commands.slash_command(
         name="timeout",
-        description="Timeouts A Member",
+        description="timeouts a member",
         options=[
             Option(
                 name="user",
@@ -320,13 +323,13 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 name="reason",
                 description="The Reason For Timeout",
                 type=OptionType.string,
-                required=True
+                required=False
             ),
         ]
     )
     @commands.has_permissions(manage_roles=True)
     @checks.not_blacklisted()
-    async def timeout(self, interaction: ApplicationCommandInteraction, user: disnake.User, time: int, reason: str):
+    async def timeout(self, interaction: ApplicationCommandInteraction, user: disnake.User, time: int, reason: str = None):
         await user.timeout(user, time=time)  
         embed = disnake.Embed(
             title="Member Timeout",
@@ -334,4 +337,4 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=color,
             timestamp=disnake.utils.utcnow()
         )
-        await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
+        await interactionsend(interaction=interaction, embed=embed)

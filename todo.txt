@@ -6,3 +6,6 @@ eg: for x in len(interaction.guild.name)
 
 
 db banned messages for a certain guild
+
+
+so for all the embeds, change the strings to remove !'s and add *'s and change capitalization

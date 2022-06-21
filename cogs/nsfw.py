@@ -19,6 +19,8 @@ class nsfw(commands.Cog, name="NSFW"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+
+
     # Commands
     @commands.slash_command(
         name="nsfw",
@@ -29,7 +31,7 @@ class nsfw(commands.Cog, name="NSFW"):
 
     @nsfw.sub_command(
         name="ass",
-        description="Show a random ass image",
+        description="show a random ass image",
     )
     @commands.is_nsfw()
     @checks.not_blacklisted()
@@ -46,7 +48,7 @@ class nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=ass") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
+                await interactionsend(interaction=interaction, embed=embed)
 
     @nsfw.sub_command(
         name="hentai",
@@ -67,12 +69,12 @@ class nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=hentai") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
+                await interactionsend(interaction=interaction, embed=embed)
 
 
     @nsfw.sub_command(
         name="tits",
-        description="Show a random tits image",
+        description="show a random tits image",
     )
     @commands.is_nsfw()
     @checks.not_blacklisted()
@@ -89,11 +91,11 @@ class nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=tits") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
+                await interactionsend(interaction=interaction, embed=embed)
 
     @nsfw.sub_command(
         name="thighs",
-        description="Show a random thighs image",
+        description="shows a random thighs image",
     )
     @commands.is_nsfw()
     @checks.not_blacklisted()
@@ -110,4 +112,4 @@ class nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=thighs") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await interactionsend(interaction=interaction, embed=embed, view=deleteinteraction())
+                await interactionsend(interaction=interaction, embed=embed)

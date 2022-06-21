@@ -50,6 +50,8 @@ class SetupSelect(disnake.ui.Select):
          options=options
       )
       
+      
+      
    async def callback(self, interaction: disnake.MessageInteraction):
       if self.values[0] == "Complete Setup - Reccomended":
          await interactionsend(interaction=interaction, msg="Setup Started", ephemeral=True)
@@ -196,6 +198,7 @@ class SetupSelect(disnake.ui.Select):
             text=f"Requested by {interaction.author}"
          )
          await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
+       
          
          
       elif self.values[0] == "Member Voice Channel Display Only":
@@ -224,6 +227,7 @@ class SetupSelect(disnake.ui.Select):
          await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
    
    
+   
       elif self.values[0] == "Mute Only":
          await interactionsend(interaction=interaction, msg="Setup Started", ephemeral=True)
          muterole = await interaction.guild.create_role(name="Mute Role", permissions=disnake.Permissions(speak=False))
@@ -249,6 +253,9 @@ class SetupSelect(disnake.ui.Select):
             text=f"Requested by {interaction.author}"
          )
          await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
+         
+         
+         
    async def on_error(self, error: Exception):
       print(error)
          
@@ -262,18 +269,16 @@ class SetupSelectView(disnake.ui.View):
         self.add_item(SetupSelect())
 
 
+
 class setupcmds(commands.Cog, name="Setup cmd"):
    def __init__(self, bot):
       self.bot = bot
       
       
    # Commands
-   
-   
-   
    @commands.slash_command(
       name="database",
-      description="Searches for servers db settings",
+      description="searches for servers db settings",
    )
    @commands.has_permissions(administrator=True)
    @checks.not_blacklisted()
@@ -302,7 +307,7 @@ class setupcmds(commands.Cog, name="Setup cmd"):
       
    @commands.slash_command(
       name="setup",
-      description="Displays The Setup Options, To Be Selected"
+      description="displays the setup options, to be selected"
    )
    @commands.has_permissions(administrator=True)
    async def test(self, interaction):
