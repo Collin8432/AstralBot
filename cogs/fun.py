@@ -18,25 +18,25 @@ from helpers.message import interactionsend
 
 # NerdButton View
 class NerdButton(disnake.ui.View):
-    def __init__(self):
-        super().__init__(timeout=None)
+      def __init__(self):
+         super().__init__(timeout=None)
 
 
 
-    @disnake.ui.button(emoji="🤓", style=ButtonStyle.red, custom_id="nerd")
-    async def first_button(
+      @disnake.ui.button(emoji="🤓", style=ButtonStyle.red, custom_id="nerd")
+      async def first_button(
         self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
-    ):
-        await interactionsend(interaction=interaction, msg="nerd")
+      ):
+         await interactionsend(interaction=interaction, msg="nerd")
    
    
    
-    @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
-    async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
-       if not interaction.author:
-          await interactionsend(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
-       else:
-          await interaction.message.delete()
+      @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
+      async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
+         if not interaction.author:
+            await interactionsend(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
+         else:
+            await interaction.message.delete()
 
 
 
@@ -45,8 +45,7 @@ class BallsButton(disnake.ui.View):
    def __init__(self):
       super().__init__(timeout=None)
 
-
-
+ 
    @disnake.ui.button(emoji="<:unknown:957276431916859442>", style=ButtonStyle.red, custom_id="balls")
    async def first_button(
       self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
