@@ -1,6 +1,6 @@
 # Imports
 import disnake
-from disnake import Option, OptionType
+from disnake import Option, OptionType, ApplicationCommandInteraction
 from disnake.ext import commands
 
 
@@ -346,17 +346,17 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       name="getauditlogs",
       description="gets the recent audit logs for a server",
    )
-   async def getauditlogs(self, interaction, amount: int = None):
-      if amount is None:
-         embed = disnake.Embed(
-               title="Logs",
-               color=color,
-               timestamp=disnake.utils.utcnow(),
-            )
-         async for entry in interaction.guild.audit_logs(limit=100):
-            embed.add_field(
-               inline=False, 
-               name="Logs",
-               value=f"{entry.user} did {entry.action} to {entry.target}",
-            )
-         await interactionsend(interaction=interaction, embed=embed)
+   @commands.has_permissions(administrator=True)
+   async def getauditlogs(self, interaction: ApplicationCommandInteraction):
+      embed = disnake.Embed(
+            title="Logs",
+            color=color,
+            timestamp=disnake.utils.utcnow(),
+         )
+      async for entry in interaction.guild.audit_logs(limit=100):
+         embed.add_field(
+            inline=False, 
+            name="Logs",
+            value=f"```{entry.user} did {entry.action} to {entry.target}```",
+         )
+      await interactionsend(interaction=interaction, embed=embed)

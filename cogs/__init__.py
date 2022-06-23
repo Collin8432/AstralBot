@@ -18,6 +18,10 @@ from .info import *
 
 
 def setup(bot):
+   """
+   * `setup`
+   Used by bot.load_extention to load classes
+   """
    bot.add_cog(Astral(bot))
    bot.add_cog(Fun(bot))
    bot.add_cog(General(bot))

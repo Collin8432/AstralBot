@@ -1,7 +1,6 @@
 # Imports
 import disnake
 from disnake import ApplicationCommandInteraction
-from disnake import embeds
 
 
 

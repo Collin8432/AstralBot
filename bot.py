@@ -1,3 +1,8 @@
+"""
+Astral Bot
+Disnake API Wrapper
+Coded by Asrto
+"""
 # Imports
 import json
 import os
@@ -43,13 +48,13 @@ if __name__ == "__main__":
 
 @bot.user_command(name="test")
 async def usercmd(interaction):
-    await interaction.send("test")
+    await interaction.send("testusercmd")
     
     
 
 @bot.message_command(name="test")
 async def msgcmd(interaction):
-    await interaction.send("test")
+    await interaction.send("testmsgcmd")
 
 
 
