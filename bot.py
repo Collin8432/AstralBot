@@ -36,7 +36,6 @@ def loadCogs():
             
 
 
-
 if __name__ == "__main__":
     loadCogs()
 
@@ -45,8 +44,14 @@ if __name__ == "__main__":
 @bot.user_command(name="test")
 async def usercmd(interaction):
     await interaction.send("test")
+    
+    
+
+@bot.message_command(name="test")
+async def msgcmd(interaction):
+    await interaction.send("test")
 
 
-     
+
 # Starting The Bot
 bot.run(config["token"])
