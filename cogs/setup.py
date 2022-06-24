@@ -1,4 +1,5 @@
 # Imports
+import traceback
 import disnake
 from disnake.ext import commands
 
@@ -311,4 +312,9 @@ class setupcmds(commands.Cog, name="Setup cmd"):
    )
    @commands.has_permissions(administrator=True)
    async def setup(self, interaction):
-      await interactionsend(interaction=interaction, msg="Choose The Correct Option, As This Cannot Be Undone.", view=SetupSelectView(), ephemeral=True)
+      try:
+         await interactionsend(interaction=interaction, msg="Choose The Correct Option, As This Cannot Be Undone.", view=SetupSelectView(), ephemeral=True)
+      except Exception as e:
+         traceback.print_exc()
+         print("----")
+         print(e)
