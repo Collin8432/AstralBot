@@ -1,14 +1,8 @@
-import dbm
-import mysql.connector
+import pymongo
 
-db = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="8432",
-  database="testdatabase"
-)
-
-cursor = db.cursor()
-
-
-print(db)
+url = "mongodb+srv://Astral69420:<mypassduh>@cluster0.agbrqlo.mongodb.net/?retryWrites=true&w=majority"
+client = pymongo.MongoClient(url)
+result = client["<dbName"]["<collName>"].find()
+# print results
+for i in result:
+    print(i)
