@@ -404,7 +404,7 @@ class General(commands.Cog, name="General Cmds"):
             timestamp=disnake.utils.utcnow()
         )
         embed.set_footer(
-            text="Requested by {}".replace(interaction.author)
+            text="Requested by {}".format(interaction.author)
         )
         await interactionsend(interaction=interaction, embed=embed)
         

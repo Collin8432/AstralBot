@@ -310,5 +310,5 @@ class setupcmds(commands.Cog, name="Setup cmd"):
       description="displays the setup options, to be selected"
    )
    @commands.has_permissions(administrator=True)
-   async def test(self, interaction):
+   async def setup(self, interaction):
       await interactionsend(interaction=interaction, msg="Choose The Correct Option, As This Cannot Be Undone.", view=SetupSelectView(), ephemeral=True)
