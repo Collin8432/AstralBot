@@ -23,10 +23,12 @@ async def interactionsend(interaction: ApplicationCommandInteraction, msg: Optio
       await interaction.response.send_modal(modal=modal)
    elif ephemeral == True and view is None:
       await interaction.send(msg, ephemeral=True, embed=embed)
-   elif ephemeral == True and view is not None:
+   elif ephemeral == True and view is not None and embed is not None:
       await interaction.send(msg, view=view, embed=embed, ephemeral=True)
-   elif ephemeral == False and view is None:
+   elif ephemeral == False and view is None and embed is not None:
       await interaction.send(msg, view=deleteinteraction(), embed=embed)
-   elif ephemeral == False and view is not None:
+   elif ephemeral == False and view is not None and embed is not None:
       await interaction.send(msg, view=view, embed=embed)
+   else:
+      await interaction.send(msg, ephemeral=True, view=view)
    
