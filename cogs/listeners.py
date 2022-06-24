@@ -144,7 +144,7 @@ class Events(commands.Cog):
          await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
          print(errormsg)
       else:
-         pass
+         print(errormsg)
 
 
 
