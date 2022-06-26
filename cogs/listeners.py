@@ -11,9 +11,7 @@ from disnake import ApplicationCommandInteraction
 
 
 from helpers.webhook import webhooksend
-from helpers.database import on_join_insert, on_leave_remove
 from helpers.helpembeds import helpemb, funemb, modemb, setupemb, nsfwemb
-from helpers.deleteinteraction import deleteinteraction
 from helpers.color import color
 from helpers.message import interactionsend
 
