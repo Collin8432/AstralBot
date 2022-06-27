@@ -40,10 +40,10 @@ def loadCogs():
             print(e)
             
 
-
-if __name__ == "__main__":
+try:
     loadCogs()
-
+except Exception as e:
+    print(e)
 
 
 @bot.user_command(name="test")

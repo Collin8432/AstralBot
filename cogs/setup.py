@@ -192,32 +192,25 @@ class setupcmds(commands.Cog, name="Setup cmd"):
       
       
    # Commands
-   # @commands.slash_command(
-   #    name="database",
-   #    description="searches for servers db settings",
-   # )
-   # @commands.has_permissions(administrator=True)
-   # @checks.not_blacklisted()
-   # async def serversearchs(interaction: disnake.ApplicationCommandInteraction) -> None:
-   #    results = await serversearch(f"{interaction.guild.id}")  
-   #    for result in results:
-   #       name: str = result["guild_name"]
-   #       guildid: int = result["guild_id"]
-   #       webhook: str = result["webhook"]
-   #       memberchannel: int = result["memberchannel"]
-   #       verificationchannel: int = result["verification"]
-   #       muterole: int = result["muterole"]
-   #       verifyrole: int = result["verifyrole"]
-   #    embed = disnake.Embed(
-   #       title=f"Server Database",
-   #       description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-   #       color=color,
-   #       timestamp=disnake.utils.utcnow()
-   #    )
-   #    embed.set_footer(
-   #       text=f"Requested by {interaction.author}"
-   #    )
-   #    await interactionsend(interaction=interaction, embed=embed, ephemeral=True) 
+   @commands.slash_command(
+      name="database",
+      description="searches for servers db settings",
+   )
+   @commands.has_permissions(administrator=True)
+   @checks.not_blacklisted()
+   async def serversearchs(interaction: disnake.ApplicationCommandInteraction) -> None:
+      results = fetch_all_guild_information(f"{interaction.guild.id}")  
+     
+      embed = disnake.Embed(
+         title=f"Server Database",
+         description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n{results}",  
+         color=color,
+         timestamp=disnake.utils.utcnow()
+      )
+      embed.set_footer(
+         text=f"Requested by {interaction.author}"
+      )
+      await interactionsend(interaction=interaction, embed=embed, ephemeral=True) 
 
       
       
@@ -227,9 +220,4 @@ class setupcmds(commands.Cog, name="Setup cmd"):
    )
    @commands.has_permissions(administrator=True)
    async def setup(self, interaction):
-      try:
-         await interactionsend(interaction=interaction, msg="Choose The Correct Option, As This Cannot Be Undone.", view=SetupSelectView(), ephemeral=True)
-      except Exception as e:
-         traceback.print_exc()
-         print("----")
-         print(e)
+      await interactionsend(interaction=interaction, msg="Choose The Correct Option, As This Cannot Be Undone.", view=SetupSelectView(), ephemeral=True)

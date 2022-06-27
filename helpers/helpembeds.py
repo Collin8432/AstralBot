@@ -10,7 +10,7 @@ from helpers.color import color
 # Embeds 
 helpemb = disnake.Embed(
     title="General ⚙️",
-    description="**/help** - Displays Help Command\n **/Shutdown** - Shuts Bot Down(Permissions Required)\n**/randomchoice (choice) (choice)** - Picks A Random Choice - Simlar To Heads/Tails\n**/ticket** - Creates A Support Ticket\n**/ping** - Shows Bot Latency\n**/astral invite** - Gets Bot Invite Link\n**/astral support** - Gets Bot Server Link\n**/astral credits** - Shows Bot Credits\n**/astral uptime** - Shows Bot Uptime",
+    description="**/help** - Displays Help Command\n **/Shutdown** - Shuts Bot Down(Permissions Required)\n**/randomchoice (choice) (choice)** - Picks A Random Choice - Simlar To Heads/Tails\n**/ticket** - Creates A Support Ticket\n**/ping** - Shows Bot Latency\n**/astral invite** - Gets Bot Invite Link\n**/astral support** - Gets Bot Server Link\n**/astral credits** - Shows Bot Credits\n**/astral uptime** - Shows Bot Uptime\n**/appinfo** - Shows Info About Astral's Application\n**/userinfo** - Gets Information On A User\n**/firstmessage** - Gets The Link To The First Message In A Channel\n**/todo** - Fetches The Todo.txt List For The Bot\n**/serverinfo** - Gets The Information On A Server\n**/getauditlogs** - Gets The Most Recent Audit Logs",
     color=color,
     timestamp=disnake.utils.utcnow(),
 )
