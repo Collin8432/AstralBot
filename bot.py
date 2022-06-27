@@ -7,11 +7,13 @@ Coded by Asrto
 import json
 import os
 import sys
+import asyncio
 
 
 
 import disnake
 from disnake.ext.commands import Bot
+from helpers.webhook import webhooksend
 
 
  
@@ -43,7 +45,7 @@ def loadCogs():
 try:
     loadCogs()
 except Exception as e:
-    print(e)
+    asyncio.run(webhooksend("err", f"{e}", 944297787779072020))
 
 
 @bot.user_command(name="test")
