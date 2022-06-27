@@ -1,5 +1,3 @@
-from operator import indexOf
-from attr import s
 import mysql.connector
 
 
