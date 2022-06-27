@@ -8,7 +8,7 @@ import random
 
 
 
-from helpers.database import memberchannel_search
+from helpers.db import *
 from helpers.webhook import webhooksend
 
 
@@ -18,26 +18,27 @@ from helpers.webhook import webhooksend
 async def status_task(self) -> None:
    statuses = [f"Watching Over {len(self.bot.guilds)} Servers"]
    await self.bot.change_presence(activity=disnake.Game(random.choice(statuses)))
-   for guild in self.bot.guilds:
-      members = len(guild.members)
-      id = guild.id
-      ch = await memberchannel_search(f"{id}")
-      if ch is not None:
-            gd = await self.bot.fetch_guild(id)
-            try:
-               channel = await self.bot.fetch_channel(ch)
-            except disnake.NotFound:
-               pass
-            try:
-               await channel.edit(name=f"Members: {members}")
-            except Exception as e:
-               print(e)
-      else:
-            list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-            s = random.choice(list)
-            if s == "a":
-               await webhooksend(f"Member Channel Updates!", "We Reccomend Adding A Memberchannel To Your Server!\nTo Do This, Type `/setmembervoicechannel` In Any Voice Channel In Your Server!", f"{id}")
-
+   try:
+      for guild in self.bot.guilds:
+         members = len(guild.members)
+         ch = fetch_guild_information("guild_membercountvoicechannel", f"{id}")
+         if ch is not None:
+               gd = await self.bot.fetch_guild(id)
+               try:
+                  channel = await self.bot.fetch_channel(ch)
+               except disnake.NotFound:
+                  pass
+               try:
+                  await channel.edit(name=f"Members: {members}")
+               except Exception as e:
+                  print(e)
+         else:
+               list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+               s = random.choice(list)
+               if s == "a":
+                  await webhooksend(f"Member Channel Updates!", "We Reccomend Adding A Memberchannel To Your Server!\nTo Do This, Type `/setmembervoicechannel` In Any Voice Channel In Your Server!", f"{id}")
+   except: 
+      pass
 
 
 # Class Tasks

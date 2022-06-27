@@ -4,9 +4,8 @@ from disnake.ext import commands
 
 
 
-from helpers.database import verification_search, verifyrole_search
+from helpers.db import *
 from helpers.webhook import webhooksend
-from helpers.deleteinteraction import deleteinteraction
 from helpers.color import color
 from helpers.message import interactionsend
 
@@ -42,7 +41,7 @@ class Verification(commands.Cog, name="Verification"):
       description="Verify yourself to gain access to the server"
    )
    async def verify(interaction):
-      verifych = await verification_search(f"{interaction.guild.id}")
+      verifych = fetch_guild_information("guild_verificationchannel", f"{interaction.guild.id}")
       verifychannel = int(verifych)  
       if interaction.channel.id != verifychannel:
          await interactionsend(interaction=interaction, msg=f"You can only use this command in <#{verifychannel}>")
@@ -72,7 +71,7 @@ class Verification(commands.Cog, name="Verification"):
                await Checker(f"{FileName}")
          except:
                pass
-         verifyrole = await verifyrole_search(f"{interaction.guild.id}")
+         verifyrole = fetch_guild_information("guild_verifyrole", f"{interaction.guild.id}")
          await interaction.author.add_roles(disnake.Object(verifyrole))  
          await webhooksend("Member Verified", f"Verified <@{interaction.author.id}>", f"{interaction.guild.id}")        
          await interaction.channel.purge(limit=9999999)

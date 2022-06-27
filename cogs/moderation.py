@@ -8,7 +8,7 @@ from disnake import ApplicationCommandInteraction, Option, OptionType
  
 from helpers import checks
 from helpers.webhook import webhooksend
-from helpers.database import muterole_search
+from helpers.db import *
 from helpers.deleteinteraction import deleteinteraction
 from helpers.color import color
 from helpers.message import interactionsend
@@ -239,7 +239,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.has_permissions(manage_roles=True)
     @checks.not_blacklisted()
     async def mute(self, interaction: ApplicationCommandInteraction, user: disnake.User) -> None:
-        muterole = await muterole_search(f"{interaction.guild.id}")
+        muterole = fetch_guild_information("guild_muterole", f"{interaction.guild.id}")
         muterole = interaction.guild.get_role(muterole)
         try:
             await user.add_roles(muterole)  
@@ -281,7 +281,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.has_permissions(manage_roles=True)
     @checks.not_blacklisted()
     async def unmute(self, interaction: ApplicationCommandInteraction, user: disnake.User):
-        muterole = await muterole_search(f"{interaction.guild.id}")  
+        muterole = fetch_guild_information("guild_muterole", f"{interaction.guild.id}")  
         muterole = interaction.guild.get_role(muterole)
         try:
             await user.remove_roles(muterole)

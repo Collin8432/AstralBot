@@ -7,7 +7,7 @@ from disnake.ext import commands
 
 
 from helpers import checks
-from helpers.database import webhook_add, verification_add, memberchannel_add, muterole_add, serversearch, verification_search, verifyrole_add, verifyrole_search, memberchannel_search
+from helpers.db import *
 from helpers.webhook import webhooksend
 from helpers.color import color
 from helpers.message import interactionsend
@@ -34,7 +34,7 @@ class SetupSelect(disnake.ui.Select):
             emoji="⚙️"
          ),
          disnake.SelectOption(
-            label="Member Voice Channel Display Only",
+            label="Member Count Voice Channel Display Only",
             description="Creates A Voice Channel That Periodcally Displays The Member Count ONLY",
             emoji="⚙️"
          ),
@@ -66,7 +66,7 @@ class SetupSelect(disnake.ui.Select):
          webhook = await channel.create_webhook(name="Astral - Bot Logging", avatar=data)
          muterole = await interaction.guild.create_role(name="Mute Role", permissions=disnake.Permissions(speak=False))
          verifyrole = await interaction.guild.create_role(name="Verified", permissions=disnake.Permissions(view_channel=True))
-         membervoicechannel = await interaction.guild.create_voice_channel(name=f"Members: {interaction.guild.member_count}")
+         membercountvoicechannel = await interaction.guild.create_voice_channel(name=f"Members: {interaction.guild.member_count}")
          voverwrites = {
             interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=True, send_messages=True, read_messages=True),
             interaction.guild.get_role(verifyrole.id): disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False),
@@ -87,35 +87,24 @@ class SetupSelect(disnake.ui.Select):
             text=f"Astral Verification"
          )
          await ch.send(embed=embed)
-         await verifyrole_add(f"{interaction.guild.id}", f"{verifyrole.id}")
-         await muterole_add(f"{interaction.guild.id}", f"{muterole.id}")
-         await webhook_add(f"{interaction.guild.id}", f"{webhook.url}")
-         await memberchannel_add(f"{interaction.guild.id}", f"{membervoicechannel.id}")
-         await verification_add(f"{interaction.guild.id}", f"{verificationchannel.id}")
+         
+         _verifyrole = fetch_guild_information("guild_verifyrole", f"{interaction.guild.id}")
+         update_guild_information("guild_verifyrole", f"{_verifyrole}", f"{verifyrole.id}")
+         
+         _muterole = fetch_guild_information("guild_muterole", f"{interaction.guild.id}")
+         update_guild_information("guild_muterole", f"{_muterole}", f"{muterole.id}")
+         
+         _webhook = fetch_guild_information("guild_webhook", f"{interaction.guild.id}")
+         update_guild_information("guild_webhook", f"{_webhook}", f"{webhook.url}")
+         
+         _membervoicechannel = fetch_guild_information("guild_membercountvoicechannel", f"{interaction.guild.id}")
+         update_guild_information(f"guild_membercountvoicechannel", f"{_membervoicechannel}", f"{membercountvoicechannel.id}")
+         
+         _verificationchannel = fetch_guild_information("guild_verificationchannel", f"{interaction.guild.id}")
+         update_guild_information(f"guild_verificationchannel", f"{_verificationchannel}", f"{verificationchannel.id}")
+         
          await webhooksend("Test Webhook Message", "If This Message Is Sent, The Webhook Is Working, Further Use Of The Bot Can Be Accessed With /help", f"{interaction.guild.id}")
          await interactionsend(interaction=interaction, msg="Setup Complete!", ephemeral=True)
-         
-         results = await serversearch(f"{interaction.guild.id}")  
-         for result in results:
-            name: str = result["guild_name"]
-            guildid: int = result["guild_id"]
-            webhook: str = result["webhook"]
-            memberchannel: int = result["memberchannel"]
-            verificationchannel: int = result["verification"]
-            muterole: int = result["muterole"]
-            verifyrole: int = result["verifyrole"]
-         embed = disnake.Embed(
-            title=f"Server Database",
-            description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-            color=color,
-            timestamp=disnake.utils.utcnow()
-         )
-         embed.set_footer(
-            text=f"Requested by {interaction.author}"
-         )
-         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
-         
-         
          
       elif self.values[0] == "Logging Only":
          await interactionsend(interaction=interaction, msg="Setup Started", ephemeral=True)
@@ -126,33 +115,14 @@ class SetupSelect(disnake.ui.Select):
          channel = await category.create_text_channel(name="Astral - Bot Logging")
          with open("./img/astral.png", "rb") as file:
             data = file.read()
-         webhook = await channel.create_webhook(name="Astral - Bot Logging", avatar=data)         
-         await webhook_add(f"{interaction.guild.id}", f"{webhook.url}")
+         webhook = await channel.create_webhook(name="Astral - Bot Logging", avatar=data) 
+         
+         _webhook = fetch_guild_information("guild_webhook", f"{interaction.guild.id}")        
+         update_guild_information(f"guild_webhook", f"{_webhook}", f"{webhook.url}")
+         
          await webhooksend("Test Webhook Message", "If This Message Is Sent, The Webhook Is Working, Further Use Of The Bot Can Be Accessed With /help", f"{interaction.guild.id}")
          await interactionsend(interaction=interaction, msg="Setup Complete!", ephemeral=True)
-         
-         results = await serversearch(f"{interaction.guild.id}")  
-         for result in results: 
-            name: str = result["guild_name"]
-            guildid: int = result["guild_id"]
-            webhook: str = result["webhook"]
-            memberchannel: int = result["memberchannel"]
-            verificationchannel: int = result["verification"]
-            muterole: int = result["muterole"]
-            verifyrole: int = result["verifyrole"]
-         embed = disnake.Embed(
-            title=f"Server Database",
-            description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-            color=color,
-            timestamp=disnake.utils.utcnow()
-         )
-         embed.set_footer(
-            text=f"Requested by {interaction.author}"
-         )
-         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
-         
-         
-         
+
       elif self.values[0] == "Verification Only":
          await interactionsend(interaction=interaction, msg="Setup Started", ephemeral=True)
          verifyrole = await interaction.guild.create_role(name="Verified", permissions=disnake.Permissions(view_channel=True))
@@ -176,86 +146,32 @@ class SetupSelect(disnake.ui.Select):
             text=f"Astral Verification"
          )
          await ch.send(embed=embed)
-         await verifyrole_add(f"{interaction.guild.id}", f"{verifyrole.id}")
-         await verification_add(f"{interaction.guild.id}", f"{verificationchannel.id}")
+         
+         _verifyrole = fetch_guild_information("guild_verifyrole", f"{interaction.guild.id}")
+         update_guild_information("guild_verifyrole", f"{_verifyrole}", f"{verifyrole.id}")
+         
+         _verificationchannel = fetch_guild_information("guild_verificationchannel", f"{interaction.guild.id}")
+         update_guild_information(f"{interaction.guild.id}", f"{_verificationchannel}" f"{verificationchannel.id}")
+         
          await interactionsend(interaction=interaction, msg="Setup Complete!", ephemeral=True)
          
-         results = await serversearch(f"{interaction.guild.id}")  
-         for result in results:
-            name: str = result["guild_name"]
-            guildid: int = result["guild_id"]
-            webhook: str = result["webhook"]
-            memberchannel: int = result["memberchannel"]
-            verificationchannel: int = result["verification"]
-            muterole: int = result["muterole"]
-            verifyrole: int = result["verifyrole"]
-         embed = disnake.Embed(
-            title=f"Server Database",
-            description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-            color=color,
-            timestamp=disnake.utils.utcnow()
-         )
-         embed.set_footer(
-            text=f"Requested by {interaction.author}"
-         )
-         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
-       
-         
-         
-      elif self.values[0] == "Member Voice Channel Display Only":
+      elif self.values[0] == "Member Count Voice Channel Display Only":
          await interactionsend(interaction=interaction, msg="Setup Started", ephemeral=True)
          membervoicechannel = await interaction.guild.create_voice_channel(name=f"Members: {interaction.guild.member_count}")
-         await memberchannel_add(f"{interaction.guild.id}", f"{membervoicechannel.id}")
+         
+         _membervoicechannel = fetch_guild_information("guild_membercountvoicechannel", f"{interaction.guild.id}")
+         update_guild_information(f"guild_membercountvoicechannel", f"{_membervoicechannel}", f"{membervoicechannel.id}")
+         
          await interactionsend(interaction=interaction, msg="Setup Complete!", ephemeral=True)
-         results = await serversearch(f"{interaction.guild.id}")  
-         for result in results:
-            name: str = result["guild_name"]
-            guildid: int = result["guild_id"]
-            webhook: str = result["webhook"]
-            memberchannel: int = result["memberchannel"]
-            verificationchannel: int = result["verification"]
-            muterole: int = result["muterole"]
-            verifyrole: int = result["verifyrole"]
-         embed = disnake.Embed(
-            title=f"Server Database",
-            description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-            color=color,
-            timestamp=disnake.utils.utcnow()
-         )
-         embed.set_footer(
-            text=f"Requested by {interaction.author}"
-         )
-         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
-   
-   
    
       elif self.values[0] == "Mute Only":
          await interactionsend(interaction=interaction, msg="Setup Started", ephemeral=True)
          muterole = await interaction.guild.create_role(name="Mute Role", permissions=disnake.Permissions(speak=False))
-         await muterole_add(f"{interaction.guild.id}", f"{muterole.id}")
+         
+         _muterole = fetch_guild_information("guild_muterole", f"{interaction.guild.id}")
+         update_guild_information("guild_muterole", f"{_muterole}" f"{muterole.id}")
+         
          await interactionsend(interaction=interaction, msg="Setup Complete!", ephemeral=True)
-      
-         results = await serversearch(f"{interaction.guild.id}")  
-         for result in results:
-            name: str = result["guild_name"]
-            guildid: int = result["guild_id"]
-            webhook: str = result["webhook"]
-            memberchannel: int = result["memberchannel"]
-            verificationchannel: int = result["verification"]
-            muterole: int = result["muterole"]
-            verifyrole: int = result["verifyrole"]
-         embed = disnake.Embed(
-            title=f"Server Database",
-            description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-            color=color,
-            timestamp=disnake.utils.utcnow()
-         )
-         embed.set_footer(
-            text=f"Requested by {interaction.author}"
-         )
-         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
-         
-         
          
    async def on_error(self, error: Exception):
       print(error)
@@ -266,7 +182,6 @@ class SetupSelectView(disnake.ui.View):
     def __init__(self):
         super().__init__()
 
-        # Adds the dropdown to our view object.
         self.add_item(SetupSelect())
 
 
@@ -277,32 +192,32 @@ class setupcmds(commands.Cog, name="Setup cmd"):
       
       
    # Commands
-   @commands.slash_command(
-      name="database",
-      description="searches for servers db settings",
-   )
-   @commands.has_permissions(administrator=True)
-   @checks.not_blacklisted()
-   async def serversearchs(interaction: disnake.ApplicationCommandInteraction) -> None:
-      results = await serversearch(f"{interaction.guild.id}")  
-      for result in results:
-         name: str = result["guild_name"]
-         guildid: int = result["guild_id"]
-         webhook: str = result["webhook"]
-         memberchannel: int = result["memberchannel"]
-         verificationchannel: int = result["verification"]
-         muterole: int = result["muterole"]
-         verifyrole: int = result["verifyrole"]
-      embed = disnake.Embed(
-         title=f"Server Database",
-         description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
-         color=color,
-         timestamp=disnake.utils.utcnow()
-      )
-      embed.set_footer(
-         text=f"Requested by {interaction.author}"
-      )
-      await interactionsend(interaction=interaction, embed=embed, ephemeral=True) 
+   # @commands.slash_command(
+   #    name="database",
+   #    description="searches for servers db settings",
+   # )
+   # @commands.has_permissions(administrator=True)
+   # @checks.not_blacklisted()
+   # async def serversearchs(interaction: disnake.ApplicationCommandInteraction) -> None:
+   #    results = await serversearch(f"{interaction.guild.id}")  
+   #    for result in results:
+   #       name: str = result["guild_name"]
+   #       guildid: int = result["guild_id"]
+   #       webhook: str = result["webhook"]
+   #       memberchannel: int = result["memberchannel"]
+   #       verificationchannel: int = result["verification"]
+   #       muterole: int = result["muterole"]
+   #       verifyrole: int = result["verifyrole"]
+   #    embed = disnake.Embed(
+   #       title=f"Server Database",
+   #       description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n**Guild Name:**\n{name}\n**Guild ID:**\n{guildid}\n**Webhook:**\n{webhook}\n**Member Channel:**\n{memberchannel}\n**Verification Channel:**\n{verificationchannel}\n**Mute Role:**\n{muterole}\n**Verify Role:**\n{verifyrole}",  
+   #       color=color,
+   #       timestamp=disnake.utils.utcnow()
+   #    )
+   #    embed.set_footer(
+   #       text=f"Requested by {interaction.author}"
+   #    )
+   #    await interactionsend(interaction=interaction, embed=embed, ephemeral=True) 
 
       
       

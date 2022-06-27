@@ -14,6 +14,7 @@ from helpers.webhook import webhooksend
 from helpers.helpembeds import helpemb, funemb, modemb, setupemb, nsfwemb
 from helpers.color import color
 from helpers.message import interactionsend
+from helpers.db import *
 
 
 
@@ -264,19 +265,27 @@ class Events(commands.Cog):
 
    @commands.Cog.listener()
    async def on_guild_join(self, guild):
-      await on_join_insert(guild.name, guild.id)
-
+      try:
+         print(guild.name, guild.id)
+         insert_guild(f"{guild.name}", f"{guild.id}")
+      except Exception as e:
+         print(e)
 
 
    @commands.Cog.listener()
    async def on_guild_remove(self, guild):
-      await on_leave_remove(guild.id)
+      try: 
+         remove_guild(guild.id)
+      except:
+         print("left a guild")
 
 
 
    @commands.Cog.listener()
-   async def on_guild_channel_delete(self, channel):
-      await webhooksend("Channel Deleted", f"{channel.name} **Was Deleted**", f"{channel.guild.id}")
+   async def on_guild_channel_delete(self, channel: disnake.abc.GuildChannel):
+      type = channel.type
+      type = str(type).capitalize()
+      await webhooksend(f"{type} Channel Deleted", f"**#{channel.name} Was Deleted**", f"{channel.guild.id}")
 
 
 

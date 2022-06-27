@@ -48,13 +48,15 @@ if __name__ == "__main__":
 
 @bot.user_command(name="test")
 async def usercmd(interaction):
-    await interaction.send("testusercmd")
+    embed=disnake.Embed(description="test")
+    await interaction.send(embed=embed)
     
     
 
 @bot.message_command(name="test")
 async def msgcmd(interaction):
-    await interaction.send("testmsgcmd")
+    embed=disnake.Embed(description="test")
+    await interaction.send(embed=embed)
 
 
 

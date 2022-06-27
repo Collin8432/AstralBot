@@ -8,7 +8,7 @@ import aiohttp
 
 
 
-from helpers.database import webhook_search
+from helpers.db import *
 from helpers.color import color
 
 
@@ -22,13 +22,13 @@ async def webhooksend(title: str, description: str, guild_id: str) -> None:
        guild_id (str): _description_
    
    See Also:
-         * :func:`helpers.database.webhook_search`
+         * :func:`helpers.db.fetch_guild_information`
          
    Used To Send Messages To A Database 
    """
    try:
       async with aiohttp.ClientSession() as session:
-         hook = await webhook_search(guild_id)
+         hook = fetch_guild_information("guild_webhook", guild_id)
          webhook = Webhook.from_url(f"{hook}", session=session)
          embed = disnake.Embed(
             title=title,
