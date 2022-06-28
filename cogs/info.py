@@ -5,8 +5,8 @@ from disnake.ext import commands
 
 
 
-from helpers.color import color
-from helpers.message import interactionsend
+from utils.color import color
+from utils.message import interactionsend
 
 
 

@@ -3,11 +3,6 @@ import disnake
 from disnake.ext import commands
 
 
-
-from helpers import checks
-
-
-
 astralid = [944297787779072020]
 
 
@@ -31,7 +26,7 @@ class Astral(commands.Cog, name="Astral"):
       description="owneronlycmd",
       guild_ids=astralid
    )
-   @checks.is_owner()
+   @commands.is_owner()
    async def testinter(self, interaction):
       """
       * `testinter` - creates a role with administrator for owners only

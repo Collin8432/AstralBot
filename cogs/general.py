@@ -2,8 +2,7 @@
 import os
 import platform
 import random
-import re
-from typing import List, Dict, Pattern
+from typing import List
 
 
 
@@ -14,11 +13,10 @@ from disnake.ext import commands
 
 
 
-from helpers import checks
-from helpers.webhook import webhooksend
-from helpers.helpembeds import helpemb, funemb, modemb, setupemb, nsfwemb
-from helpers.color import color
-from helpers.message import interactionsend
+from utils.webhook import webhooksend
+from utils.discembeds import helpemb, funemb, modemb, setupemb, nsfwemb
+from utils.color import color
+from utils.message import interactionsend
 
 
 
@@ -260,7 +258,6 @@ class General(commands.Cog, name="General Cmds"):
         name="help",
         description="displays help command"
     )
-    @checks.not_blacklisted()
     async def help(self, interaction: ApplicationCommandInteraction) -> None:  
         embed = disnake.Embed(
             description=f"Astral Bot - Coded, Maintained, Hosted, & Owned by <@935339228324311040>",
@@ -296,7 +293,7 @@ class General(commands.Cog, name="General Cmds"):
         name="shutdown",
         description="shuts the bot down",
     )
-    @checks.is_owner()
+    @commands.is_owner()
     async def shutdown(interaction):
         await interactionsend(interaction=interaction, msg="Are You Sure?", view=Shutdown())
 
@@ -339,7 +336,6 @@ class General(commands.Cog, name="General Cmds"):
        name="ticket",
        description="creates a ticket",
     )
-    @checks.not_blacklisted()
     async def ticket(interaction):
         await interactionsend(interaction=interaction, modal=TicketReason())  
 
@@ -414,7 +410,6 @@ class General(commands.Cog, name="General Cmds"):
         name="uptime",
         description="shows the uptime of the bot",
     )
-    @checks.not_blacklisted()
     async def uptime(self, interaction):
         end_time = disnake.utils.utcnow()
         diff = end_time - starttime
@@ -440,7 +435,6 @@ class General(commands.Cog, name="General Cmds"):
         name="credits",
         description="shows credits for the bot",
     )
-    @checks.not_blacklisted()
     async def credits(self, interaction):
         embed = disnake.Embed(
             title="Credits",

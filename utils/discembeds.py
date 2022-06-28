@@ -3,7 +3,7 @@ import disnake
 
 
 
-from helpers.color import color
+from utils.color import color
 
 
 

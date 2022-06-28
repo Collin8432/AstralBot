@@ -1,3 +1,3 @@
-from helpers.webhook import webhooksend
+from utils.webhook import webhooksend
 
 webhooksend("hi", "hi", "hi")

@@ -4,10 +4,9 @@ from disnake.ext import commands
 
 
 
-from helpers.color import color
-from helpers.deleteinteraction import deleteinteraction
-from helpers import checks
-from helpers.message import interactionsend
+from utils.color import color
+from utils.deleteinteraction import deleteinteraction
+from utils.message import interactionsend
 
 
 
@@ -34,7 +33,6 @@ class nsfw(commands.Cog, name="NSFW"):
         description="show a random ass image",
     )
     @commands.is_nsfw()
-    @checks.not_blacklisted()
     async def ass(self, interaction):
         embed = disnake.Embed(
             title="Ass",
@@ -55,7 +53,6 @@ class nsfw(commands.Cog, name="NSFW"):
         description="Show a random hentai image",
     )
     @commands.is_nsfw()
-    @checks.not_blacklisted()
     async def hentai(self, interaction):
         embed = disnake.Embed(
             title="hentai",
@@ -77,7 +74,6 @@ class nsfw(commands.Cog, name="NSFW"):
         description="show a random tits image",
     )
     @commands.is_nsfw()
-    @checks.not_blacklisted()
     async def tits(self, interaction):
         embed = disnake.Embed(
             title="Tits",
@@ -98,7 +94,6 @@ class nsfw(commands.Cog, name="NSFW"):
         description="shows a random thighs image",
     )
     @commands.is_nsfw()
-    @checks.not_blacklisted()
     async def thighs(self, interaction):
         embed = disnake.Embed(
             title="Thighs",

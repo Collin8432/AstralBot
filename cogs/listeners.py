@@ -10,11 +10,11 @@ from disnake import ApplicationCommandInteraction
 
 
 
-from helpers.webhook import webhooksend
-from helpers.helpembeds import helpemb, funemb, modemb, setupemb, nsfwemb
-from helpers.color import color
-from helpers.message import interactionsend
-from helpers.db import *
+from utils.webhook import webhooksend
+from utils.discembeds import helpemb, funemb, modemb, setupemb, nsfwemb
+from utils.color import color
+from utils.message import interactionsend
+from utils.db import *
 
 
 
@@ -114,6 +114,7 @@ class Events(commands.Cog):
 
    @commands.Cog.listener()
    async def on_slash_command_error(self, interaction: ApplicationCommandInteraction, error: Exception) -> None:
+      await interaction.response.defer(with_message=True, ephemeral=True)
       errormsg = error
       for errors in disnake.ext.commands.errors.__all__:
          if errors == type(error).__name__:
@@ -136,7 +137,6 @@ class Events(commands.Cog):
          text=f"Command Error!"
       )
       try:
-         await interaction.response.defer(with_message=True, ephemeral=True)
          await interaction.edit_original_message(embed=embed, ephemeral=True)  
          print(errormsg)
       except:

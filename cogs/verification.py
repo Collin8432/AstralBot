@@ -4,10 +4,10 @@ from disnake.ext import commands
 
 
 
-from helpers.db import *
-from helpers.webhook import webhooksend
-from helpers.color import color
-from helpers.message import interactionsend
+from utils.db import *
+from utils.webhook import webhooksend
+from utils.color import color
+from utils.message import interactionsend
 
 
  

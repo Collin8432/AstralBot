@@ -8,8 +8,8 @@ import random
 
 
 
-from helpers.db import *
-from helpers.webhook import webhooksend
+from utils.db import *
+from utils.webhook import webhooksend
 
 
 

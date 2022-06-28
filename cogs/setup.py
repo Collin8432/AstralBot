@@ -5,12 +5,10 @@ from disnake.ext import commands
 
 
 
-
-from helpers import checks
-from helpers.db import *
-from helpers.webhook import webhooksend
-from helpers.color import color
-from helpers.message import interactionsend
+from utils.db import *
+from utils.webhook import webhooksend
+from utils.color import color
+from utils.message import interactionsend
 
 
 
@@ -197,7 +195,6 @@ class setupcmds(commands.Cog, name="Setup cmd"):
       description="searches for servers db settings",
    )
    @commands.has_permissions(administrator=True)
-   @checks.not_blacklisted()
    async def serversearchs(interaction: disnake.ApplicationCommandInteraction) -> None:
       results = fetch_all_guild_information(f"{interaction.guild.id}")  
      
