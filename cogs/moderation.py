@@ -1,5 +1,4 @@
 # Imports
-from re import M
 import disnake
 from disnake.ext import commands
 from disnake import ApplicationCommandInteraction, Option, OptionType
@@ -12,6 +11,10 @@ from helpers.webhook import webhooksend
 from helpers.db import *
 from helpers.color import color
 from helpers.message import interactionsend
+
+
+
+from typing import Optional
 
 
 
@@ -344,131 +347,58 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.slash_command(
         name="editguild",
         description="edits the guild",
-        options= [
-            Option(
-            name="reason",
-            description="reason to edit the guild",
-            type=OptionType.string,
-            required=False
-            ),
-            Option(
-                name="name",
-                description="edits the guild's name",
-                type=OptionType.string,
-                required=False
-            ),
-            Option(
-                name="description",
-                description="edits the guild's description",
-                type=OptionType.string,
-                required=False
-            ),
-            Option(
-                name="icon",
-                description="edits the guild's icon",
-                type=OptionType.attachment,
-                required=False
-            ),
-            Option(
-                name="banner",
-                description="edits the guild's banner",
-                type=OptionType.attachment,
-                required=False
-            ),
-            Option(
-                name="splash",
-                description="edits the guild's splash",
-                type=OptionType.attachment,
-                required=False   
-            ),
-            Option(
-                name="discovery_splash",
-                description="edits the guild's discovery splash",
-                type=OptionType.attachment,
-                required=False
-            ),
-            Option(
-                name="community",
-                description="edits thew guild's community status",
-                type=OptionType.boolean,
-                required=False
-            ),
-            Option(
-                name="afk_channel",
-                description="edits the guild's afk channel",
-                type=OptionType.channel,
-                required=False
-            ),
-            Option(
-                name="owner",
-                description="edits the guild's owner",
-                type=OptionType.user,
-                required=False
-            ),
-            Option(
-                name="afk_timeout",
-                description="edits the guild's afk timeout",
-                type=OptionType.integer,
-                required=False
-            ),
-            Option(
-                name="default_notifications",
-                description="edits the guild's default notifications\nHint: all_messages, or only_mentions",
-                type=OptionType.string,
-                required=False
-            ),
-            Option(
-                name="verification_level",
-                description="edits the guild's verification level\nHint: None, Low, Medium, High, Or Highest",
-                type=OptionType.string,
-                required=False
-            ),
-            Option(
-                name="explicit_content_filter",
-                description="edits the guild's explicit content filter\nHint: disable, no_role, or all_members",
-                type=OptionType.string,
-                required=False
-            ),
-            Option(
-                name="vanity_code",
-                description="edits the guild's vanity url",
-                type=OptionType.string,
-                required=False
-            ),
-            Option(
-                name="system_channel",
-                description="edits the guild's system channel",
-                type=OptionType.channel,
-                required=False
-            ),
-            Option(
-                name="preferred_locale",
-                description="edits the guild's preferred locale\nHint: https://docs.disnake.dev/en/stable/api.html?highlight=edit#disnake.Locale",
-                type=OptionType.string,
-                required=False
-            ),
-            Option(
-                name="rules_channel",
-                description="edits the guild's rules channel",
-                type=OptionType.channel,
-                required=False
-            ),
-            Option(
-                name="public_updates_channel",
-                description="edits the guild's public updates channel",
-                type=OptionType.channel,
-                required=False
-            ),
-            Option(
-                name="premium_progress_bar_enabled",
-                description="edits the guild's premium progress bar status",
-                type=OptionType.bool,
-                required=False
-            ),
-        ]
     )
-    @commands.has_permissions(Administrator=True)
-    async def editguild(self, interaction: ApplicationCommandInteraction, reason: str = None, name: str = None, description: str = None, icon: bytes = None, banner: bytes = None, splash: bytes = None, discovery_splash: bytes = None, community: bool = None, afk_channel: disnake.TextChannel = None, owner: disnake.User = None, afk_timeout: int = None, default_notifications: disnake.NotificationLevel = None, verification_level: disnake.VerificationLevel = None, explicit_content_filter: disnake.ContentFilter = None, vanity_code: str = None, system_channel: disnake.TextChannel = None, preferred_locale: disnake.Locale = None, rules_channel: disnake.TextChannel = None, public_updates_channel: disnake.TextChannel = None, premium_progress_bar_enabled: bool = None):
+    @commands.has_permissions(administrator=True)
+    async def editguild(self, 
+        interaction: ApplicationCommandInteraction,
+        name: Optional[str] = None, 
+        reason: Optional[str] = None, 
+        description: Optional[str] = None, 
+        icon: Optional[disnake.Attachment] = None, 
+        banner: Optional[disnake.Attachment] = None, 
+        splash: Optional[disnake.Attachment] = None, 
+        discovery_splash: Optional[disnake.Attachment] = None, 
+        community: Optional[bool] = None, 
+        afk_channel: Optional[disnake.TextChannel] = None, 
+        owner: Optional[disnake.User] = None, 
+        afk_timeout: Optional[int] = None, 
+        default_notifications: Optional[disnake.NotificationLevel] = None, 
+        verification_level: Optional[disnake.VerificationLevel] = None, 
+        explicit_content_filter: Optional[disnake.ContentFilter] = None, 
+        vanity_code: Optional[str] = None, 
+        system_channel: Optional[disnake.TextChannel] = None,
+        # system_channel_flags: Optional[disnake.SystemChannelFlags] = None, 
+        # preferred_locale: Optional[disnake.Locale] = None, 
+        rules_channel: Optional[disnake.TextChannel] = None, 
+        public_updates_channel: Optional[disnake.TextChannel] = None, 
+        premium_progress_bar_enabled: Optional[bool] = None
+        ):
+        """_summary_
+
+        Args:
+            interaction (ApplicationCommandInteraction): _description_
+            name (Optional[str], optional): _description_. Defaults to None.
+            reason (Optional[str], optional): _description_. Defaults to None.
+            description (Optional[str], optional): _description_. Defaults to None.
+            icon (Optional[disnake.Attachment], optional): _description_. Defaults to None.
+            banner (Optional[disnake.Attachment], optional): _description_. Defaults to None.
+            splash (Optional[disnake.Attachment], optional): _description_. Defaults to None.
+            discovery_splash (Optional[disnake.Attachment], optional): _description_. Defaults to None.
+            community (Optional[bool], optional): _description_. Defaults to None.
+            afk_channel (Optional[disnake.TextChannel], optional): _description_. Defaults to None.
+            owner (Optional[disnake.User], optional): _description_. Defaults to None.
+            afk_timeout (Optional[int], optional): _description_. Defaults to None.
+            default_notifications (Optional[disnake.NotificationLevel], optional): _description_. Defaults to None.
+            verification_level (Optional[disnake.VerificationLevel], optional): _description_. Defaults to None.
+            explicit_content_filter (Optional[disnake.ContentFilter], optional): _description_. Defaults to None.
+            vanity_code (Optional[str], optional): _description_. Defaults to None.
+            system_channel (Optional[disnake.TextChannel], optional): _description_. Defaults to None.
+            # system_channel_flags (Optional[disnake.SystemChannelFlags], optional): _description_. Defaults to None.
+            # preferred_locale (Optional[disnake.Locale], optional): _description_. Defaults to None.
+            rules_channel (Optional[disnake.TextChannel], optional): _description_. Defaults to None.
+            public_updates_channel (Optional[disnake.TextChannel], optional): _description_. Defaults to None.
+            premium_progress_bar_enabled (Optional[bool], optional): _description_. Defaults to None.
+        """
         await interaction.guild.edit(
             reason=reason,
             name=name, 
@@ -486,8 +416,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             explicit_content_filter=explicit_content_filter, 
             vanity_code=vanity_code, 
             system_channel=system_channel, 
-            # system_channel_flags=..., 
-            preferred_locale=preferred_locale, 
+            # system_channel_flags=system_channel_flags, 
+            # preferred_locale=preferred_locale, 
             rules_channel=rules_channel, 
             public_updates_channel=public_updates_channel, 
             premium_progress_bar_enabled=premium_progress_bar_enabled

@@ -22,7 +22,7 @@ funemb = disnake.Embed(
 )
 modemb = disnake.Embed(
     title="Moderation ⚙️",
-    description="**/ban** - Bans A User\n**/kick** - Kicks A User\n**/purge** - Purges All The Messages In A Channel\n**/moderatorapplication** - Apply For Mod\n**/rules** - Only Can Be Used By Administrators - Displays Simple Rules\n**/Testhooksend** - Sends A Test Message To The Webhook On Your Database\n**/Mute (member)** - Mutes A Selected Member\n**/UnMute (Member)** - Unmutes A Selected Member",
+    description="**/ban** - Bans A User\n**/kick** - Kicks A User\n**/purge** - Purges All The Messages In A Channel\n**/moderatorapplication** - Apply For Mod\n**/rules** - Only Can Be Used By Administrators - Displays Simple Rules\n**/Testhooksend** - Sends A Test Message To The Webhook On Your Database\n**/Mute (member)** - Mutes A Selected Member\n**/UnMute (Member)** - Unmutes A Selected Member\n**/editguild (args)** - Edits A Guild",
     color=color,
     timestamp=disnake.utils.utcnow(),
 )
