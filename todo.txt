@@ -15,3 +15,5 @@ Style
 title **HEY!**
 description **main** **subcategory**
 """
+
+add paginators to the on_button_click

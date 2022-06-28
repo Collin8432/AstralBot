@@ -1,4 +1,5 @@
 # Imports
+from re import M
 import disnake
 from disnake.ext import commands
 from disnake import ApplicationCommandInteraction, Option, OptionType
@@ -9,7 +10,6 @@ from disnake import ApplicationCommandInteraction, Option, OptionType
 from helpers import checks
 from helpers.webhook import webhooksend
 from helpers.db import *
-from helpers.deleteinteraction import deleteinteraction
 from helpers.color import color
 from helpers.message import interactionsend
 
@@ -338,3 +338,158 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             timestamp=disnake.utils.utcnow()
         )
         await interactionsend(interaction=interaction, embed=embed)
+        
+        
+    
+    @commands.slash_command(
+        name="editguild",
+        description="edits the guild",
+        options= [
+            Option(
+            name="reason",
+            description="reason to edit the guild",
+            type=OptionType.string,
+            required=False
+            ),
+            Option(
+                name="name",
+                description="edits the guild's name",
+                type=OptionType.string,
+                required=False
+            ),
+            Option(
+                name="description",
+                description="edits the guild's description",
+                type=OptionType.string,
+                required=False
+            ),
+            Option(
+                name="icon",
+                description="edits the guild's icon",
+                type=OptionType.attachment,
+                required=False
+            ),
+            Option(
+                name="banner",
+                description="edits the guild's banner",
+                type=OptionType.attachment,
+                required=False
+            ),
+            Option(
+                name="splash",
+                description="edits the guild's splash",
+                type=OptionType.attachment,
+                required=False   
+            ),
+            Option(
+                name="discovery_splash",
+                description="edits the guild's discovery splash",
+                type=OptionType.attachment,
+                required=False
+            ),
+            Option(
+                name="community",
+                description="edits thew guild's community status",
+                type=OptionType.boolean,
+                required=False
+            ),
+            Option(
+                name="afk_channel",
+                description="edits the guild's afk channel",
+                type=OptionType.channel,
+                required=False
+            ),
+            Option(
+                name="owner",
+                description="edits the guild's owner",
+                type=OptionType.user,
+                required=False
+            ),
+            Option(
+                name="afk_timeout",
+                description="edits the guild's afk timeout",
+                type=OptionType.integer,
+                required=False
+            ),
+            Option(
+                name="default_notifications",
+                description="edits the guild's default notifications\nHint: all_messages, or only_mentions",
+                type=OptionType.string,
+                required=False
+            ),
+            Option(
+                name="verification_level",
+                description="edits the guild's verification level\nHint: None, Low, Medium, High, Or Highest",
+                type=OptionType.string,
+                required=False
+            ),
+            Option(
+                name="explicit_content_filter",
+                description="edits the guild's explicit content filter\nHint: disable, no_role, or all_members",
+                type=OptionType.string,
+                required=False
+            ),
+            Option(
+                name="vanity_code",
+                description="edits the guild's vanity url",
+                type=OptionType.string,
+                required=False
+            ),
+            Option(
+                name="system_channel",
+                description="edits the guild's system channel",
+                type=OptionType.channel,
+                required=False
+            ),
+            Option(
+                name="preferred_locale",
+                description="edits the guild's preferred locale\nHint: https://docs.disnake.dev/en/stable/api.html?highlight=edit#disnake.Locale",
+                type=OptionType.string,
+                required=False
+            ),
+            Option(
+                name="rules_channel",
+                description="edits the guild's rules channel",
+                type=OptionType.channel,
+                required=False
+            ),
+            Option(
+                name="public_updates_channel",
+                description="edits the guild's public updates channel",
+                type=OptionType.channel,
+                required=False
+            ),
+            Option(
+                name="premium_progress_bar_enabled",
+                description="edits the guild's premium progress bar status",
+                type=OptionType.bool,
+                required=False
+            ),
+        ]
+    )
+    @commands.has_permissions(Administrator=True)
+    async def editguild(self, interaction: ApplicationCommandInteraction, reason: str = None, name: str = None, description: str = None, icon: bytes = None, banner: bytes = None, splash: bytes = None, discovery_splash: bytes = None, community: bool = None, afk_channel: disnake.TextChannel = None, owner: disnake.User = None, afk_timeout: int = None, default_notifications: disnake.NotificationLevel = None, verification_level: disnake.VerificationLevel = None, explicit_content_filter: disnake.ContentFilter = None, vanity_code: str = None, system_channel: disnake.TextChannel = None, preferred_locale: disnake.Locale = None, rules_channel: disnake.TextChannel = None, public_updates_channel: disnake.TextChannel = None, premium_progress_bar_enabled: bool = None):
+        await interaction.guild.edit(
+            reason=reason,
+            name=name, 
+            description=description, 
+            icon=icon, 
+            banner=banner, 
+            splash=splash, 
+            discovery_splash=discovery_splash, 
+            community=community, 
+            afk_channel=afk_channel, 
+            owner=owner, 
+            afk_timeout=afk_timeout, 
+            default_notifications=default_notifications, 
+            verification_level=verification_level, 
+            explicit_content_filter=explicit_content_filter, 
+            vanity_code=vanity_code, 
+            system_channel=system_channel, 
+            # system_channel_flags=..., 
+            preferred_locale=preferred_locale, 
+            rules_channel=rules_channel, 
+            public_updates_channel=public_updates_channel, 
+            premium_progress_bar_enabled=premium_progress_bar_enabled
+            )
+        await interactionsend(interaction=interaction, msg="Edited Guild", ephemeral=True)
