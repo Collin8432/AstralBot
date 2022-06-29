@@ -22,7 +22,6 @@ import disnake
 from disnake.ext.commands import Bot
 
  
-# Setting Up Bot
 if not os.path.isfile("./secret/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
 else:
@@ -53,6 +52,7 @@ if __name__ == "__main__":
     Used too load the cogs of the bot
     """
     loadCogs()
+
 
 
 # Starting The Bot

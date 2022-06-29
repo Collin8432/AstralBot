@@ -1,5 +1,5 @@
 """
-Contains * `webhooksend (title, description, guild_id)` - Used too send messages to a discord webhook
+Contains async def def webhooksend used too send messages to a discord webhook
 
 Copyright 2022-Present Astral 
 

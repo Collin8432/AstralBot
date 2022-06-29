@@ -1,5 +1,5 @@
 """
-Contains 
+Contains interaction send - used to send messages within an interaction
 
 Copyright 2022-Present Astral 
 
@@ -22,7 +22,13 @@ from typing import Optional
 
 
 
-async def interactionsend(interaction: ApplicationCommandInteraction, msg: Optional[str] = None, view: Optional[str] = None, ephemeral: bool = False, modal: Optional[str] = None, embed: Optional[str] = None) -> None:
+async def interactionsend(interaction: ApplicationCommandInteraction, 
+                          msg: Optional[str] = None, 
+                          view: Optional[str] = None, 
+                          ephemeral: bool = False, 
+                          modal: Optional[str] = None, 
+                          embed: Optional[str] = None
+                          ) -> None:
    if embed is not None:
       if embed.footer.text is None:
       
@@ -31,16 +37,30 @@ async def interactionsend(interaction: ApplicationCommandInteraction, msg: Optio
          )
    if modal is not None:
       await interaction.response.send_modal(modal=modal)
+      
+      
    elif ephemeral == True and view is None:
       await interaction.send(msg, ephemeral=True)
+      
+      
    elif ephemeral == True and view is None and embed is not None:
       await interaction.send(msg, ephemeral=True, embed=embed)
+      
+      
    elif ephemeral == True and view is not None and embed is not None:
       await interaction.send(msg, view=view, embed=embed, ephemeral=True)
+      
+      
    elif ephemeral == False and view is None and embed is not None:
       await interaction.send(msg, view=deleteinteraction(), embed=embed)
+      
+      
    elif ephemeral == False and view is not None and embed is not None:
       await interaction.send(msg, view=view, embed=embed)
+      
+   elif ephemeral == False and view is None and embed is None:
+      await interaction.send(msg, view=deleteinteraction()) 
+   
    else:
       await interaction.send(msg, ephemeral=True, view=view)
    

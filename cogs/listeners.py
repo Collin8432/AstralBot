@@ -114,20 +114,10 @@ class Events(commands.Cog):
 
    @commands.Cog.listener()
    async def on_slash_command_error(self, interaction: ApplicationCommandInteraction, error: Exception) -> None:
-      await interaction.response.defer(with_message=True, ephemeral=True)
       errormsg = error
-      for errors in disnake.ext.commands.errors.__all__:
-         if errors == type(error).__name__:
-            err = errors
-      if interaction.author.id == 935339228324311040:
-         embed = disnake.Embed(
-            title=f"{err}",
-            description=f"{errormsg}",
-            color=color,
-            timestamp=disnake.utils.utcnow()
-         )
-      else:
-         embed = disnake.Embed(
+      import traceback
+      traceback.print_exc()
+      embed = disnake.Embed(
             title="Error",
             description=f"Error With Command:\n```{errormsg}```",
             color=color,
@@ -137,14 +127,10 @@ class Events(commands.Cog):
          text=f"Command Error!"
       )
       try:
-         await interaction.edit_original_message(embed=embed, ephemeral=True)  
-         print(errormsg)
+         await interaction.response.defer()
+         await interaction.edit_original_message(embed=embed)
       except:
-         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
-         print(errormsg)
-      else:
-         print(errormsg)
-
+         await interactionsend(embed=embed)
 
 
    @commands.Cog.listener("on_message")
@@ -158,7 +144,7 @@ class Events(commands.Cog):
 
 
    @commands.Cog.listener()
-   async def on_message_delete(self, message):
+   async def on_message_delete(self, message: disnake.Message):
       if message.content == None or "" or " ":
          content = "**Message Content Unable To Be Retrieved, Likely Due To An Embeded Message**"
       else:

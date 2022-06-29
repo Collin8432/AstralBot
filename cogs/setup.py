@@ -1,4 +1,5 @@
 # Imports
+from time import time
 import traceback
 import disnake
 from disnake.ext import commands
@@ -191,24 +192,35 @@ class setupcmds(commands.Cog, name="Setup cmd"):
       
    # Commands
    @commands.slash_command(
-      name="database",
-      description="searches for servers db settings",
+    name="fetchdatabase",
+    description="fetches the guilds db"
    )
    @commands.has_permissions(administrator=True)
-   async def serversearchs(interaction: disnake.ApplicationCommandInteraction) -> None:
-      results = fetch_all_guild_information(f"{interaction.guild.id}")  
-     
-      embed = disnake.Embed(
-         title=f"Server Database",
-         description=f"🟥DO NOT SHARE THIS INFORMATION🟥\n{results}",  
-         color=color,
-         timestamp=disnake.utils.utcnow()
-      )
-      embed.set_footer(
-         text=f"Requested by {interaction.author}"
-      )
-      await interactionsend(interaction=interaction, embed=embed, ephemeral=True) 
-
+   async def fetchdatabase(self, interaction):
+      res = fetch_all_guild_information(f"{interaction.guild.id}")
+      
+      try:
+         res = res[0]
+         guild_name = res[0]
+         guild_id = res[1]
+         guild_webhook = res[2]
+         guild_membercountvoicechannel = res[3]
+         guild_verificationchannel = res[4]
+         guild_muterole = res[5]    
+         guild_verifyrole = res[6]     
+         embed = disnake.Embed(
+            title="Fetched Results!", 
+            description=f"**Guild Name:\n{guild_name}\nGuild ID:\n{guild_id}\nGuild Webhook:\n{guild_webhook}\nGuild Member Count Voice Channel:\n{guild_membercountvoicechannel}\nGuild Verification Channel:\n{guild_verificationchannel}\nGuild Muterole:\n{guild_muterole}\nGuild Verification Role:\n{guild_verifyrole}**",
+            color=color,
+            timestamp=disnake.utils.utcnow()
+         )
+      except:
+         embed = disnake.Embed(
+            title="Error Fetching Results!", 
+            color=color,
+            timestamp=disnake.utils.utcnow()
+         )
+      await interactionsend(interaction=interaction, embed=embed)
       
       
    @commands.slash_command(

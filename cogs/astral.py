@@ -3,7 +3,6 @@ import disnake
 from disnake.ext import commands
 
 
-astralid = [944297787779072020]
 
 
 
@@ -24,7 +23,7 @@ class Astral(commands.Cog, name="Astral"):
    @commands.slash_command(
       name="owneronly",
       description="owneronlycmd",
-      guild_ids=astralid
+      guild_ids=944297787779072020
    )
    @commands.is_owner()
    async def testinter(self, interaction):

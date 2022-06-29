@@ -40,3 +40,6 @@ def setup(bot):
    bot.add_cog(Tasks(bot))
    bot.add_cog(Verification(bot))
    bot.add_cog(Info(bot))
+   
+   
+   # TODO: finish cleaning code

@@ -10,10 +10,12 @@ db banned messages for a certain guild
 
 so for all the embeds, change the strings to remove !'s and add *'s and change capitalization
 
+
 """
 Style 
 title **HEY!**
 description **main** **subcategory**
 """
+
 
 add paginators to the on_button_click
