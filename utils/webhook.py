@@ -43,9 +43,11 @@ async def webhooksend(title: str, description: str, guild_id: str) -> None:
       async with aiohttp.ClientSession() as session:
          hook = fetch_guild_information("guild_webhook", guild_id)
          webhook = Webhook.from_url(f"{hook}", session=session)
+         description = str(description).replace("*", "")
+         title = str(title).replace("!", "")
          embed = disnake.Embed(
-            title=title,
-            description=description,
+            title=f"{title}!",
+            description=f"**{description}**",
             color=color,
             timestamp=disnake.utils.utcnow()
          )
