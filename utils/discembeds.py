@@ -28,7 +28,7 @@ helpemb = disnake.Embed(
 
 funemb = disnake.Embed(
     title="Fun ⚙️",
-    description="**/nerd** - NerdButton\n**/balls** - BallsButton\n**/9-11** - 9/11 In Discord\n**/emojify (text)** - Translates Text To Emojis\n**/slots** - Slots In Discord",
+    description="**/nerd** - NerdButton\n**/balls** - BallsButton\n**/emojify (text)** - Translates Text To Emojis\n**/slots** - Slots In Discord",
     color=color,
     timestamp=disnake.utils.utcnow(),
 )

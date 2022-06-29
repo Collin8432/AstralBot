@@ -1,3 +1,16 @@
+"""
+Contains all fun commands for the bot
+
+Copyright 2022-Present Astral 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
+
 # Imports
 import disnake
 from disnake.ext import commands
@@ -5,22 +18,16 @@ from disnake.enums import ButtonStyle
 from disnake import ApplicationCommandInteraction, Option, OptionType
 
 
-
-import asyncio
 import random
-
 
 
 from utils.color import color
 from utils.message import interactionsend
 
 
-
-# NerdButton View
 class NerdButton(disnake.ui.View):
       def __init__(self):
          super().__init__(timeout=None)
-
 
 
       @disnake.ui.button(emoji="🤓", style=ButtonStyle.red, custom_id="nerd")
@@ -28,7 +35,6 @@ class NerdButton(disnake.ui.View):
         self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
       ):
          await interactionsend(interaction=interaction, msg="nerd")
-   
    
    
       @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
@@ -39,8 +45,6 @@ class NerdButton(disnake.ui.View):
             await interaction.message.delete()
 
 
-
-# BallsButton View
 class BallsButton(disnake.ui.View):
    def __init__(self):
       super().__init__(timeout=None)
@@ -53,7 +57,6 @@ class BallsButton(disnake.ui.View):
       await interactionsend(interaction=interaction, msg="balls")
       
       
-      
    @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
    async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
@@ -62,22 +65,17 @@ class BallsButton(disnake.ui.View):
          await interaction.message.delete()
 
 
-
-# Fun Cog
 class Fun(commands.Cog, name="fun cmds"):
    def __init__(self, bot):
       self.bot = bot
 
 
-
-   # Commands
    @commands.slash_command(
       name="nerd",
       description="nerd"
    )
    async def nerd(self, interaction):
       await interactionsend(interaction=interaction, view=NerdButton())
-   
 
 
    @commands.slash_command(
@@ -86,61 +84,6 @@ class Fun(commands.Cog, name="fun cmds"):
    )
    async def balls(self, interaction):
       await interactionsend(interaction=interaction, view=BallsButton())
-
-
-
-   @commands.slash_command(
-      name="9-11",
-      description="9-11 in discord"
-      )
-   async def nine_eleven(interaction):
-      message = await interactionsend(interaction=interaction,   
-         msg=f'''``` #
-                        ,-------------------. 
-                     ,'                    ;
-                  ,'                    .'|
-                  ,'                    .'# |
-               ,'                    .'# # |
-               :-------------------.'# # # |
-               | # # # # # # # # # | # # # |
-               | # # # # # # # # # | # # # |
-               | # # # # # # # # # | # # # |
-               | # # # # # # # # # | # # # |
-               | # # # # # # # # # | # # # |
-               | # # # # # # # # # | # # # |
-               | #,-'. # # # # # # | # # # |
-               |_/'  / # # # # # # | # # # |
-         _.--""     /_ # # # # # # | # # #
-         '__.--,       `-.# # # # # | # #
-            /  /''`--.__; # # # # | #
-         _,| ,'  # # # # # # # # #|
-         `--|._`.```
-   ''')
-      await asyncio.sleep(.5)
-      await interaction.edit_original_message(  
-         content=f'''```
-                     ,-------------------.
-                     ,'                    ;  '::
-                  ,'                    .'|'::::
-            ::.: ,'                    .'# |::::':
-      ':':.: ,'                    .'# # |::':::'
-         :'. : :-------------------.'# # # |':::'::
-         :::.:| # # # # # # # # # | # # # |:::::'
-         ::.:..| # # # # # # # # # | # # # |::'
-      `:;.::'| # # # # # # # # # | # # # |
-      '::..:'| #.:::.. # # # # # | # # # |
-         :::::|.,:.:::::::..::# # | # # # |
-         `:::::::::::.::..:#::::.# | # # # |
-         `:':::`::'.::::. :: # # | # # # |
-         ,`::::::::::'::'::' # # | # # # |
-      `:;.::'| # # # # # # # # # | # # # |
-               | # # # # # # # # # | # # # |
-               | # # # # # # # # # | # # #
-               | # # # # # # # # # | # #
-               | # # # # # # # # # | #
-               | # # # # # # # # # |```
-   ''')
-
 
 
    @commands.slash_command(
@@ -188,8 +131,7 @@ class Fun(commands.Cog, name="fun cmds"):
                   .replace('x', '\u200B🇽')\
                   .replace('y', '\u200B🇾')\
                   .replace('z', '\u200B🇿')
-      await interactionsend(interaction=interaction, msg=text)
-      
+      await interactionsend(interaction=interaction, msg=text, ephemeral=True)
       
       
    @commands.slash_command(

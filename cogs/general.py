@@ -1,9 +1,21 @@
+"""
+Contains all general commands for the bot
+
+Copyright 2022-Present Astral 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
+
 # Imports
 import os
 import platform
 import random
 from typing import List
-
 
 
 import disnake
@@ -12,22 +24,17 @@ from disnake.enums import ButtonStyle
 from disnake.ext import commands
 
 
-
 from utils.webhook import webhooksend
 from utils.discembeds import helpemb, funemb, modemb, setupemb, nsfwemb
 from utils.color import color
 from utils.message import interactionsend
 
 
-
 global starttime
 starttime = disnake.utils.utcnow()
 
 
-
-# Class Paginator
 class Paginator(disnake.ui.View):
-    
     
     
     def __init__(self, embeds: List[disnake.Embed]):
@@ -42,7 +49,6 @@ class Paginator(disnake.ui.View):
             embed.set_footer(text=f"Page {i + 1} of {len(self.embeds)}")
     
     
-    
     @disnake.ui.button(emoji="⏪", style=disnake.ButtonStyle.blurple)
     async def first_page(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         self.embed_count = 0
@@ -54,8 +60,7 @@ class Paginator(disnake.ui.View):
         self.next_page.disabled = False
         self.last_page.disabled = False
         await interaction.response.edit_message(embed=embed, view=self)
-
-
+        
 
     @disnake.ui.button(emoji="◀", style=disnake.ButtonStyle.secondary)
     async def prev_page(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
@@ -70,11 +75,9 @@ class Paginator(disnake.ui.View):
         await interaction.response.edit_message(embed=embed, view=self)
 
 
-
     @disnake.ui.button(emoji="❌", style=disnake.ButtonStyle.red)
     async def remove(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         await interaction.response.edit_message(view=None)
-
 
 
     @disnake.ui.button(emoji="▶", style=disnake.ButtonStyle.secondary)
@@ -90,11 +93,9 @@ class Paginator(disnake.ui.View):
         await interaction.response.edit_message(embed=embed, view=self)
 
 
-
     @disnake.ui.button(emoji="⏩", style=disnake.ButtonStyle.blurple)
     async def last_page(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         self.embed_count = len(self.embeds) - 1
-        print(self.embeds[self.embed_count])
         embed = self.embeds[self.embed_count]
 
         self.first_page.disabled = False
@@ -104,8 +105,6 @@ class Paginator(disnake.ui.View):
         await interaction.response.edit_message(embed=embed, view=self)      
         
 
-
-# TicketReason Modal
 class TicketReason(disnake.ui.Modal):
     def __init__(self) -> None:
         components = [
@@ -141,15 +140,12 @@ class TicketReason(disnake.ui.Modal):
             text="Requested by {}".format(interaction.author)
         )
         await channel.send(embed=embed)
-        await webhooksend(f"Ticket Created", f"{interaction.author.mention} **Created A Ticket**\n**Reason:**\n{Reason}", f"{interaction.guild.id}")  
+        await webhooksend(f"Ticket Created!", f"{interaction.author.mention} **Created A Ticket**\n**Reason:**\n{Reason}", f"{interaction.guild.id}")  
 
 
-
-# Shutdown View 
 class Shutdown(disnake.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
-        
         
         
     @disnake.ui.button(emoji="✅", style=ButtonStyle.green, custom_id="shutdowncomfirm")
@@ -160,14 +156,12 @@ class Shutdown(disnake.ui.View):
         os._exit(0)
         
         
-        
     @disnake.ui.button(emoji="⛔", style=ButtonStyle.red, custom_id="shutdowncancel")
     async def Deny(
         self, button: disnake.ui.button, interaction: disnake.MessageInteraction  
     ):
         await interactionsend(interaction=interaction, msg="Cancelled")
         await interaction.message.delete()
-        
         
         
     @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
@@ -178,13 +172,10 @@ class Shutdown(disnake.ui.View):
          await interaction.message.delete()
 
 
-
-# HelpButtons View
 class HelpButtons(disnake.ui.View):
     def __init__(self):
         super().__init__()
         self.value = 0
-        
         
         
     @disnake.ui.button(label="General ⚙️", style=disnake.ButtonStyle.success, custom_id="genhelp")
@@ -194,8 +185,7 @@ class HelpButtons(disnake.ui.View):
             text="Requested by {}".format(interaction.author)
         )
         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
-
-
+        
 
     @disnake.ui.button(label="Fun 🎉", style=disnake.ButtonStyle.success, custom_id="funhelp")
     async def Fun(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
@@ -204,7 +194,6 @@ class HelpButtons(disnake.ui.View):
             text="Requested by {}".format(interaction.author)
         )   
         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
-
 
 
     @disnake.ui.button(label="Moderation 🚩", style=disnake.ButtonStyle.success, custom_id="modhelp")
@@ -216,7 +205,6 @@ class HelpButtons(disnake.ui.View):
         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
         
         
-        
     @disnake.ui.button(label="Setup ⚙️", style=disnake.ButtonStyle.success, custom_id="setuphelp")
     async def Setup(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         embed = setupemb
@@ -224,7 +212,6 @@ class HelpButtons(disnake.ui.View):
             text="Requested by {}".format(interaction.author)
         )
         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
-        
         
         
     @disnake.ui.button(label="NSFW 🔞", style=disnake.ButtonStyle.success, custom_id="nsfwhelp")
@@ -236,7 +223,6 @@ class HelpButtons(disnake.ui.View):
         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
     
     
-    
     @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
     async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
@@ -244,16 +230,12 @@ class HelpButtons(disnake.ui.View):
       else:
          await interaction.message.delete()
 
-            
 
-# General Cog
 class General(commands.Cog, name="General Cmds"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot  
    
-   
-   
-    # Commands
+
     @commands.slash_command(
         name="help",
         description="displays help command"
@@ -287,7 +269,6 @@ class General(commands.Cog, name="General Cmds"):
          )
         await interactionsend(interaction=interaction, embed=embed, view=HelpButtons())
 
- 
 
     @commands.slash_command(
         name="shutdown",
@@ -296,7 +277,6 @@ class General(commands.Cog, name="General Cmds"):
     @commands.is_owner()
     async def shutdown(interaction):
         await interactionsend(interaction=interaction, msg="Are You Sure?", view=Shutdown())
-
 
 
     @commands.slash_command(
@@ -331,14 +311,12 @@ class General(commands.Cog, name="General Cmds"):
         await interactionsend(interaction=interaction, embed=embed)
 
 
-
     @commands.slash_command(
        name="ticket",
        description="creates a ticket",
     )
     async def ticket(interaction):
         await interactionsend(interaction=interaction, modal=TicketReason())  
-
     
 
     @commands.slash_command(
@@ -358,7 +336,6 @@ class General(commands.Cog, name="General Cmds"):
             text="Requested by {}".format(interaction.author)
         )
         await interactionsend(interaction=interaction, embed=embed)  
-    
 
 
     @commands.slash_command(
@@ -368,7 +345,6 @@ class General(commands.Cog, name="General Cmds"):
     async def astral(self, interaction):
         pass
 
-
     
     @astral.sub_command(
         name="support",
@@ -376,7 +352,7 @@ class General(commands.Cog, name="General Cmds"):
     )
     async def link(self, interaction):
         embed = disnake.Embed(
-            title="Invite Link",
+            title="Invite Link!",
             description="https://discord.gg/NdwvUHCDcM",
             color=color,
             timestamp=disnake.utils.utcnow()
@@ -387,14 +363,13 @@ class General(commands.Cog, name="General Cmds"):
         await interactionsend(interaction=interaction, embed=embed)
 
 
-
     @astral.sub_command(
         name="invite",
         description="gets invite link to astral discord bot",
     )
     async def bot(self, interaction):
         embed = disnake.Embed(
-            title="Invite Link",
+            title="Bot Invite Link!",
             description="https://discord.com/api/oauth2/authorize?client_id=938579223780655145&permissions=8&scope=bot%20applications.commands",
             color=color,
             timestamp=disnake.utils.utcnow()
@@ -403,7 +378,6 @@ class General(commands.Cog, name="General Cmds"):
             text="Requested by {}".format(interaction.author)
         )
         await interactionsend(interaction=interaction, embed=embed)
-        
         
     
     @astral.sub_command(
@@ -419,7 +393,7 @@ class General(commands.Cog, name="General Cmds"):
         days = diff.days
         uptime_str = f"{days} days, {hours} hours, {minutes} minutes, {seconds} seconds"
         embed = disnake.Embed(
-            title="Uptime",
+            title="Uptime!",
             description="**The Bot Has Been Online For: {}**".format(uptime_str),
             color=color,
             timestamp=disnake.utils.utcnow(),
@@ -429,7 +403,6 @@ class General(commands.Cog, name="General Cmds"):
         )
         await interactionsend(interaction=interaction, embed=embed)
         
-        
     
     @astral.sub_command(
         name="credits",
@@ -437,7 +410,7 @@ class General(commands.Cog, name="General Cmds"):
     )
     async def credits(self, interaction):
         embed = disnake.Embed(
-            title="Credits",
+            title="Credits!",
             description=f"**Astral Bot**\n[**Disnake - Discord API Wrapper**](https://disnake.dev)\n[**Original Template - Credits To kkrypt0nn**](https://github.com/kkrypt0nn/Python-Discord-Bot-Template)\n**Coded By <@935339228324311040>**",
             color=color,
             timestamp=disnake.utils.utcnow()
@@ -448,7 +421,6 @@ class General(commands.Cog, name="General Cmds"):
         await interactionsend(interaction=interaction, embed=embed)
         
         
-        
     @commands.slash_command(
         name="allcmds",
         description="all commands"
@@ -456,19 +428,19 @@ class General(commands.Cog, name="General Cmds"):
     async def allcmds(self,  interaction):
         embeds = [
              disnake.Embed(
-                title="Commands Page 1",
+                title="Commands Page 1!",
                 description="",
                 color=color,
                 timestamp=disnake.utils.utcnow(),
             ),
             disnake.Embed(
-                title="Commands Page 2",
+                title="Commands Page 2!",
                 description="",
                 color=color,
                 timestamp=disnake.utils.utcnow(),
             ),
             disnake.Embed(
-                title="Commands Page 3",
+                title="Commands Page 3!",
                 description="",
                 color=color,
                 timestamp=disnake.utils.utcnow()

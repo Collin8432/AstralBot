@@ -1,13 +1,24 @@
+"""
+Contains all information commands for the bot
+
+Copyright 2022-Present Astral 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
+
 # Imports
 import disnake
 from disnake import Option, OptionType, ApplicationCommandInteraction
 from disnake.ext import commands
 
 
-
 from utils.color import color
 from utils.message import interactionsend
-
 
 
 appinfo = """
@@ -27,7 +38,6 @@ appinfo = """
 """
 
 
-
 userinfo = """
 **User Name:** `{username}`
 **User Id:** `{userid}`
@@ -42,7 +52,6 @@ userinfo = """
 **Top Role:** {toprole}
 **Roles:** \n{roles}
 """
-
 
 
 serverinfo = """
@@ -92,15 +101,11 @@ serverinfo = """
 """
 
 
-
-# Class Info
 class Info(commands.Cog, name="Info Cmds"):
    def __init__(self, bot: commands.Bot):
       self.bot = bot
    
    
-   
-   # Commands
    @commands.slash_command(
       name="appinfo",
       description="shows info about the bot",
@@ -117,7 +122,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       apptag=str(app.tags)
       apptags=apptag.replace("[", "").replace("]", "").replace("'", "")
       embed = disnake.Embed(
-         title="Appinfo",
+         title="Appinfo!",
          description=appinfo.format(
             appname=app.name,
             appid=app.id,
@@ -138,8 +143,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
          text="Requested by {}".format(interaction.author),
       )
       await interactionsend(interaction=interaction, embed=embed)
-      
-      
+
       
    @commands.slash_command(
       name="userinfo",
@@ -161,7 +165,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       roles = [role.mention for role in user.roles]
       roles = str(roles).replace("]", "").replace("[", "").replace("'", "")
       embed = disnake.Embed(
-         title="Userinfo",
+         title="Userinfo!",
          description=userinfo.format(
             username=user.name,
             userid=user.id,
@@ -185,7 +189,6 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       
       await interactionsend(interaction=interaction, embed=embed)
 
-
    
    @commands.slash_command(
       name="firstmessage",
@@ -195,7 +198,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       first_message = (await interaction.channel.history(limit = 1, oldest_first = True).flatten())[0]
       
       embed = disnake.Embed(
-         title="First Message",
+         title="First Message!",
          description=first_message.jump_url,
          color=color,
          timestamp=disnake.utils.utcnow(),
@@ -216,7 +219,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       with open("./todo.txt", "r") as f:
          todo = f.read()
       embed = disnake.Embed(
-         title="Todo List",
+         title="Todo List!",
          description=todo,
          color=color,
          timestamp=disnake.utils.utcnow(),
@@ -246,7 +249,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       if user is not None:
          url = user.avatar.url  
       embed = disnake.Embed(
-         title="Profile Picture",
+         title="Profile Picture!",
          color=color,
          timestamp=disnake.utils.utcnow()
       )
@@ -292,7 +295,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
             botroles += 1
       
       embed = disnake.Embed(
-         title="Serverinfo",
+         title="Serverinfo!",
          description=serverinfo.format(
             servername=interaction.guild.name, 
             serverid=interaction.guild.id, 
@@ -349,7 +352,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
    @commands.has_permissions(administrator=True)
    async def getauditlogs(self, interaction: ApplicationCommandInteraction):
       embed = disnake.Embed(
-            title="Logs",
+            title="Logs!",
             color=color,
             timestamp=disnake.utils.utcnow(),
          )

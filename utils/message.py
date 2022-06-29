@@ -39,7 +39,7 @@ async def interactionsend(interaction: ApplicationCommandInteraction,
       await interaction.response.send_modal(modal=modal)
       
       
-   elif ephemeral == True and view is None:
+   elif ephemeral == True and view is None and embed is None:
       await interaction.send(msg, ephemeral=True)
       
       
