@@ -25,14 +25,13 @@ from utils.webhook import webhooksend
 
 @tasks.loop(minutes=1.0)
 async def status_task(self) -> None:
-   statuses = [f"Watching Over {len(self.bot.guilds)} Servers"]
+   statuses = [f"Watching Over {len(self.bot.guilds)} Servers!", "With You!", "With Astro!", "In Space!"]
    await self.bot.change_presence(activity=disnake.Game(random.choice(statuses)))
    try:
       for guild in self.bot.guilds:
          members = len(guild.members)
-         ch = fetch_guild_information("guild_membercountvoicechannel", f"{id}")
+         ch = fetch_guild_information("guild_membercountvoicechannel", f"{guild.id}")
          if ch is not None:
-               gd = await self.bot.fetch_guild(id)
                try:
                   channel = await self.bot.fetch_channel(ch)
                except disnake.NotFound:
@@ -41,13 +40,8 @@ async def status_task(self) -> None:
                   await channel.edit(name=f"Members: {members}")
                except Exception as e:
                   print(e)
-         else:
-               list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-               s = random.choice(list)
-               if s == "a":
-                  await webhooksend(f"Member Channel Updates!", "We Reccomend Adding A Memberchannel To Your Server!\nTo Do This, Type `/setmembervoicechannel` In Any Voice Channel In Your Server!", f"{id}")
-   except: 
-      pass
+   except Exception as e:
+      print(e)
 
 
 class Tasks(commands.Cog, name="Tasks And Special Events"):

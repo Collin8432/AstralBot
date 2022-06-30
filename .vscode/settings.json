@@ -1,0 +1,17 @@
+{
+   "sqltools.connections": [
+      {
+         "mysqlOptions": {
+            "authProtocol": "default"
+         },
+         "previewLimit": 50,
+         "server": "containers-us-west-72.railway.app",
+         "port": 7359,
+         "driver": "MySQL",
+         "name": "Railway",
+         "database": "railway",
+         "username": "root",
+         "password": "7359"
+      }
+   ]
+}

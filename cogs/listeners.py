@@ -85,10 +85,10 @@ class Events(commands.Cog):
             )
             await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
          else:
-               await interactionsend(interaction=interaction, msg=f"Invalid Button! - {interaction.component.custom_id}")
+               await interactionsend(interaction=interaction, msg=f"Invalid Button! - Likely due to it being a paginator button, the paginator interaction has expired, run the command again please")
       except:
          pass
-     
+
      
    @commands.Cog.listener()
    async def on_connect(self):
@@ -102,7 +102,7 @@ class Events(commands.Cog):
    
    @commands.Cog.listener()
    async def on_ready(self):
-      print(f"Logged in as {self.bot.user.name}")
+      print(f"Logged in as {self.bot.user.name}")      
 
 
    @commands.Cog.listener()
@@ -125,12 +125,9 @@ class Events(commands.Cog):
       embed.set_footer(
          text=f"Command Error!"
       )
-      try:
-         await interaction.response.defer()
-         await interaction.edit_original_message(embed=embed)
-      except:
-         await interactionsend(interaction=interaction, embed=embed)
-
+      ch = interaction.channel.id
+      ch = await self.bot.get_channel(ch)
+      await ch.send(embed=embed)
 
    @commands.Cog.listener("on_message")
    async def on_message(self, message):

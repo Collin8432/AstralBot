@@ -454,3 +454,4 @@ class General(commands.Cog, name="General Cmds"):
         for cmd in s[26:]:
             embeds[2].add_field(name=f"{cmd.name}", value=f"{cmd.description}", inline=True)
         await interactionsend(interaction=interaction, embed=embeds[0], view=Paginator(embeds))
+    

@@ -1,6 +1,7 @@
 """
 Astral Bot
 Using Disnake API Wrapper
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Copyright 2022-Present Astral 
 
@@ -52,7 +53,6 @@ if __name__ == "__main__":
     Used too load the cogs of the bot
     """
     loadCogs()
-
 
 
 # Starting The Bot
