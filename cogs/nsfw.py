@@ -1,7 +1,19 @@
+"""
+Contains all NSFW commands for the bot
+
+Copyright 2022-Present Astral 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
+
 # Imports
 import disnake
 from disnake.ext import commands
-
 
 
 from utils.color import color
@@ -9,15 +21,12 @@ from utils.deleteinteraction import deleteinteraction
 from utils.message import interactionsend
 
 
-
 import aiohttp
-
 
 
 class nsfw(commands.Cog, name="NSFW"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-
 
 
     # Commands
@@ -28,6 +37,7 @@ class nsfw(commands.Cog, name="NSFW"):
     async def nsfw(self, interaction):
         pass
 
+
     @nsfw.sub_command(
         name="ass",
         description="show a random ass image",
@@ -35,7 +45,7 @@ class nsfw(commands.Cog, name="NSFW"):
     @commands.is_nsfw()
     async def ass(self, interaction):
         embed = disnake.Embed(
-            title="Ass",
+            title="Ass!",
             color=color,
             timestamp=disnake.utils.utcnow(),
         )
@@ -48,6 +58,7 @@ class nsfw(commands.Cog, name="NSFW"):
                 embed.set_image(url=res["message"])
                 await interactionsend(interaction=interaction, embed=embed)
 
+
     @nsfw.sub_command(
         name="hentai",
         description="Show a random hentai image",
@@ -55,7 +66,7 @@ class nsfw(commands.Cog, name="NSFW"):
     @commands.is_nsfw()
     async def hentai(self, interaction):
         embed = disnake.Embed(
-            title="hentai",
+            title="Hentai!",
             color=color,
             timestamp=disnake.utils.utcnow(),
         )
@@ -76,7 +87,7 @@ class nsfw(commands.Cog, name="NSFW"):
     @commands.is_nsfw()
     async def tits(self, interaction):
         embed = disnake.Embed(
-            title="Tits",
+            title="Tits!",
             color=color,
             timestamp=disnake.utils.utcnow(),
         )
@@ -89,6 +100,7 @@ class nsfw(commands.Cog, name="NSFW"):
                 embed.set_image(url=res["message"])
                 await interactionsend(interaction=interaction, embed=embed)
 
+
     @nsfw.sub_command(
         name="thighs",
         description="shows a random thighs image",
@@ -96,7 +108,7 @@ class nsfw(commands.Cog, name="NSFW"):
     @commands.is_nsfw()
     async def thighs(self, interaction):
         embed = disnake.Embed(
-            title="Thighs",
+            title="Thighs!",
             color=color,
             timestamp=disnake.utils.utcnow(),
         )

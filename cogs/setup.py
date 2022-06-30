@@ -1,9 +1,19 @@
+"""
+Contains all setup commands for the bot
+
+Copyright 2022-Present Astral 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
+
 # Imports
-from time import time
-import traceback
 import disnake
 from disnake.ext import commands
-
 
 
 from utils.db import *
@@ -12,8 +22,6 @@ from utils.color import color
 from utils.message import interactionsend
 
 
-
-# Setup Dropdown
 class SetupSelect(disnake.ui.Select):
    def __init__(self):
       options = [
@@ -49,7 +57,6 @@ class SetupSelect(disnake.ui.Select):
          max_values=1,
          options=options
       )
-      
       
       
    async def callback(self, interaction: disnake.MessageInteraction):
@@ -176,7 +183,6 @@ class SetupSelect(disnake.ui.Select):
       print(error)
          
          
-         
 class SetupSelectView(disnake.ui.View):
     def __init__(self):
         super().__init__()
@@ -184,13 +190,11 @@ class SetupSelectView(disnake.ui.View):
         self.add_item(SetupSelect())
 
 
-
 class setupcmds(commands.Cog, name="Setup cmd"):
    def __init__(self, bot):
       self.bot = bot
       
       
-   # Commands
    @commands.slash_command(
     name="fetchdatabase",
     description="fetches the guilds db"
@@ -229,4 +233,4 @@ class setupcmds(commands.Cog, name="Setup cmd"):
    )
    @commands.has_permissions(administrator=True)
    async def setup(self, interaction):
-      await interactionsend(interaction=interaction, msg="Choose The Correct Option, As This Cannot Be Undone.", view=SetupSelectView(), ephemeral=True)
+      await interactionsend(interaction=interaction, msg="Choose The Correct Option, As This Cannot Be Undone", view=SetupSelectView(), ephemeral=True)

@@ -1,8 +1,20 @@
+"""
+Contains all moderation commands for the bot
+
+Copyright 2022-Present Astral 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
+
 # Imports
 import disnake
 from disnake.ext import commands
 from disnake import ApplicationCommandInteraction, Option, OptionType
-
 
 
 from utils.webhook import webhooksend
@@ -11,12 +23,9 @@ from utils.color import color
 from utils.message import interactionsend
 
 
-
 from typing import Optional
 
 
-
-# Moderator Application Modal
 class ModApp(disnake.ui.Modal):
     def __init__(self) -> None:
         components = [
@@ -47,7 +56,6 @@ class ModApp(disnake.ui.Modal):
         super().__init__(title="Moderator Application", custom_id="ModApp", components=components)
 
 
-
     async def callback(self, interaction: disnake.ModalInteraction) -> None:
         ApplyingFor = interaction.text_values["ApplyingFor"]
         Experience = interaction.text_values["Experience"]
@@ -56,20 +64,15 @@ class ModApp(disnake.ui.Modal):
         await interactionsend(interaction=interaction, msg="Application Submitted Successfully!", ephemeral=True)
         
         
-        
     async def on_error(self, error: Exception, inter: disnake.ModalInteraction) -> None:
         await interactionsend(interaction=inter, msg=f"Error In Modal Interaction, {error}", ephemeral=True)
 
 
-
-# Moderation Cog
 class Moderation(commands.Cog, name="Mod Cmds"):
     def __init__(self, bot):
       self.bot = bot
 
 
-
-    # Commands
     @commands.slash_command(
         name="kick",
         description="kicks a member from the server",
@@ -95,7 +98,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
         if member.guild_permissions.administrator:  
             embed = disnake.Embed(
                 title="Error!",
-                description="User has Admin permissions.",
+                description="**User has Admin permissions**",
                 color=0xE02B2B,
                 timestamp=disnake.utils.utcnow()
             )
@@ -103,8 +106,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
         else:
             try:
                 embed = disnake.Embed(
-                    title="Member Kicked",
-                    description=f"<@{member.id}> Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}",  
+                    title="Member Kicked!",
+                    description=f"**<@{member.id}> Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}**",  
                     color=color,
                     timestamp=disnake.utils.utcnow()
                 )
@@ -112,7 +115,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 try:
                     embed = disnake.Embed(
                     title="You Were Kicked!",
-                    description=f"<@{member.id}> Was Kicked By <@{interaction.author.id}>\n**Reason:**\n{reason}",  
+                    description=f"**You were Kicked by <@{interaction.author.id}>\n**Reason:**\n{reason}**",  
                     color=color,
                     timestamp=disnake.utils.utcnow()
                     )
@@ -122,13 +125,12 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 await member.kick(reason=reason)  
             except:
                 embed = disnake.Embed(
-                    title="Error",
-                    description="Error While Kicking Member, Make Sure Member Does Not Have Higher Roles Than Me",
+                    title="Error!",
+                    description="**Error While Kicking Member, Make Sure Member Does Not Have Higher Roles Than Me**",
                     color=color,
                     timestamp=disnake.utils.utcnow()
                 )
                 await interactionsend(interaction=interaction, embed=embed)
-
 
 
     @commands.slash_command(
@@ -156,7 +158,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                   if member.guild_permissions.administrator:  
                       embed = disnake.Embed(
                           title="Error!",
-                          description="User Has Administrator Permissions",
+                          description="**User has Admin permissions**",
                           color=color,
                           timestamp=disnake.utils.utcnow()
                       )
@@ -164,8 +166,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                   else:
                       try:
                         embed = disnake.Embed(
-                            title="Member Banned",
-                            description=f"<@{member.id}> Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}",  
+                            title="Member Banned!",
+                            description=f"**<@{member.id}> Was Banned By <@{interaction.author.id}>\n**Reason:**\n{reason}**",  
                             color=color,
                             timestamp=disnake.utils.utcnow()
                         )
@@ -174,11 +176,10 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                       except:
                           embed = disnake.Embed(
                               title="Error!",
-                              description="Error While Banning Member, Make Sure Member Does Not Have Higher Roles Than Me",
+                              description="**Error While Banning Member, Make Sure Member Does Not Have Higher Roles Than Me**",
                               color=color,
                               timestamp=disnake.utils.utcnow()
                           )
-
 
 
     @commands.slash_command(
@@ -189,7 +190,6 @@ class Moderation(commands.Cog, name="Mod Cmds"):
       await interactionsend(interaction=interaction, modal=ModApp())
 
 
-
     @commands.slash_command(
         name="purge",
         description="purges all messages in a channel",
@@ -197,14 +197,13 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.has_permissions(manage_messages=True)
     async def purge(interaction: disnake.CommandInteraction):  
         embed = disnake.Embed(
-            title="Messages Purged",
-            description="Purged All Messages In This Channel",
+            title="Messages Purged!",
+            description="**Purged All Messages In This Channel**",
             color=color,
             timestamp=disnake.utils.utcnow()
         )
         await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
         await interaction.channel.purge(limit=200)
-
 
 
     @commands.slash_command(
@@ -214,13 +213,12 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.has_permissions(administrator=True)
     async def rules(interaction):
         embed = disnake.Embed(
-            title="Rules",
-            description="1. Dont Be Annoying\n2. Dont Ask For Free Shit/Mod\n3. Be Smart With What You Say And Do\n4. Please Be Kind And Follow Discord TOS",
+            title="Rules!",
+            description="**1. Dont Be Annoying\n2. Dont Ask For Free Shit/Mod\n3. Be Smart With What You Say And Do\n4. Please Be Kind And Follow Discord TOS**",
             color=color,
             timestamp=disnake.utils.utcnow()
         )
         await interactionsend(interaction=interaction, embed=embed)  
-
 
 
     @commands.slash_command(
@@ -242,8 +240,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
         try:
             await user.add_roles(muterole)  
             embed = disnake.Embed(
-                title="Member Muted",
-                description=f"<@{user.id}> Was Muted By <@{interaction.author.id}>",
+                title="Member Muted!",
+                description=f"**<@{user.id}> Was Muted By <@{interaction.author.id}>**",
                 color=color,
                 timestamp=disnake.utils.utcnow()
             )
@@ -251,17 +249,16 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 text="Requested by {}".format(interaction.author)
             )
             await interactionsend(interaction=interaction, embed=embed)
-        except Exception as e:
+        except:
             embed = disnake.Embed(
                 title="Error!",
-                description=f"Error While Muting Member, Make Sure Member Does Not Have Higher Roles Than Me\n{e}",
+                description=f"**Error While Muting Member, Make Sure Member Does Not Have Higher Roles Than Me**",
                 color=color,
                 timestamp=disnake.utils.utcnow()
             )
             embed.set_footer(
                 text="Requested by {}".format(interaction.author)
             )
-
 
 
     @commands.slash_command(
@@ -283,8 +280,8 @@ class Moderation(commands.Cog, name="Mod Cmds"):
         try:
             await user.remove_roles(muterole)
             embed = disnake.Embed(
-                title="Member Unmuted",
-                description=f"{user.mention} was unmuted by {interaction.author.mention}",
+                title="Member Unmuted!",
+                description=f"**{user.mention} was unmuted by {interaction.author.mention}**",
                 color=color,
                 timestamp=disnake.utils.utcnow(),
             )
@@ -292,13 +289,12 @@ class Moderation(commands.Cog, name="Mod Cmds"):
         except Exception as e:
             embed = disnake.Embed(
                 title="Error!",
-                description=f"Error While Unmuting Member, Make Sure Member Does Not Have Higher Roles Than Me\n{e}",
+                description=f"**Error While Unmuting Member, Make Sure Member Does Not Have Higher Roles Than Me**",
                 color=color,
                 timestamp=disnake.utils.utcnow(),
             )
             await interactionsend(interaction=interaction, embed=embed)
    
-
    
     @commands.slash_command(
         name="timeout",
@@ -328,13 +324,12 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     async def timeout(self, interaction: ApplicationCommandInteraction, user: disnake.User, time: int, reason: str = None):
         await user.timeout(user, time=time)  
         embed = disnake.Embed(
-            title="Member Timeout",
-            description=f"<@{user.id}> Was Timeout By <@{interaction.author.id}>\n**Time:**\n{time}\n**Reason:**\n{reason}",
+            title="Member Timed Out!",
+            description=f"**<@{user.id}> Was Timeout By <@{interaction.author.id}>\n**Time:**\n{time}\n**Reason:**\n{reason}**",
             color=color,
             timestamp=disnake.utils.utcnow()
         )
         await interactionsend(interaction=interaction, embed=embed)
-        
         
     
     @commands.slash_command(
