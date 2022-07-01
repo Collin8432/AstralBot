@@ -12,8 +12,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 # Imports
+from typing import Optional
+from click import pass_context
+
+
 import disnake
-from disnake import Option, OptionType, ApplicationCommandInteraction
 from disnake.ext import commands
 
 
@@ -45,12 +48,13 @@ userinfo = """
 **Joined At:** `{joindate}`
 **Account Created At:** `{accountcreatedat}`
 **Is Boosting Guild?:** `{boostingguild}`
-**Public Flags:** `{publicflags}`
 
 **Is Bot Account?:** `{isbotaccount}`
 **Animated Avatar?:** `{animatedavatar}`
 **Top Role:** {toprole}
 **Roles:** \n{roles}
+
+**Public Flags:**\n{flags}
 """
 
 
@@ -148,22 +152,23 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
    @commands.slash_command(
       name="userinfo",
       description="gets a user's information",
-      options=[
-         Option(
-            name="user",
-            description="user to get info about",
-            type=OptionType.user, 
-            required=True,
-         )
-      ]
    )
-   async def userinfo(self, interaction, user: disnake.User = None):
+   async def userinfo(self, interaction: disnake.ApplicationCommandInteraction,
+                      user: disnake.User = None):
       if user.bot == True:
          bot = "Is Bot Account"
       else:
          bot = "Isn't Bot Account"
       roles = [role.mention for role in user.roles]
       roles = str(roles).replace("]", "").replace("[", "").replace("'", "")
+      boosters = interaction.guild.premium_subscribers
+      if interaction.author in boosters:
+         boosting = True
+      else:
+         boosting = False
+         
+      flags = interaction.author.public_flags.all()
+      flags = str(flags).replace("[", "").replace("]", "")
       embed = disnake.Embed(
          title="Userinfo!",
          description=userinfo.format(
@@ -172,6 +177,8 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
             nickname=user.nick or "None",
             joindate=user.joined_at.strftime("%A %b %d, %Y"),
             accountcreatedat=user.created_at.strftime("%A %B %d, %Y"),
+            boostingguild=boosting,
+            flags=flags,
             isbotaccount=bot,
             animatedavatar=user.avatar.is_animated(),
             toprole=user.top_role.mention,
@@ -234,16 +241,10 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
    @commands.slash_command(
       name="pfp",
       description="gets a user's profile picture",
-      options=[
-         Option(
-            name="user",
-            description="user to get pfp of",
-            type=OptionType.user,
-            required=False
-         )
-      ],
    )
-   async def pfp(self, interaction, user: disnake.User = None):
+   async def pfp(self, interaction,
+                 user: Optional[disnake.User] = None
+                 ):
       if user is None:
          url = interaction.author.avatar.url 
       if user is not None:
@@ -350,7 +351,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       description="gets the recent audit logs for a server",
    )
    @commands.has_permissions(administrator=True)
-   async def getauditlogs(self, interaction: ApplicationCommandInteraction):
+   async def getauditlogs(self, interaction: disnake.ApplicationCommandInteraction):
       embed = disnake.Embed(
             title="Logs!",
             color=color,

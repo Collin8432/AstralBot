@@ -89,16 +89,10 @@ class Fun(commands.Cog, name="fun cmds"):
    @commands.slash_command(
       name="emojify",
       description="emojifies your text",
-      options=[
-         Option(
-               name="text",
-               description="The text to emojify",
-               type=OptionType.string,
-               required=True            
-         )
-      ]
    )
-   async def emojify(interaction: ApplicationCommandInteraction, text: str) -> None: 
+   async def emojify(interaction: ApplicationCommandInteraction,
+                     text: str = None,
+                     ) -> None: 
       if text != None:
          out = text.lower()
          text = out.replace(' ', '   ')\

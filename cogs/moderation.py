@@ -76,23 +76,10 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.slash_command(
         name="kick",
         description="kicks a member from the server",
-        options=[
-            Option(
-                name="user",
-                description="the member you want to kick",
-                type=OptionType.user,
-                required=True
-            ),
-            Option(
-                name="reason",
-                description="reason to kick member",
-                type=OptionType.string,
-                required=False
-            )
-        ]
     )
     @commands.has_permissions(kick_members=True)
-    async def kick(self, interaction: ApplicationCommandInteraction, user: disnake.User,
+    async def kick(self, interaction: ApplicationCommandInteraction,
+                   user: disnake.User,
                    reason: str = "Not specified") -> None:
         member = await interaction.guild.get_or_fetch_member(user.id)  
         if member.guild_permissions.administrator:  
@@ -136,23 +123,10 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.slash_command(
         name="ban",
         description="bans a member from the server",
-        options=[
-            Option(
-                name="user",
-                description="the member you want to ban",
-                type=OptionType.user,
-                required=True
-            ),
-            Option(
-                name="reason",
-                description="reason to ban member",
-                type=OptionType.string,
-                required=False
-            )
-        ]
     )
     @commands.has_permissions(ban_members=True)
-    async def ban(self, interaction: ApplicationCommandInteraction, user: disnake.User,
+    async def ban(self, interaction: ApplicationCommandInteraction,
+                  user: disnake.User,
                   reason: str = "Not specified") -> None:
                   member = await interaction.guild.get_or_fetch_member(user.id)  
                   if member.guild_permissions.administrator:  
@@ -224,17 +198,11 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.slash_command(
         name="mute",
         description="mutes a member",
-        options=[
-            Option(
-                name="user",
-                description="the member you want to mute",
-                type=OptionType.user,
-                required=True
-            ),
-        ]
     )
     @commands.has_permissions(manage_roles=True)
-    async def mute(self, interaction: ApplicationCommandInteraction, user: disnake.User) -> None:
+    async def mute(self, interaction: ApplicationCommandInteraction,
+                   user: disnake.User
+                   ) -> None:
         muterole = fetch_guild_information("guild_muterole", f"{interaction.guild.id}")
         muterole = interaction.guild.get_role(muterole)
         try:
@@ -264,17 +232,11 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.slash_command(
         name="unmute",
         description="unmutes a member",
-        options=[
-            Option(
-                name="user",
-                description="the member you want to unmute",
-                type=OptionType.user,
-                required=True
-            ),
-        ]
+
     )
     @commands.has_permissions(manage_roles=True)
-    async def unmute(self, interaction: ApplicationCommandInteraction, user: disnake.User):
+    async def unmute(self, interaction: ApplicationCommandInteraction,
+                     user: disnake.User):
         muterole = fetch_guild_information("guild_muterole", f"{interaction.guild.id}")  
         muterole = interaction.guild.get_role(muterole)
         try:
@@ -299,29 +261,12 @@ class Moderation(commands.Cog, name="Mod Cmds"):
     @commands.slash_command(
         name="timeout",
         description="timeouts a member",
-        options=[
-            Option(
-                name="user",
-                description="The Member You Want To Timeout",
-                type=OptionType.user,
-                required=True
-            ),
-            Option(
-                name="time",
-                description="The Timeout Time",
-                type=OptionType.integer,
-                required=True
-            ),
-            Option(
-                name="reason",
-                description="The Reason For Timeout",
-                type=OptionType.string,
-                required=False
-            ),
-        ]
     )
     @commands.has_permissions(manage_roles=True)
-    async def timeout(self, interaction: ApplicationCommandInteraction, user: disnake.User, time: int, reason: str = None):
+    async def timeout(self, interaction: ApplicationCommandInteraction,
+                      user: disnake.User,
+                      time: int,
+                      reason: Optional[str] = None):
         await user.timeout(user, time=time)  
         embed = disnake.Embed(
             title="Member Timed Out!",

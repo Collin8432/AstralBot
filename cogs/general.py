@@ -19,7 +19,7 @@ from typing import List
 
 
 import disnake
-from disnake import ApplicationCommandInteraction, Option, OptionType
+from disnake import ApplicationCommandInteraction
 from disnake.enums import ButtonStyle
 from disnake.ext import commands
 
@@ -282,22 +282,10 @@ class General(commands.Cog, name="General Cmds"):
     @commands.slash_command(
         name="randomchoice",
         description="picks a random choice out of 2 options",
-        options=[
-            Option(
-                name="choiceone",
-                description="First Choice",
-                type=OptionType.string,
-                required=True
-            ),
-            Option(
-                name="choicetwo",
-                description="Second Choice",
-                type=OptionType.string,
-                required=True
-            )
-        ]
     )
-    async def ranchoice(self, interaction: ApplicationCommandInteraction, choiceone: str, choicetwo: str):
+    async def ranchoice(self, interaction: ApplicationCommandInteraction,
+                        choiceone: str = None,
+                        choicetwo: str = None):
         choices = [choiceone, choicetwo]
         choicechoser = random.choice(choices)
         embed = disnake.Embed(
@@ -454,4 +442,51 @@ class General(commands.Cog, name="General Cmds"):
         for cmd in s[26:]:
             embeds[2].add_field(name=f"{cmd.name}", value=f"{cmd.description}", inline=True)
         await interactionsend(interaction=interaction, embed=embeds[0], view=Paginator(embeds))
-    
+        
+        
+    @commands.slash_command(
+        name="suggest",
+        description="suggest something to add to the bot"
+    )
+    async def suggestion(self,
+                         interaction: ApplicationCommandInteraction,
+                         suggestion: str = None):
+        ch = self.bot.get_channel(992463726814974082)
+        embed = disnake.Embed(
+            title="New Suggestion!",
+            description=f"**Suggestion:\n{suggestion}**",
+            color=color,
+            timestamp=disnake.utils.utcnow(),
+        )
+        embed.set_footer(
+            text="Sent by {name} • {id}".format(
+                name=interaction.author,
+                id = interaction.author.id
+            )
+        )
+        await ch.send(embed=embed)
+        await interaction.send(f"Suggestion sent successfully!\n{suggestion}", ephemeral=True)
+        
+        
+    @commands.slash_command(
+        name="probelm",
+        description="report a problem to the bot"
+    )
+    async def problem(self,
+                      interaction: ApplicationCommandInteraction,
+                      problem: str = None):
+        ch = self.bot.get_channel(992463768674119730)
+        embed = disnake.Embed(
+            title="New Problem!",
+            description=f"**Problem:\n{problem}**",
+            color=color,
+            timestamp=disnake.utils.utcnow()
+        )
+        embed.set_footer(
+            text="Sent by {name} • {id}".format(
+                name = interaction.author,
+                id = interaction.author.id
+            )
+        )
+        await ch.send(embed=embed)
+        await interaction.send(f"Problem sent successfully!\n{problem}", ephemeral=True)

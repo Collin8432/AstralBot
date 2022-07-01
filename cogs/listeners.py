@@ -126,8 +126,8 @@ class Events(commands.Cog):
          text=f"Command Error!"
       )
       ch = interaction.channel.id
-      ch = await self.bot.get_channel(ch)
-      await ch.send(embed=embed)
+      ch = self.bot.get_channel(ch)
+      await ch.send(embed=embed, ephemeral=True)
 
    @commands.Cog.listener("on_message")
    async def on_message(self, message):
