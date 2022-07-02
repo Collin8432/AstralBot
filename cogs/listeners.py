@@ -148,7 +148,7 @@ class Events(commands.Cog):
 
 
    @commands.Cog.listener()
-   async def on_member_ban(self, guild, user):
+   async def on_member_ban(self, guild, user: disnake.User):
       await webhooksend("Member Banned", f"{user.mention} Was Banned From {guild.name}", f"{guild.id}")
       embed = disnake.Embed(
          title=f"You Were Banned From {guild.name}",

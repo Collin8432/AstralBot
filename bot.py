@@ -24,7 +24,7 @@ from disnake.ext.commands import Bot
 
  
 if not os.path.isfile("./secret/config.json"):
-    sys.exit("'config.json' not found! Please add it and try again.")
+    sys.exit("'/secret/config.json' not found! Please add it and try again.")
 else:
     with open("./secret/config.json") as file:
         config = json.load(file)
