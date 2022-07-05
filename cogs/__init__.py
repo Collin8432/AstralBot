@@ -23,6 +23,7 @@ from .tasks import *
 from .verification import *
 from .astral import *
 from .info import *
+from .giveaway import *
 
 
 def setup(bot):
@@ -40,3 +41,4 @@ def setup(bot):
    bot.add_cog(Tasks(bot))
    bot.add_cog(Verification(bot))
    bot.add_cog(Info(bot))
+   bot.add_cog(Giveaways(bot))

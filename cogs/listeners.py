@@ -127,7 +127,7 @@ class Events(commands.Cog):
       )
       ch = interaction.channel.id
       ch = self.bot.get_channel(ch)
-      await ch.send(embed=embed, ephemeral=True)
+      await ch.send(embed=embed)
 
    @commands.Cog.listener("on_message")
    async def on_message(self, message):
