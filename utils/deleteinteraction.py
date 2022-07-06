@@ -20,7 +20,7 @@ from disnake.enums import ButtonStyle
 from typing import Optional
 
 
-async def interactionsend(interaction: ApplicationCommandInteraction, msg: Optional[str] = None, view: Optional[str] = None, ephemeral: bool = False, modal: Optional[str] = None, embed: Optional[str] = None) -> None:
+async def send(interaction: ApplicationCommandInteraction, msg: Optional[str] = None, view: Optional[str] = None, ephemeral: bool = False, modal: Optional[str] = None, embed: Optional[str] = None) -> None:
    if embed.footer.text is None:
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
@@ -46,6 +46,6 @@ class deleteinteraction(disnake.ui.View):
    @disnake.ui.button(label="Delete Message ❌", style=ButtonStyle.red, custom_id="deleteinter")
    async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
-         await interactionsend(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
+         await send(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
       else:
          await interaction.message.delete()

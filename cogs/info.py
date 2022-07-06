@@ -21,7 +21,7 @@ from disnake.ext import commands
 
 
 from utils.color import color
-from utils.message import interactionsend
+from utils.message import send
 
 
 appinfo = """
@@ -146,7 +146,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       embed.set_footer(
          text="Requested by {}".format(interaction.author),
       )
-      await interactionsend(interaction=interaction, embed=embed)
+      await send(interaction=interaction, embed=embed)
 
       
    @commands.slash_command(
@@ -194,7 +194,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
          url=user.avatar.url
       )
       
-      await interactionsend(interaction=interaction, embed=embed)
+      await send(interaction=interaction, embed=embed)
 
    
    @commands.slash_command(
@@ -214,7 +214,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
          text="Requested by {}".format(interaction.author)
       )
       
-      await interactionsend(interaction=interaction, embed=embed)
+      await send(interaction=interaction, embed=embed)
       
       
       
@@ -234,7 +234,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await interactionsend(interaction=interaction, embed=embed)
+      await send(interaction=interaction, embed=embed)
    
    
    
@@ -260,7 +260,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       embed.set_image(
          url=url
       )
-      await interactionsend(interaction=interaction, embed=embed)
+      await send(interaction=interaction, embed=embed)
       
       
       
@@ -342,7 +342,7 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await interactionsend(interaction=interaction, embed=embed)
+      await send(interaction=interaction, embed=embed)
       
       
       
@@ -363,4 +363,4 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
             name="Logs",
             value=f"```{entry.user} did {entry.action} to {entry.target}```",
          )
-      await interactionsend(interaction=interaction, embed=embed)
+      await send(interaction=interaction, embed=embed)

@@ -11,24 +11,25 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 """
 
 # Imports
+import disnake
 from disnake import ApplicationCommandInteraction
 
 
 from .deleteinteraction import deleteinteraction
 
 
-
 from typing import Optional
 
 
-
-async def interactionsend(interaction: ApplicationCommandInteraction, 
-                          msg: Optional[str] = None, 
-                          view: Optional[str] = None, 
-                          ephemeral: bool = False, 
-                          modal: Optional[str] = None, 
-                          embed: Optional[str] = None
-                          ) -> None:
+async def send(
+   interaction: Optional[ApplicationCommandInteraction], 
+   msg: Optional[str] = None, 
+   view: Optional[str] = None, 
+   ephemeral: bool = False, 
+   modal: Optional[str] = None, 
+   embed: Optional[str] = None,
+   channel: Optional[disnake.TextChannel] = None,
+   ) -> None:
    if embed is not None:
       if embed.footer.text is None:
       
@@ -36,31 +37,52 @@ async def interactionsend(interaction: ApplicationCommandInteraction,
             text="Requested by {}".format(interaction.author)
          )
    if modal is not None:
-      await interaction.response.send_modal(modal=modal)
+      return await interaction.response.send_modal(modal=modal)
       
       
-   elif ephemeral == True and view is None and embed is None:
-      await interaction.send(msg, ephemeral=True)
+   elif ephemeral == True and view is None and embed is None and channel is None:
+      return await interaction.send(msg, ephemeral=True)
       
       
-   elif ephemeral == True and view is None and embed is not None:
-      await interaction.send(msg, ephemeral=True, embed=embed)
+   elif ephemeral == True and view is None and embed is not None and channel is None:
+      return await interaction.send(msg, ephemeral=True, embed=embed)
       
       
-   elif ephemeral == True and view is not None and embed is not None:
-      await interaction.send(msg, view=view, embed=embed, ephemeral=True)
+   elif ephemeral == True and view is not None and embed is not None and channel is None:
+      return await interaction.send(msg, view=view, embed=embed, ephemeral=True)
       
       
-   elif ephemeral == False and view is None and embed is not None:
-      await interaction.send(msg, view=deleteinteraction(), embed=embed)
+   elif ephemeral == False and view is None and embed is not None and channel is None:
+      return await interaction.send(msg, view=deleteinteraction(), embed=embed)
       
       
-   elif ephemeral == False and view is not None and embed is not None:
-      await interaction.send(msg, view=view, embed=embed)
+   elif ephemeral == False and view is not None and embed is not None and channel is None:
+      return await interaction.send(msg, view=view, embed=embed)
       
-   elif ephemeral == False and view is None and embed is None:
-      await interaction.send(msg, view=deleteinteraction()) 
+   elif ephemeral == False and view is None and embed is None and channel is None:
+      return await interaction.send(msg, view=deleteinteraction()) 
    
+   elif ephemeral == True and view is None and embed is None and channel is not None:
+      return await channel.send(msg, ephemeral=True)
+      
+      
+   elif ephemeral == True and view is None and embed is not None and channel is not None:
+      return await channel.send(msg, ephemeral=True, embed=embed)
+      
+      
+   elif ephemeral == True and view is not None and embed is not None and channel is not None:
+      return await channel.send(msg, view=view, embed=embed, ephemeral=True)
+      
+      
+   elif ephemeral == False and view is None and embed is not None and channel is not None:
+      return await channel.send(msg, view=deleteinteraction(), embed=embed)
+      
+      
+   elif ephemeral == False and view is not None and embed is not None and channel is not None:
+      return await channel.send(msg, view=view, embed=embed)
+      
+   elif ephemeral == False and view is None and embed is None and channel is not None:
+      return await channel.send(msg, view=deleteinteraction()) 
+ 
    else:
-      await interaction.send(msg, ephemeral=True, view=view)
-   
+      return await interaction.send(msg, ephemeral=True, view=view)

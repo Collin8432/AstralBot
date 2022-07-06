@@ -1,5 +1,5 @@
 """
-Astral cogs
+Contains Poll commands for the bot
 
 Copyright 2022-Present Astral 
 
@@ -11,36 +11,42 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 """
 
 
-
 # Imports
-from .fun import *
-from .general import *
-from .listeners import *
-from .moderation import *
-from .nsfw import *
-from .setup import *
-from .tasks import *
-from .verification import *
-from .astral import *
-from .info import *
-from .giveaway import *
-from .poll import *
+import disnake
+from disnake.ext import commands
 
 
-def setup(bot):
-   """
-   * `setup`
-   Used by bot.load_extention to load classes
-   """
-   bot.add_cog(Astral(bot))
-   bot.add_cog(Fun(bot))
-   bot.add_cog(General(bot))
-   bot.add_cog(Events(bot))
-   bot.add_cog(Moderation(bot))
-   bot.add_cog(Nsfw(bot))
-   bot.add_cog(Setup(bot))
-   bot.add_cog(Tasks(bot))
-   bot.add_cog(Verification(bot))
-   bot.add_cog(Info(bot))
-   bot.add_cog(Giveaways(bot))
-   bot.add_cog(Poll(bot))
+from utils.color import color
+from utils.message import send
+
+
+from typing import Optional
+
+
+class Poll(commands.Cog):
+   def __init__(self, bot: commands.Bot):
+      self.bot = bot
+      
+      
+   @commands.slash_command(
+      name="poll",
+      description="create a poll",
+   )
+   async def poll(
+      self,
+      interaction,
+      poll: str,
+      ):
+         embed = disnake.Embed(
+            title="📢 {} 📢".format(poll),
+            description="React with the emoji you want to vote for",
+            timestamp=disnake.utils.utcnow(),
+            color=color
+         )
+         import traceback
+         try:
+            message = await interaction.send(embed=embed)
+            await message.add_reaction("✅")
+            await message.add_reaction("❌")
+         except:
+            traceback.print_exc()

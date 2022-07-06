@@ -27,7 +27,7 @@ from disnake.ext import commands
 from utils.webhook import webhooksend
 from utils.discembeds import helpemb, funemb, modemb, setupemb, nsfwemb
 from utils.color import color
-from utils.message import interactionsend
+from utils.message import send
 
 
 global starttime
@@ -121,7 +121,7 @@ class TicketReason(disnake.ui.Modal):
     async def callback(self, interaction: disnake.ModalInteraction) -> None:
         global Reason
         Reason = interaction.text_values["Reason"]
-        await interactionsend(interaction=interaction, msg="Ticket Submitted Successfully!", ephemeral=True)
+        await send(interaction=interaction, msg="Ticket Submitted Successfully!", ephemeral=True)
         ticketchannel = await interaction.guild.create_text_channel(  
         name=f"ticket-{interaction.author.name}", 
         overwrites={ 
@@ -152,7 +152,7 @@ class Shutdown(disnake.ui.View):
     async def Confirm(
         self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
     ):
-        await interactionsend(interaction=interaction, msg="exiting...")
+        await send(interaction=interaction, msg="exiting...")
         os._exit(0)
         
         
@@ -160,14 +160,14 @@ class Shutdown(disnake.ui.View):
     async def Deny(
         self, button: disnake.ui.button, interaction: disnake.MessageInteraction  
     ):
-        await interactionsend(interaction=interaction, msg="Cancelled")
+        await send(interaction=interaction, msg="Cancelled")
         await interaction.message.delete()
         
         
     @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
     async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
-         await interactionsend(interaction=interaction, msg="You Must Be The Author To Delete The Interaction", ephemeral=True)
+         await send(interaction=interaction, msg="You Must Be The Author To Delete The Interaction", ephemeral=True)
       else:
          await interaction.message.delete()
 
@@ -184,7 +184,7 @@ class HelpButtons(disnake.ui.View):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
+        await send(interaction=interaction, embed=embed, ephemeral=True)
         
 
     @disnake.ui.button(label="Fun 🎉", style=disnake.ButtonStyle.success, custom_id="funhelp")
@@ -193,7 +193,7 @@ class HelpButtons(disnake.ui.View):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )   
-        await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
+        await send(interaction=interaction, embed=embed, ephemeral=True)
 
 
     @disnake.ui.button(label="Moderation 🚩", style=disnake.ButtonStyle.success, custom_id="modhelp")
@@ -202,7 +202,7 @@ class HelpButtons(disnake.ui.View):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
+        await send(interaction=interaction, embed=embed, ephemeral=True)
         
         
     @disnake.ui.button(label="Setup ⚙️", style=disnake.ButtonStyle.success, custom_id="setuphelp")
@@ -211,7 +211,7 @@ class HelpButtons(disnake.ui.View):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
+        await send(interaction=interaction, embed=embed, ephemeral=True)
         
         
     @disnake.ui.button(label="NSFW 🔞", style=disnake.ButtonStyle.success, custom_id="nsfwhelp")
@@ -220,13 +220,13 @@ class HelpButtons(disnake.ui.View):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
+        await send(interaction=interaction, embed=embed, ephemeral=True)
     
     
     @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
     async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
-         await interactionsend(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
+         await send(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
       else:
          await interaction.message.delete()
 
@@ -267,7 +267,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
          )
-        await interactionsend(interaction=interaction, embed=embed, view=HelpButtons())
+        await send(interaction=interaction, embed=embed, view=HelpButtons())
 
 
     @commands.slash_command(
@@ -276,7 +276,7 @@ class General(commands.Cog, name="General Cmds"):
     )
     @commands.is_owner()
     async def shutdown(interaction):
-        await interactionsend(interaction=interaction, msg="Are You Sure?", view=Shutdown())
+        await send(interaction=interaction, msg="Are You Sure?", view=Shutdown())
 
 
     @commands.slash_command(
@@ -296,7 +296,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await interactionsend(interaction=interaction, embed=embed)
+        await send(interaction=interaction, embed=embed)
 
 
     @commands.slash_command(
@@ -304,7 +304,7 @@ class General(commands.Cog, name="General Cmds"):
        description="creates a ticket",
     )
     async def ticket(interaction):
-        await interactionsend(interaction=interaction, modal=TicketReason())  
+        await send(interaction=interaction, modal=TicketReason())  
     
 
     @commands.slash_command(
@@ -323,7 +323,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await interactionsend(interaction=interaction, embed=embed)  
+        await send(interaction=interaction, embed=embed)  
 
 
     @commands.slash_command(
@@ -348,7 +348,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text=f"Requested by {interaction.author}"
         )
-        await interactionsend(interaction=interaction, embed=embed)
+        await send(interaction=interaction, embed=embed)
 
 
     @astral.sub_command(
@@ -365,7 +365,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await interactionsend(interaction=interaction, embed=embed)
+        await send(interaction=interaction, embed=embed)
         
     
     @astral.sub_command(
@@ -389,7 +389,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await interactionsend(interaction=interaction, embed=embed)
+        await send(interaction=interaction, embed=embed)
         
     
     @astral.sub_command(
@@ -406,7 +406,7 @@ class General(commands.Cog, name="General Cmds"):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await interactionsend(interaction=interaction, embed=embed)
+        await send(interaction=interaction, embed=embed)
         
         
     @commands.slash_command(
@@ -441,7 +441,7 @@ class General(commands.Cog, name="General Cmds"):
             embeds[1].add_field(name=f"{cmd.name}", value=f"{cmd.description}", inline=True)
         for cmd in s[26:]:
             embeds[2].add_field(name=f"{cmd.name}", value=f"{cmd.description}", inline=True)
-        await interactionsend(interaction=interaction, embed=embeds[0], view=Paginator(embeds))
+        await send(interaction=interaction, embed=embeds[0], view=Paginator(embeds))
         
         
     @commands.slash_command(

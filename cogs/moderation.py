@@ -20,7 +20,7 @@ from disnake import ApplicationCommandInteraction, Option, OptionType
 from utils.webhook import webhooksend
 from utils.db import *
 from utils.color import color
-from utils.message import interactionsend
+from utils.message import send
 
 
 from typing import Optional
@@ -61,11 +61,11 @@ class ModApp(disnake.ui.Modal):
         Experience = interaction.text_values["Experience"]
         BR = interaction.text_values["BR"]
         await webhooksend("New Application", f"<@{interaction.author.id}> Submitted This Application \n**Appplying For:**\n{ApplyingFor}\n**Experience:**\n{Experience}\n**Why Are You Better Than Others For Your Role:**\n{BR}", f"{interaction.guild.id}")  
-        await interactionsend(interaction=interaction, msg="Application Submitted Successfully!", ephemeral=True)
+        await send(interaction=interaction, msg="Application Submitted Successfully!", ephemeral=True)
         
         
     async def on_error(self, error: Exception, inter: disnake.ModalInteraction) -> None:
-        await interactionsend(interaction=inter, msg=f"Error In Modal Interaction, {error}", ephemeral=True)
+        await send(interaction=inter, msg=f"Error In Modal Interaction, {error}", ephemeral=True)
 
 
 class Moderation(commands.Cog, name="Mod Cmds"):
@@ -89,7 +89,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 color=0xE02B2B,
                 timestamp=disnake.utils.utcnow()
             )
-            await interactionsend(interaction=interaction, embed=embed)
+            await send(interaction=interaction, embed=embed)
         else:
             try:
                 embed = disnake.Embed(
@@ -98,7 +98,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     color=color,
                     timestamp=disnake.utils.utcnow()
                 )
-                await interactionsend(interaction=interaction, embed=embed)
+                await send(interaction=interaction, embed=embed)
                 try:
                     embed = disnake.Embed(
                     title="You Were Kicked!",
@@ -117,7 +117,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                     color=color,
                     timestamp=disnake.utils.utcnow()
                 )
-                await interactionsend(interaction=interaction, embed=embed)
+                await send(interaction=interaction, embed=embed)
 
 
     @commands.slash_command(
@@ -136,7 +136,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                           color=color,
                           timestamp=disnake.utils.utcnow()
                       )
-                      await interactionsend(interaction=interaction, embed=embed)
+                      await send(interaction=interaction, embed=embed)
                   else:
                       try:
                         embed = disnake.Embed(
@@ -145,7 +145,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                             color=color,
                             timestamp=disnake.utils.utcnow()
                         )
-                        await interactionsend(interaction=interaction, embed=embed)
+                        await send(interaction=interaction, embed=embed)
                         await member.ban(reason=reason)  
                       except:
                           embed = disnake.Embed(
@@ -161,7 +161,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
        description="sends a moderator appliction"
     )
     async def Appliction(interaction: disnake.CommandInteraction):  
-      await interactionsend(interaction=interaction, modal=ModApp())
+      await send(interaction=interaction, modal=ModApp())
 
 
     @commands.slash_command(
@@ -176,7 +176,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=color,
             timestamp=disnake.utils.utcnow()
         )
-        await interactionsend(interaction=interaction, embed=embed, ephemeral=True)
+        await send(interaction=interaction, embed=embed, ephemeral=True)
         await interaction.channel.purge(limit=200)
 
 
@@ -192,7 +192,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=color,
             timestamp=disnake.utils.utcnow()
         )
-        await interactionsend(interaction=interaction, embed=embed)  
+        await send(interaction=interaction, embed=embed)  
 
 
     @commands.slash_command(
@@ -216,7 +216,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             embed.set_footer(
                 text="Requested by {}".format(interaction.author)
             )
-            await interactionsend(interaction=interaction, embed=embed)
+            await send(interaction=interaction, embed=embed)
         except:
             embed = disnake.Embed(
                 title="Error!",
@@ -247,7 +247,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 color=color,
                 timestamp=disnake.utils.utcnow(),
             )
-            await interactionsend(interaction=interaction, embed=embed)
+            await send(interaction=interaction, embed=embed)
         except Exception as e:
             embed = disnake.Embed(
                 title="Error!",
@@ -255,7 +255,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
                 color=color,
                 timestamp=disnake.utils.utcnow(),
             )
-            await interactionsend(interaction=interaction, embed=embed)
+            await send(interaction=interaction, embed=embed)
    
    
     @commands.slash_command(
@@ -274,7 +274,7 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             color=color,
             timestamp=disnake.utils.utcnow()
         )
-        await interactionsend(interaction=interaction, embed=embed)
+        await send(interaction=interaction, embed=embed)
         
     
     @commands.slash_command(
@@ -355,4 +355,4 @@ class Moderation(commands.Cog, name="Mod Cmds"):
             public_updates_channel=public_updates_channel, 
             premium_progress_bar_enabled=premium_progress_bar_enabled
             )
-        await interactionsend(interaction=interaction, msg="Edited Guild", ephemeral=True)
+        await send(interaction=interaction, msg="Edited Guild", ephemeral=True)

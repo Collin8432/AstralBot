@@ -18,13 +18,13 @@ from disnake.ext import commands
 
 from utils.color import color
 from utils.deleteinteraction import deleteinteraction
-from utils.message import interactionsend
+from utils.message import send
 
 
 import aiohttp
 
 
-class nsfw(commands.Cog, name="NSFW"):
+class Nsfw(commands.Cog, name="NSFW"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
@@ -56,7 +56,7 @@ class nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=ass") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await interactionsend(interaction=interaction, embed=embed)
+                await send(interaction=interaction, embed=embed)
 
 
     @nsfw.sub_command(
@@ -77,7 +77,7 @@ class nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=hentai") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await interactionsend(interaction=interaction, embed=embed)
+                await send(interaction=interaction, embed=embed)
 
 
     @nsfw.sub_command(
@@ -98,7 +98,7 @@ class nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=tits") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await interactionsend(interaction=interaction, embed=embed)
+                await send(interaction=interaction, embed=embed)
 
 
     @nsfw.sub_command(
@@ -119,4 +119,4 @@ class nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=thighs") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await interactionsend(interaction=interaction, embed=embed)
+                await send(interaction=interaction, embed=embed)

@@ -22,7 +22,7 @@ import random
 
 
 from utils.color import color
-from utils.message import interactionsend
+from utils.message import send
 
 
 class NerdButton(disnake.ui.View):
@@ -34,13 +34,13 @@ class NerdButton(disnake.ui.View):
       async def first_button(
         self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
       ):
-         await interactionsend(interaction=interaction, msg="nerd")
+         await send(interaction=interaction, msg="nerd")
    
    
       @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
       async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
          if not interaction.author:
-            await interactionsend(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
+            await send(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
          else:
             await interaction.message.delete()
 
@@ -54,13 +54,13 @@ class BallsButton(disnake.ui.View):
    async def first_button(
       self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
    ):
-      await interactionsend(interaction=interaction, msg="balls")
+      await send(interaction=interaction, msg="balls")
       
       
    @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
    async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
-         await interactionsend(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
+         await send(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
       else:
          await interaction.message.delete()
 
@@ -75,7 +75,7 @@ class Fun(commands.Cog, name="fun cmds"):
       description="nerd"
    )
    async def nerd(self, interaction):
-      await interactionsend(interaction=interaction, view=NerdButton())
+      await send(interaction=interaction, view=NerdButton())
 
 
    @commands.slash_command(
@@ -83,7 +83,7 @@ class Fun(commands.Cog, name="fun cmds"):
       description="balls"
    )
    async def balls(self, interaction):
-      await interactionsend(interaction=interaction, view=BallsButton())
+      await send(interaction=interaction, view=BallsButton())
 
 
    @commands.slash_command(
@@ -125,7 +125,7 @@ class Fun(commands.Cog, name="fun cmds"):
                   .replace('x', '\u200B🇽')\
                   .replace('y', '\u200B🇾')\
                   .replace('z', '\u200B🇿')
-      await interactionsend(interaction=interaction, msg=text, ephemeral=True)
+      await send(interaction=interaction, msg=text, ephemeral=True)
       
       
    @commands.slash_command(
@@ -150,4 +150,4 @@ class Fun(commands.Cog, name="fun cmds"):
          timestamp=disnake.utils.utcnow(),
          color=color
       )
-      await interactionsend(interaction=interaction, embed=embed)
+      await send(interaction=interaction, embed=embed)
