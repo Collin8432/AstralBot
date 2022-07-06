@@ -13,7 +13,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 # Imports
 from typing import Optional
-from click import pass_context
 
 
 import disnake
@@ -24,38 +23,6 @@ from utils.color import color
 from utils.message import send
 
 
-appinfo = """
-**App Name:** `{appname}`
-**App Id:** `{appid}`
-**Bot Name:** `{botname}`
-**Bot Id:** `{botid}`
-**Public Bot:** `{publicbot}`
-**Requires Bot Code Grant:** `{codegrant}`
-**Terms Of Service URL:** `{tosurl}`
-**Privacy Policy URL:** `{ppurl}`
-**Bot Invite URL: ** {inviteurl}
-
-**App Flags:** \n`{appflags}`
-
-**App Tags:** \n`{apptags}`
-"""
-
-
-userinfo = """
-**User Name:** `{username}`
-**User Id:** `{userid}`
-**Nickname?:** `{nickname}`
-**Joined At:** `{joindate}`
-**Account Created At:** `{accountcreatedat}`
-**Is Boosting Guild?:** `{boostingguild}`
-
-**Is Bot Account?:** `{isbotaccount}`
-**Animated Avatar?:** `{animatedavatar}`
-**Top Role:** {toprole}
-**Roles:** \n{roles}
-
-**Public Flags:**\n{flags}
-"""
 
 
 serverinfo = """
@@ -109,92 +76,6 @@ class Info(commands.Cog, name="Info Cmds"):
    def __init__(self, bot: commands.Bot):
       self.bot = bot
    
-   
-   @commands.slash_command(
-      name="appinfo",
-      description="shows info about the bot",
-   )
-   async def appinfo(self, interaction):
-      app = await self.bot.application_info()
-      appflags=f"""Gateway Presence: {app.flags.gateway_presence}
-Gateway Presence Limited: {app.flags.gateway_presence_limited}
-Gateway Guild Members: {app.flags.gateway_guild_members}
-Verificaiton Pending Guild Limit: {app.flags.verification_pending_guild_limit}
-Embedded: {app.flags.embedded}
-Gateway Message Content: {app.flags.gateway_message_content}
-Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
-      apptag=str(app.tags)
-      apptags=apptag.replace("[", "").replace("]", "").replace("'", "")
-      embed = disnake.Embed(
-         title="Appinfo!",
-         description=appinfo.format(
-            appname=app.name,
-            appid=app.id,
-            botname=self.bot.user.name, 
-            botid=self.bot.user.id,
-            publicbot=app.bot_public,
-            codegrant=app.bot_require_code_grant,
-            tosurl=app.terms_of_service_url,
-            ppurl=app.privacy_policy_url,
-            inviteurl="[Invite](https://discord.com/api/oauth2/authorize?client_id=938579223780655145&permissions=8&scope=bot%20applications.commands)",
-            appflags=appflags,
-            apptags=apptags,
-            ),
-         color=color,
-         timestamp=disnake.utils.utcnow(),
-      )
-      embed.set_footer(
-         text="Requested by {}".format(interaction.author),
-      )
-      await send(interaction=interaction, embed=embed)
-
-      
-   @commands.slash_command(
-      name="userinfo",
-      description="gets a user's information",
-   )
-   async def userinfo(self, interaction: disnake.ApplicationCommandInteraction,
-                      user: disnake.User = None):
-      if user.bot == True:
-         bot = "Is Bot Account"
-      else:
-         bot = "Isn't Bot Account"
-      roles = [role.mention for role in user.roles]
-      roles = str(roles).replace("]", "").replace("[", "").replace("'", "")
-      boosters = interaction.guild.premium_subscribers
-      if interaction.author in boosters:
-         boosting = True
-      else:
-         boosting = False
-         
-      flags = interaction.author.public_flags.all()
-      flags = str(flags).replace("[", "").replace("]", "")
-      embed = disnake.Embed(
-         title="Userinfo!",
-         description=userinfo.format(
-            username=user.name,
-            userid=user.id,
-            nickname=user.nick or "None",
-            joindate=user.joined_at.strftime("%A %b %d, %Y"),
-            accountcreatedat=user.created_at.strftime("%A %B %d, %Y"),
-            boostingguild=boosting,
-            flags=flags,
-            isbotaccount=bot,
-            animatedavatar=user.avatar.is_animated(),
-            toprole=user.top_role.mention,
-            roles=roles,
-         ),
-         color=color,
-         timestamp=disnake.utils.utcnow()
-      )
-      embed.set_footer(
-         text="Requested by {}".format(interaction.author)
-      )
-      embed.set_image(
-         url=user.avatar.url
-      )
-      
-      await send(interaction=interaction, embed=embed)
 
    
    @commands.slash_command(

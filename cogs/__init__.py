@@ -1,5 +1,6 @@
 """
 Astral cogs
+~~~~~~~~~~~
 
 Copyright 2022-Present Astral 
 
@@ -14,7 +15,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 # Imports
 from .fun import *
-from .general import *
 from .listeners import *
 from .moderation import *
 from .nsfw import *
@@ -25,6 +25,12 @@ from .astral import *
 from .info import *
 from .giveaway import *
 from .poll import *
+from .allcommands import *
+from .astralsub import *
+from .ticket import *
+from .shutdown import *
+from .help import *
+from .appinfo import *
 
 
 def setup(bot):
@@ -34,7 +40,6 @@ def setup(bot):
    """
    bot.add_cog(Astral(bot))
    bot.add_cog(Fun(bot))
-   bot.add_cog(General(bot))
    bot.add_cog(Events(bot))
    bot.add_cog(Moderation(bot))
    bot.add_cog(Nsfw(bot))
@@ -44,3 +49,9 @@ def setup(bot):
    bot.add_cog(Info(bot))
    bot.add_cog(Giveaways(bot))
    bot.add_cog(Poll(bot))
+   bot.add_cog(Helpall(bot))
+   bot.add_cog(Astralsub(bot))
+   bot.add_cog(Tickets(bot))
+   bot.add_cog(Shutdown(bot))
+   bot.add_cog(Help(bot))
+   bot.add_cog(Appinfo(bot))

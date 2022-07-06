@@ -66,7 +66,6 @@ async def stop_giveaway(self, g_id, data):
         color=color,
         description="Congratulations {} you won the giveaway!".format(", ".join(users_mention))
     )
-    embed.set_footer(text="Giveaway Ended !")
     await giveaway_message.edit(embed=embed)
     ghost_ping = await channel.send(", ".join(users_mention))
     await ghost_ping.delete()
@@ -105,7 +104,7 @@ class Giveaways(commands.Cog):
                        interaction: ApplicationCommandInteraction,
                        prize: str, 
                        channel: disnake.TextChannel,
-                       duration: str,
+                       duration: disnake.OptionChoice("snake", "snake"),
                        winners: int
     ):
         converted_time = convert(duration)
