@@ -34,9 +34,12 @@ class Poll(commands.Cog):
    )
    async def poll(
       self,
-      interaction,
+      interaction: disnake.ApplicationCommandInteraction,
       poll: str,
+      channel: Optional[disnake.TextChannel] = None,
       ):
+         if channel is None:
+            channel = interaction.channel 
          embed = disnake.Embed(
             title="📢 {} 📢".format(poll),
             description="React with the emoji you want to vote for",
@@ -44,9 +47,7 @@ class Poll(commands.Cog):
             color=color
          )
          import traceback
-         try:
-            message = await interaction.send(embed=embed)
-            await message.add_reaction("✅")
-            await message.add_reaction("❌")
-         except:
-            traceback.print_exc()
+         message = await channel.send(embed=embed)
+         await interaction.edit_original_message()
+         await message.add_reaction("✅")
+         await message.add_reaction("❌")
