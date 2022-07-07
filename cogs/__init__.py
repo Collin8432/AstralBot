@@ -14,7 +14,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 # Imports
-from .fun import *
+from .balls import *
 from .listeners import *
 from .moderation import *
 from .nsfw import *
@@ -31,6 +31,10 @@ from .ticket import *
 from .shutdown import *
 from .help import *
 from .appinfo import *
+from .userinfo import *
+from .nerd import *
+from .slots import *
+from .emojify import *
 
 
 def setup(bot):
@@ -39,7 +43,7 @@ def setup(bot):
    Used by bot.load_extention to load classes
    """
    bot.add_cog(Astral(bot))
-   bot.add_cog(Fun(bot))
+   bot.add_cog(Balls(bot))
    bot.add_cog(Events(bot))
    bot.add_cog(Moderation(bot))
    bot.add_cog(Nsfw(bot))
@@ -55,3 +59,7 @@ def setup(bot):
    bot.add_cog(Shutdown(bot))
    bot.add_cog(Help(bot))
    bot.add_cog(Appinfo(bot))
+   bot.add_cog(Userinfo(bot))
+   bot.add_cog(Nerd(bot))
+   bot.add_cog(Slots(bot))
+   bot.add_cog(Emojify(bot))

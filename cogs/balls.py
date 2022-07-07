@@ -1,5 +1,5 @@
 """
-Contains all games for the bot
+Contains all fun commands for the bot
 
 Copyright 2022-Present Astral 
 
@@ -11,48 +11,44 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 """
 
 
-
 # Imports
 import disnake
 from disnake.ext import commands
+from disnake import ButtonStyle
 
 
-import random
-
-
-from utils.color import color
 from utils.message import send
 
 
-class Games(commands.Cog):
 
+class BallsButton(disnake.ui.View):
+   def __init__(self):
+      super().__init__(timeout=None)
+
+ 
+   @disnake.ui.button(emoji="<:unknown:957276431916859442>", style=ButtonStyle.red, custom_id="balls")
+   async def first_button(
+      self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
+   ):
+      await send(interaction=interaction, msg="balls")
+      
+      
+   @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
+   async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
+      if not interaction.author:
+         await send(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
+      else:
+         await interaction.message.delete()
+
+
+class Balls(commands.Cog, name="fun cmds"):
    def __init__(self, bot):
       self.bot = bot
 
 
    @commands.slash_command(
-      name="slots",
-      description="slots in discord"
+      name="balls", 
+      description="balls"
    )
-   async def slots(self, interaction):
-      emojis = "🍕🍟🍔🍫🍬🥤🍒🍉"
-      a = random.choice(emojis)
-      b = random.choice(emojis)
-      c = random.choice(emojis)
-      slotmachineoutput = f"{a} {b} {c}"
-      if (a == b == c):
-         description = "Match!, You Win"
-      elif (a == b) or (a == c) or (b == c):
-         description = "Two Matches!, You Win"
-      else:
-         description = "No Matches, You Lose"
-      embed = disnake.Embed(
-         title="{}".format(slotmachineoutput),
-         description=description,
-         timestamp=disnake.utils.utcnow(),
-         color=color
-      )
-      await send(interaction=interaction, embed=embed)
-      
-   
-   
+   async def balls(self, interaction):
+      await send(interaction=interaction, view=BallsButton())
