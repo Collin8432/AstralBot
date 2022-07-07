@@ -126,28 +126,3 @@ class Fun(commands.Cog, name="fun cmds"):
                   .replace('y', '\u200B🇾')\
                   .replace('z', '\u200B🇿')
       await send(interaction=interaction, msg=text, ephemeral=True)
-      
-      
-   @commands.slash_command(
-      name="slots",
-      description="slots in discord"
-   )
-   async def slots(self, interaction):
-      emojis = "🍕🍟🍔🍫🍬🥤🍒🍉"
-      a = random.choice(emojis)
-      b = random.choice(emojis)
-      c = random.choice(emojis)
-      slotmachineoutput = f"{a} {b} {c}"
-      if (a == b == c):
-         description = "Match!, You Win"
-      elif (a == b) or (a == c) or (b == c):
-         description = "Two Matches!, You Win"
-      else:
-         description = "No Matches, You Lose"
-      embed = disnake.Embed(
-         title="{}".format(slotmachineoutput),
-         description=description,
-         timestamp=disnake.utils.utcnow(),
-         color=color
-      )
-      await send(interaction=interaction, embed=embed)
