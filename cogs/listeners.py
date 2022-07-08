@@ -15,11 +15,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 # Imports
 import random
 import os
+import traceback
 
 
 import disnake
 from disnake.ext import commands
-from disnake import ApplicationCommandInteraction
 
 
 from utils.webhook import webhooksend
@@ -115,25 +115,25 @@ class Events(commands.Cog):
 
 
    @commands.Cog.listener()
-   async def on_slash_command_error(self, interaction: ApplicationCommandInteraction, error: Exception) -> None:
-      errormsg = error
-      embed = disnake.Embed(
-            title="Error!",
-            description=f"**Error With Command:\n```{errormsg}```**",
-            color=color,
-            timestamp=disnake.utils.utcnow()
-         )
+   async def on_slash_command_error(
+      self, interaction: disnake.ApplicationCommandInteraction, error: Exception
+   ):
+      embed = disnake.Embed(title="Error Caught!", color=color)
       embed.set_footer(
-         text=f"Command Error!"
+         text=f"{interaction.author.name} executed /{interaction.data.name}",
+         icon_url=interaction.author.display_avatar.url,
       )
-      ch = interaction.channel.id
-      ch = self.bot.get_channel(ch)
-      await ch.send(embed=embed)
+      if isinstance(error, commands.CommandOnCooldown):
+         embed.description = f"Command `{interaction.data.name}` can only be used {error.cooldown.rate} once a {error.cooldown.per} seconds\nTry after {round(error.retry_after)} seconds"
+      else:
+         embed.description = f"Something went wrong!\n{error.__class__.__name__}: {error}"
+      await interaction.response.send_message(embed=embed, ephemeral=True)
 
    @commands.Cog.listener("on_message")
-   async def on_message(self, message):
+   async def on_message(self, message: disnake.Message):
       botids = [938579223780655145]
-      if "nigger" in message.content and message.guild.id == 944297787779072020 and message.author.id not in botids:
+      bannedwords = ["nigger"]
+      if bannedwords in message.content and message.author.bot is False:
          await message.reply("Please Don't Say That!")
          await message.delete()
          await webhooksend("N-Word Logged!", f"**<@{message.author.id}> Sent An N-Word In <#{message.channel.id}>\n Content: \n{message.content}", f"{message.guild.id}**")

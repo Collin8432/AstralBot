@@ -36,6 +36,8 @@ async def send(
          embed.set_footer(
             text="Requested by {}".format(interaction.author)
          )
+      if embed.footer.icon_url is None:
+         embed.set_footer(icon_url=interaction.author.display_avatar.url)
    if modal is not None:
       return await interaction.response.send_modal(modal=modal)
       

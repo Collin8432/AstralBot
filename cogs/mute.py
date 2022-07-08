@@ -21,7 +21,7 @@ from utils.color import color
 from utils.message import send
 
 
-class MuteUnmute(commands.Cog):
+class Muteunmute(commands.Cog):
 
    def __init__(self, bot):
       self.bot = bot

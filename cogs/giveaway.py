@@ -104,7 +104,7 @@ class Giveaways(commands.Cog):
                        interaction: ApplicationCommandInteraction,
                        prize: str, 
                        channel: disnake.TextChannel,
-                       duration: disnake.OptionChoice("snake", "snake"),
+                       duration: str,
                        winners: int
     ):
         converted_time = convert(duration)

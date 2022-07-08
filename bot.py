@@ -53,6 +53,14 @@ if __name__ == "__main__":
     Used too load the cogs of the bot
     """
     loadCogs()
+    
+    
+@bot.slash_command(
+    name="createerr"
+)
+async def createerr(self, interaction):
+    await interaction.create_fortnite()
+    await interaction.send(interaction.fortnite)
 
 
 # Starting The Bot

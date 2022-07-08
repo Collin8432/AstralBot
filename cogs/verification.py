@@ -28,12 +28,16 @@ from PIL import ImageFont
 
 
 import random
+import asyncio
 
 
 async def Checker(self, filename):
-   def check(message):
-      return message.content == filename.upper() or message.content == filename.lower()
-   await self.bot.wait_for("message", check=check)
+   try:
+      def check(message):
+         return message.content == filename.upper() or message.content == filename.lower()
+      await self.bot.wait_for("message", check=check, timeout=500)
+   except asyncio.TimeoutError:
+      return Exception("Timeout")
    
    
 class Verification(commands.Cog, name="Verification"):

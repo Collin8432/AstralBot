@@ -14,9 +14,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 # Imports
+from typing import overload
 from .balls import *
 from .listeners import *
-from .moderation import *
+from .kick import *
 from .nsfw import *
 from .setup import *
 from .tasks import *
@@ -36,6 +37,11 @@ from .nerd import *
 from .slots import *
 from .emojify import *
 from .modapp import *
+from .mute import * 
+from .timeout import *
+from .editguild import *
+from .purge import *
+from .ban import *
 
 
 def setup(bot):
@@ -46,7 +52,8 @@ def setup(bot):
    bot.add_cog(Astral(bot))
    bot.add_cog(Balls(bot))
    bot.add_cog(Events(bot))
-   bot.add_cog(Moderation(bot))
+   bot.add_cog(Kick(bot))
+   bot.add_cog(Ban(bot))
    bot.add_cog(Nsfw(bot))
    bot.add_cog(Setup(bot))
    bot.add_cog(Tasks(bot))
@@ -65,3 +72,8 @@ def setup(bot):
    bot.add_cog(Slots(bot))
    bot.add_cog(Emojify(bot))
    bot.add_cog(Moderatorapp(bot))
+   bot.add_cog(Muteunmute(bot))
+   bot.add_cog(Timeout(bot))
+   bot.add_cog(Editguild(bot))
+   bot.add_cog(Purge(bot))
+   
