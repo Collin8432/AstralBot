@@ -26,46 +26,6 @@ from utils.message import send
 from typing import Optional
 
 
-class ModApp(disnake.ui.Modal):
-    def __init__(self) -> None:
-        components = [
-            disnake.ui.TextInput(
-                label="What Are You Applying For?",
-                placeholder="Ex. Mod, Moderator, etc...",
-                custom_id="ApplyingFor",
-                style=disnake.TextInputStyle.short,
-                max_length=50,
-            ),
-            disnake.ui.TextInput(
-                label="What Are You Experienced In?",
-                placeholder="Ex. Discord",
-                custom_id="Experience",
-                style=disnake.TextInputStyle.short,
-                min_length=5,
-                max_length=50
-            ),
-            disnake.ui.TextInput(
-                label="Why Are You Better Than Others?",
-                placeholder="Ex. I have a lot of experience in this role, I know how to do this, etc...",
-                custom_id="BR",
-                style=disnake.TextInputStyle.paragraph,
-                min_length=20,
-                max_length=500
-            )
-        ]
-        super().__init__(title="Moderator Application", custom_id="ModApp", components=components)
-
-
-    async def callback(self, interaction: disnake.ModalInteraction) -> None:
-        ApplyingFor = interaction.text_values["ApplyingFor"]
-        Experience = interaction.text_values["Experience"]
-        BR = interaction.text_values["BR"]
-        await webhooksend("New Application", f"<@{interaction.author.id}> Submitted This Application \n**Appplying For:**\n{ApplyingFor}\n**Experience:**\n{Experience}\n**Why Are You Better Than Others For Your Role:**\n{BR}", f"{interaction.guild.id}")  
-        await send(interaction=interaction, msg="Application Submitted Successfully!", ephemeral=True)
-        
-        
-    async def on_error(self, error: Exception, inter: disnake.ModalInteraction) -> None:
-        await send(interaction=inter, msg=f"Error In Modal Interaction, {error}", ephemeral=True)
 
 
 class Moderation(commands.Cog, name="Mod Cmds"):
@@ -157,14 +117,6 @@ class Moderation(commands.Cog, name="Mod Cmds"):
 
 
     @commands.slash_command(
-       name="moderatorapplication",
-       description="sends a moderator appliction"
-    )
-    async def Appliction(interaction: disnake.CommandInteraction):  
-      await send(interaction=interaction, modal=ModApp())
-
-
-    @commands.slash_command(
         name="purge",
         description="purges all messages in a channel",
     )
@@ -178,84 +130,6 @@ class Moderation(commands.Cog, name="Mod Cmds"):
         )
         await send(interaction=interaction, embed=embed, ephemeral=True)
         await interaction.channel.purge(limit=200)
-
-
-    @commands.slash_command(
-        name="rules",
-        description="sends basic rules",
-    )
-    @commands.has_permissions(administrator=True)
-    async def rules(interaction):
-        embed = disnake.Embed(
-            title="Rules!",
-            description="**1. Dont Be Annoying\n2. Dont Ask For Free Shit/Mod\n3. Be Smart With What You Say And Do\n4. Please Be Kind And Follow Discord TOS**",
-            color=color,
-            timestamp=disnake.utils.utcnow()
-        )
-        await send(interaction=interaction, embed=embed)  
-
-
-    @commands.slash_command(
-        name="mute",
-        description="mutes a member",
-    )
-    @commands.has_permissions(manage_roles=True)
-    async def mute(self, interaction: ApplicationCommandInteraction,
-                   user: disnake.User
-                   ) -> None:
-        muterole = fetch_guild_information("guild_muterole", f"{interaction.guild.id}")
-        muterole = interaction.guild.get_role(muterole)
-        try:
-            await user.add_roles(muterole)  
-            embed = disnake.Embed(
-                title="Member Muted!",
-                description=f"**<@{user.id}> Was Muted By <@{interaction.author.id}>**",
-                color=color,
-                timestamp=disnake.utils.utcnow()
-            )
-            embed.set_footer(
-                text="Requested by {}".format(interaction.author)
-            )
-            await send(interaction=interaction, embed=embed)
-        except:
-            embed = disnake.Embed(
-                title="Error!",
-                description=f"**Error While Muting Member, Make Sure Member Does Not Have Higher Roles Than Me**",
-                color=color,
-                timestamp=disnake.utils.utcnow()
-            )
-            embed.set_footer(
-                text="Requested by {}".format(interaction.author)
-            )
-
-
-    @commands.slash_command(
-        name="unmute",
-        description="unmutes a member",
-
-    )
-    @commands.has_permissions(manage_roles=True)
-    async def unmute(self, interaction: ApplicationCommandInteraction,
-                     user: disnake.User):
-        muterole = fetch_guild_information("guild_muterole", f"{interaction.guild.id}")  
-        muterole = interaction.guild.get_role(muterole)
-        try:
-            await user.remove_roles(muterole)
-            embed = disnake.Embed(
-                title="Member Unmuted!",
-                description=f"**{user.mention} was unmuted by {interaction.author.mention}**",
-                color=color,
-                timestamp=disnake.utils.utcnow(),
-            )
-            await send(interaction=interaction, embed=embed)
-        except Exception as e:
-            embed = disnake.Embed(
-                title="Error!",
-                description=f"**Error While Unmuting Member, Make Sure Member Does Not Have Higher Roles Than Me**",
-                color=color,
-                timestamp=disnake.utils.utcnow(),
-            )
-            await send(interaction=interaction, embed=embed)
    
    
     @commands.slash_command(

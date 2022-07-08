@@ -35,6 +35,7 @@ from .userinfo import *
 from .nerd import *
 from .slots import *
 from .emojify import *
+from .modapp import *
 
 
 def setup(bot):
@@ -63,3 +64,4 @@ def setup(bot):
    bot.add_cog(Nerd(bot))
    bot.add_cog(Slots(bot))
    bot.add_cog(Emojify(bot))
+   bot.add_cog(Moderatorapp(bot))
