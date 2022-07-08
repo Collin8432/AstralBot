@@ -1,6 +1,6 @@
 """
-Contains task and information for the bot
- 
+Contains a listner
+
 Copyright 2022-Present Astral 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -11,42 +11,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 """
 
 
-# Imports
 import disnake
-from disnake.ext import tasks, commands
+from disnake.ext import commands
 
 
-import random
+class Onconnect(commands.Cog):
 
-
-from utils.db import *
-
-
-@tasks.loop(minutes=1.0)
-async def status_task(self) -> None:
-   statuses = [f"Watching Over {len(self.bot.guilds)} Servers!", "With You!", "With Astro!", "In Space!"]
-   await self.bot.change_presence(activity=disnake.Game(random.choice(statuses)))
-   try:
-      for guild in self.bot.guilds:
-         members = len(guild.members)
-         ch = fetch_guild_information("guild_membercountvoicechannel", f"{guild.id}")
-         if ch is not None:
-               try:
-                  channel = await self.bot.fetch_channel(ch)
-               except disnake.NotFound:
-                  pass
-               try:
-                  await channel.edit(name=f"Members: {members}")
-               except Exception as e:
-                  print(e)
-   except Exception as e:
-      print(e)
-
-
-class Tasks(commands.Cog):
-   def __init__(self, bot: commands.Bot):
+   def __init__(self, bot):
       self.bot = bot
-      self.status_task.start()
-      
-      
-   pass
+
+
+   @commands.Cog.listener()
+   async def on_connect(self):
+      print("Connected Too Discord")

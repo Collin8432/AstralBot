@@ -51,7 +51,6 @@ def setup(bot):
    """
    bot.add_cog(Astral(bot))
    bot.add_cog(Balls(bot))
-   bot.add_cog(Events(bot))
    bot.add_cog(Kick(bot))
    bot.add_cog(Ban(bot))
    bot.add_cog(Nsfw(bot))
