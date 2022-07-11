@@ -38,66 +38,58 @@ intents = disnake.Intents.all()
 bot = Bot(command_prefix=config["prefix"], intents=intents, case_insensitive=False, description="A Simple Discord Bot Coded by Astro", owner_ids=[config["owners"]], sync_commands=True)
 token = config.get("token")
 bot.remove_command("help")
+# TODO: fix this all
 
-
-def loadCogs():
-    """
-    Load Extentions Of The Bot
-    """
-    if os.path.isfile("./cogs/__init__.py"):
-        try:
-            bot.load_extension(f"cogs.__init__")
-            print("Loaded Cogs ✅")
-        except Exception as e:
-            print(e)
-
-
+def runtime(self):
+    bot.run(token, app=self)
 class Window(QMainWindow):
-   def __init__(self,
-                app: QtGui.QGuiApplication,
-                *,
-                window_title: str = "Astral",
-                geometry: tuple = (800, 800),
-                
-                ):
-      super().__init__()
-      self.setWindowTitle(window_title)
-      self.setFixedSize(QSize(geometry[0], geometry[1]))
-      self.app = app
-      self.show()
-      
-      self.button1 = QPushButton(self)
-      self.button1.setText("Start Bot")
-      self.button1.move(64,32)      
-      self.button1.clicked.connect(self.startbot)   
-      # self.label = QLabel("Enter a guild id to begin messaging")
-      self.setCentralWidget(self.button1)
-      self.app.exec()
-   
-   
-   def editlabel(self, text: str):
-      self.label.setText(text)
-      
-   def loadCogs():
-    """
-    Load Extentions Of The Bot
-    """
-    if os.path.isfile("./cogs/__init__.py"):
-        try:
-            bot.load_extension(f"cogs.__init__")
-            print("Loaded Cogs ✅")
-        except Exception as e:
-            print(e)
-   
-   def startbot(self):
-      # self.button2 = QPushButton("Guild IDS", self)
-      bot.run(token)
-      # guild_ids=[]
-      # for guild in bot.guilds:
-      #    guild_ids.append(guild.id)
-      # self.editlabel(text=f"Enter guild ID\n{guild_ids}")
-      print("started")
-
+    def __init__(self,
+                    app: QtGui.QGuiApplication,
+                    *,
+                    window_title: str = "Astral",
+                    geometry: tuple = (800, 800),
+                    
+                    ):
+        super().__init__()
+        self.setWindowTitle(window_title)
+        self.setFixedSize(QSize(geometry[0], geometry[1]))
+        self.app = app
+        self.show()
+        
+        self.button1 = QPushButton(self)
+        self.button1.setText("Start Bot")
+        self.button1.move(256,32)      
+        self.button1.clicked.connect(self.startbot)
+        self.button1.show()
+        
+        self.button2 = QPushButton(self)
+        self.button2.setText("Stop Bot")
+        self.button2.move(64,32)
+        self.button2.clicked.connect(self.stopbot)
+        # self.label = QLabel("Enter a guild id to begin messaging")
+        # self.setCentralWidget(self.button1)
+        self.app.exec()
+    
+    
+    def editlabel(self, text: str):
+        self.label.setText(text)
+        
+    def loadCogs():
+        """
+        Load Extentions Of The Bot
+        """
+        if os.path.isfile("./cogs/__init__.py"):
+            try:
+                bot.load_extension(f"cogs.__init__")
+                print("Loaded Cogs ✅")
+            except Exception as e:
+                print(e)
+    def startbot(self):
+        self.button2.show()
+        self.button1.hide()
+        runtime
+    def stopbot(self):
+        sys.exit()
 def __init__():
    app = QApplication(sys.argv)
    Window(app)
