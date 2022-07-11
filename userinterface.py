@@ -1,7 +1,9 @@
 """
-Astral (GUI) Bot
-Using Disnake API Wrapper
+Astral (GUI)
+Using PyQt5 API
 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Contains initailization of the GUI and classes containing elements of the GUI
 
 Copyright 2022-Present Astral 
 
@@ -13,17 +15,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 """
 
 
-# Imports
 import json
 import os
 import sys
-import asyncio
-
+from typing import Optional
 
 import disnake
 from disnake.ext.commands import Bot
+from PyQt5 import QtGui
+from PyQt5.QtCore import QSize
+from PyQt5.QtWidgets import *
 
- 
+
 if not os.path.isfile("./secret/config.json"):
     sys.exit("'/secret/config.json' not found! Please add it and try again.")
 else:
@@ -49,12 +52,54 @@ def loadCogs():
             print(e)
 
 
-if __name__ == "__main__":
+class Window(QMainWindow):
+   def __init__(self,
+                app: QtGui.QGuiApplication,
+                *,
+                window_title: str = "Astral",
+                geometry: tuple = (800, 800),
+                
+                ):
+      super().__init__()
+      self.setWindowTitle(window_title)
+      self.setFixedSize(QSize(geometry[0], geometry[1]))
+      self.app = app
+      self.show()
+      
+      self.button1 = QPushButton(self)
+      self.button1.setText("Start Bot")
+      self.button1.move(64,32)      
+      self.button1.clicked.connect(self.startbot)   
+      # self.label = QLabel("Enter a guild id to begin messaging")
+      self.setCentralWidget(self.button1)
+      self.app.exec()
+   
+   
+   def editlabel(self, text: str):
+      self.label.setText(text)
+      
+   def loadCogs():
     """
-    Used too load the cogs of the bot
+    Load Extentions Of The Bot
     """
-    loadCogs()
+    if os.path.isfile("./cogs/__init__.py"):
+        try:
+            bot.load_extension(f"cogs.__init__")
+            print("Loaded Cogs ✅")
+        except Exception as e:
+            print(e)
+   
+   def startbot(self):
+      # self.button2 = QPushButton("Guild IDS", self)
+      bot.run(token)
+      # guild_ids=[]
+      # for guild in bot.guilds:
+      #    guild_ids.append(guild.id)
+      # self.editlabel(text=f"Enter guild ID\n{guild_ids}")
+      print("started")
 
-
-# Starting The Bot
-bot.run(config["token"])
+def __init__():
+   app = QApplication(sys.argv)
+   Window(app)
+   
+__init__()
