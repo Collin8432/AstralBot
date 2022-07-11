@@ -55,7 +55,7 @@ def setup(bot):
    bot.add_cog(Ban(bot))
    bot.add_cog(Nsfw(bot))
    bot.add_cog(Setup(bot))
-   bot.add_cog(Tasks(bot))
+   # bot.add_cog(Tasks(bot))
    bot.add_cog(Verification(bot))
    bot.add_cog(Info(bot))
    bot.add_cog(Giveaways(bot))
