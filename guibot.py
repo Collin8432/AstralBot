@@ -1,5 +1,5 @@
 """
-Astral (GUI)
+Astral bot (GUI)
 Using PyQt5 API
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -19,6 +19,9 @@ import json
 import os
 import sys
 from typing import Optional
+import asyncio
+import threading
+
 
 import disnake
 from disnake.ext.commands import Bot
@@ -40,8 +43,10 @@ token = config.get("token")
 bot.remove_command("help")
 # TODO: fix this all
 
-def runtime(self):
-    bot.run(token, app=self)
+async def runtime():
+    bot.run(token)
+    
+    
 class Window(QMainWindow):
     def __init__(self,
                     app: QtGui.QGuiApplication,
@@ -59,7 +64,7 @@ class Window(QMainWindow):
         self.button1 = QPushButton(self)
         self.button1.setText("Start Bot")
         self.button1.move(256,32)      
-        self.button1.clicked.connect(self.startbot)
+        self.button1.clicked.connect(self.start_bot)
         self.button1.show()
         
         self.button2 = QPushButton(self)
@@ -74,6 +79,7 @@ class Window(QMainWindow):
     def editlabel(self, text: str):
         self.label.setText(text)
         
+        
     def loadCogs():
         """
         Load Extentions Of The Bot
@@ -84,14 +90,19 @@ class Window(QMainWindow):
                 print("Loaded Cogs ✅")
             except Exception as e:
                 print(e)
-    def startbot(self):
+                
+                
+    async def start_bot(self):
         self.button2.show()
         self.button1.hide()
-        runtime
+        await runtime()
+        
+
     def stopbot(self):
         sys.exit()
-def __init__():
+        
+def start():
    app = QApplication(sys.argv)
    Window(app)
    
-__init__()
+start()
