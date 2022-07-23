@@ -41,9 +41,9 @@ intents = disnake.Intents.all()
 bot = Bot(command_prefix=config["prefix"], intents=intents, case_insensitive=False, description="A Simple Discord Bot Coded by Astro", owner_ids=[config["owners"]], sync_commands=True)
 token = config.get("token")
 bot.remove_command("help")
-# TODO: fix this all
 
-async def runtime():
+
+def runtime():
     bot.run(token)
     
     
@@ -80,22 +80,21 @@ class Window(QMainWindow):
         self.label.setText(text)
         
         
-    def loadCogs():
+    def loadCogs(self):
         """
         Load Extentions Of The Bot
         """
-        if os.path.isfile("./cogs/__init__.py"):
+        if os.path.isfile("__init__.py"):
             try:
-                bot.load_extension(f"cogs.__init__")
+                bot.load_extension(f"__init__")
                 print("Loaded Cogs ✅")
             except Exception as e:
                 print(e)
                 
                 
-    async def start_bot(self):
-        self.button2.show()
-        self.button1.hide()
-        await runtime()
+    def start_bot(self):
+        self.loadCogs()
+        runtime()
         
 
     def stopbot(self):
@@ -104,5 +103,6 @@ class Window(QMainWindow):
 def start():
    app = QApplication(sys.argv)
    Window(app)
+      
    
 start()
