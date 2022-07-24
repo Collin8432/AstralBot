@@ -1,6 +1,6 @@
 """
 Astral bot (GUI)
-Using PyQt5 API
+Using Kivy API
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Contains initailization of the GUI and classes containing elements of the GUI
@@ -24,9 +24,12 @@ from typing import Optional
 
 import disnake
 from disnake.ext.commands import Bot
-from PyQt5 import QtGui
-from PyQt5.QtCore import QSize
-from PyQt5.QtWidgets import *
+import kivy
+from kivy.app import App
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
 
 
 if not os.path.isfile("./secret/config.json"):
@@ -46,62 +49,45 @@ async def runtime():
     bot.run(token)
     
     
-class Window(QMainWindow):
-    def __init__(self,
-                    app: QtGui.QGuiApplication,
-                    *,
-                    window_title: str = "Astral",
-                    geometry: tuple = (800, 800),
-                    
-                    ):
-        super().__init__()
-        self.setWindowTitle(window_title)
-        self.setFixedSize(QSize(geometry[0], geometry[1]))
-        self.app = app
-        self.show()
-        
-        self.button1 = QPushButton(self)
-        self.button1.setText("Start Bot")
-        self.button1.move(256,32)      
-        self.button1.clicked.connect(self.start_bot)
-        
-        self.button2 = QPushButton(self)
-        self.button2.setText("Stop Bot")
-        self.button2.move(64,32)
-        self.button2.clicked.connect(self.stopbot)
-        # self.label = QLabel("Enter a guild id to begin messaging")
-        # self.setCentralWidget(self.button1)
-        self.app.exec()
-    
-    
-    def editlabel(self, text: str):
-        self.label.setText(text)
-        
-        
-    def loadCogs(self):
-        """
-        Load Extentions Of The Bot
-        """
-        if os.path.isfile("__init__.py"):
-            try:
-                bot.load_extension(f"__init__")
-                print("Loaded Cogs ✅")
-            except Exception as e:
-                print(e)
-                
-                
-    def start_bot(self):
-        self.loadCogs()
-        bot.run(token)
-        
+def loadCogs(self):
+    """
+    Load Extentions Of The Bot
+    """
+    if os.path.isfile("__init__.py"):
+        try:
+            bot.load_extension(f"__init__")
+            print("Loaded Cogs ✅")
+        except Exception as e:
+            print(e)
 
-    def stopbot(self):
-        sys.exit()
+
+class StartBot(GridLayout):
+
+    def __init__(self, **kwargs):
+        super(StartBot, self).__init__(**kwargs)
+        self.cols = 3
+        self.add_widget(Button(text='Start Bot', pos_hint=(None, None), pos=(300, 350), size_hint=(None, None), size=(100, 100), on_press=self.login))
+        # self.username = TextInput(multiline=False)
+        # self.add_widget(self.username)
+        # self.add_widget(Label(text='password'))
+        # self.password = TextInput(password=True, multiline=False)
+        # self.add_widget(self.password)
+        # self.add_widget(Button(text='login', pos=(300, 350), on_press=self.login))
+        
+    def login(self, instance):
+        bot.run(token)
+
+
+class Window(App):
+    def build(self):
+        self.title = "Astral Discord Bot"
+        self.icon = "img/Astral.png"
+        return StartBot()
+
+
         
 def start():
-    # app = QApplication(sys.argv)
-    # Window(app)
-    bot.run(token)
-      
+    Window().run()
+    
    
 start()
