@@ -18,9 +18,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import json
 import os
 import sys
-from typing import Optional
 import asyncio
-import threading
+from typing import Optional
 
 
 import disnake
@@ -43,7 +42,7 @@ token = config.get("token")
 bot.remove_command("help")
 
 
-def runtime():
+async def runtime():
     bot.run(token)
     
     
@@ -65,7 +64,6 @@ class Window(QMainWindow):
         self.button1.setText("Start Bot")
         self.button1.move(256,32)      
         self.button1.clicked.connect(self.start_bot)
-        self.button1.show()
         
         self.button2 = QPushButton(self)
         self.button2.setText("Stop Bot")
@@ -94,15 +92,16 @@ class Window(QMainWindow):
                 
     def start_bot(self):
         self.loadCogs()
-        runtime()
+        bot.run(token)
         
 
     def stopbot(self):
         sys.exit()
         
 def start():
-   app = QApplication(sys.argv)
-   Window(app)
+    # app = QApplication(sys.argv)
+    # Window(app)
+    bot.run(token)
       
    
 start()
