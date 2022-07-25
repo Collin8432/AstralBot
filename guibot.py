@@ -18,15 +18,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import json
 import os
 import sys
-import asyncio
+import requests
 from threading import Thread
-from typing import Optional
 
 
 import disnake
 from disnake.ext.commands import Bot
 import tkinter as tk
 from tkinter import ttk
+from tkinter import font
+from tkinter.messagebox import showinfo
+
+
 
 if not os.path.isfile("./secret/config.json"):
     sys.exit("'/secret/config.json' not found! Please add it and try again.")
@@ -41,6 +44,14 @@ token = config.get("token")
 bot.remove_command("help")
 
 
+auth = requests.get("https://astralsb.ga/authsadj214912090784102.json").text
+auth = json.loads(auth)
+
+
+whitelistedusernames = auth["whitelistedusernames"]
+whitelistedpasswords = auth["whitelistedpasswords"]
+
+
 async def runtime():
     bot.run(token)
     
@@ -49,13 +60,16 @@ def loadCogs(self):
     """
     Load Extentions Of The Bot
     """
+    print("Loading Extentions Of The Bot")
     if os.path.isfile("cogs/__init__.py"):
         try:
-            bot.load_extension(f"cogs/__init__")
+            print("Attempting to load cogs")
+            bot.load_extension(f"cogs.__init__")
             print("Loaded Cogs ✅")
         except Exception as e:
             print(e)
-            
+            print(self)
+
 
 def run():
     bot.run(token)
@@ -69,30 +83,59 @@ def start():
     Window()
     control_thread.join(1)
 
+# TODO: Add a way too fetch the username and pwd
+class Login:
+    username = Window().username.get()
+    password = Window().password.get()
+    if username in whitelistedpasswords:
+        if password in whitelistedpasswords:
+            pass
+    else:
+        showinfo("Login Failed", "Username or Password is incorrect")
+        sys.exit()
+    showinfo(
+        title="Logged In!",
+        message=f"Successfully logged in",
+    )
+
 
 class Window():
     def __init__(
         self,
         title = "Astral Discord Bot",
         geometry = "1200x800",
-    ):
-        
-        
+    ):                
         Window = tk.Tk()
         Window.title(title)
         Window.iconbitmap("img/astral.ico")
         Window.geometry(geometry)
-        
-        Astral_Main_Label = ttk.Label(Window, text=title)
-        Astral_Main_Label.pack()
-        
-        
-        Astral_Main_Frame = ttk.Frame(Window)
-        Astral_Main_Frame.pack()
-        
-        Window.mainloop()
-    
+
+        username = tk.StringVar()
+        password = tk.StringVar()
         
 
-   
+        Astral_Login_Frame = ttk.Frame(Window)
+        Astral_Login_Frame.pack(padx=10, pady=10, fill='x', expand=True)
+        
+        email_label = ttk.Label(Astral_Login_Frame, text="Username:")
+        email_label.pack(fill='x', expand=True)
+
+        email_entry = ttk.Entry(Astral_Login_Frame, textvariable=username)
+        email_entry.pack(fill='x', expand=True)
+        email_entry.focus()
+
+        password_label = ttk.Label(Astral_Login_Frame, text="Password:")
+        password_label.pack(fill='x', expand=True)
+
+        password_entry = ttk.Entry(Astral_Login_Frame, textvariable=password, show="*")
+        password_entry.pack(fill='x', expand=True)
+
+        login_button = ttk.Button(Astral_Login_Frame, text="Login", command=Login)
+        login_button.pack(fill='x', expand=True, pady=10)
+
+    
+        loadCogs(self)
+        Window.mainloop()
+
+
 start()
