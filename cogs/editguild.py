@@ -17,6 +17,8 @@ from disnake.ext import commands
 
 
 from typing import Optional
+import random as random
+keys = ["keys"]
 
 
 from utils.message import send
@@ -106,3 +108,4 @@ class Editguild(commands.Cog):
          premium_progress_bar_enabled=premium_progress_bar_enabled
          )
       await send(interaction=interaction, msg="Edited Guild", ephemeral=True)
+      

@@ -19,18 +19,14 @@ import json
 import os
 import sys
 import asyncio
+from threading import Thread
 from typing import Optional
 
 
 import disnake
 from disnake.ext.commands import Bot
-import kivy
-from kivy.app import App
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-
+import tkinter as tk
+from tkinter import ttk
 
 if not os.path.isfile("./secret/config.json"):
     sys.exit("'/secret/config.json' not found! Please add it and try again.")
@@ -53,41 +49,50 @@ def loadCogs(self):
     """
     Load Extentions Of The Bot
     """
-    if os.path.isfile("__init__.py"):
+    if os.path.isfile("cogs/__init__.py"):
         try:
-            bot.load_extension(f"__init__")
+            bot.load_extension(f"cogs/__init__")
             print("Loaded Cogs ✅")
         except Exception as e:
             print(e)
+            
 
-
-class StartBot(GridLayout):
-
-    def __init__(self, **kwargs):
-        super(StartBot, self).__init__(**kwargs)
-        self.cols = 3
-        self.add_widget(Button(text='Start Bot', pos_hint=(None, None), pos=(300, 350), size_hint=(None, None), size=(100, 100), on_press=self.login))
-        # self.username = TextInput(multiline=False)
-        # self.add_widget(self.username)
-        # self.add_widget(Label(text='password'))
-        # self.password = TextInput(password=True, multiline=False)
-        # self.add_widget(self.password)
-        # self.add_widget(Button(text='login', pos=(300, 350), on_press=self.login))
-        
-    def login(self, instance):
-        bot.run(token)
-
-
-class Window(App):
-    def build(self):
-        self.title = "Astral Discord Bot"
-        self.icon = "img/Astral.png"
-        return StartBot()
-
-
-        
-def start():
-    Window().run()
+def run():
+    bot.run(token)
     
+    
+def start():
+    global control_thread
+    control_thread = Thread(target=run, daemon=True)
+    control_thread.start()
+
+    Window()
+    control_thread.join(1)
+
+
+class Window():
+    def __init__(
+        self,
+        title = "Astral Discord Bot",
+        geometry = "1200x800",
+    ):
+        
+        
+        Window = tk.Tk()
+        Window.title(title)
+        Window.iconbitmap("img/astral.ico")
+        Window.geometry(geometry)
+        
+        Astral_Main_Label = ttk.Label(Window, text=title)
+        Astral_Main_Label.pack()
+        
+        
+        Astral_Main_Frame = ttk.Frame(Window)
+        Astral_Main_Frame.pack()
+        
+        Window.mainloop()
+    
+        
+
    
 start()
