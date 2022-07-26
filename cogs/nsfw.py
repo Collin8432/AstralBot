@@ -17,9 +17,8 @@ from disnake.ext import commands
 
 
 from utils.color import color
-from utils.deleteinteraction import deleteinteraction
-from utils.message import send
-
+from utils.DeleteButton import deleteinteraction
+ 
 
 import aiohttp
 
@@ -27,7 +26,7 @@ import aiohttp
 class Nsfw(commands.Cog, name="NSFW"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-
+        print("NSFW")
 
     # Commands
     @commands.slash_command(
