@@ -1,5 +1,5 @@
 """
-Contains all games for the bot
+Contains Class deleteinteraction which contains a button view to delete a message
 
 Copyright 2022-Present Astral 
 
@@ -11,47 +11,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 """
 
 
-
 # Imports
 import disnake
-from disnake.ext import commands
+from disnake.enums import ButtonStyle
 
 
-import random
-
-
-from utils.color import color
- 
-
-class Slots(commands.Cog):
-
-   def __init__(self, bot):
-      self.bot = bot
-
-
-   @commands.slash_command(
-      name="slots",
-      description="slots in discord"
-   )
-   async def slots(self, interaction):
-      emojis = "🍕🍟🍔🍫🍬🥤🍒🍉"
-      a = random.choice(emojis)
-      b = random.choice(emojis)
-      c = random.choice(emojis)
-      slotmachineoutput = f"{a} {b} {c}"
-      if (a == b == c):
-         description = "Match!, You Win"
-      elif (a == b) or (a == c) or (b == c):
-         description = "Two Matches!, You Win"
-      else:
-         description = "No Matches, You Lose"
-      embed = disnake.Embed(
-         title="{}".format(slotmachineoutput),
-         description=description,
-         timestamp=disnake.utils.utcnow(),
-         color=color
-      )
-      await send(interaction=interaction, embed=embed)
+class DeleteButton:
+   def __init__(self): 
+      super().__init__()
       
-   
+   @disnake.ui.Button(emoji="", custom_id="deleteinter", style=ButtonStyle.red):
+   async def DeleteButton(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+      if interaction.author == interaction.message.author:
+      
    

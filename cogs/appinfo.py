@@ -15,8 +15,7 @@ import disnake
 from disnake.ext import commands
 
 
-from utils.message import send
-from utils.color import color
+ from utils.color import color
 
 
 appinfo = """

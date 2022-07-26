@@ -32,6 +32,7 @@ class Tasks(commands.Cog):
    async def status_task(self) -> None:
       statuses = ["Astral GUI", "Creating Astral GUI", "Discord GUI Bot"]
       # statuses = [f"Watching Over {len(self.bot.guilds)} Servers!", "With You!", "With Astro!", "In Space!"]
+      await self.bot.wait_until_ready()
       await self.bot.change_presence(activity=disnake.Game(random.choice(statuses)))
       try:
          for guild in self.bot.guilds:

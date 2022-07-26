@@ -16,8 +16,7 @@ from disnake.ext import commands
 
 
 from utils.color import color
-from utils.message import send
-from utils.webhook import webhooksend
+ from utils.webhook import webhooksend
 
 
 

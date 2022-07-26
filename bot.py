@@ -54,6 +54,5 @@ if __name__ == "__main__":
     """
     loadCogs()
 
-
 # Starting The Bot
 bot.run(config["token"])

@@ -17,8 +17,7 @@ from disnake.ext import commands
 
 
 from utils.discembeds import *
-from utils.message import send
-
+ 
 
 import platform
 import psutil

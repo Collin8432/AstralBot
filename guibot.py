@@ -19,6 +19,7 @@ import json
 import os
 import sys
 import requests
+import asyncio
 from threading import Thread
 
 
@@ -55,25 +56,22 @@ async def runtime():
     bot.run(token)
     
     
-def loadCogs(self):
+def loadCogs():
     """
     Load Extentions Of The Bot
     """
-    print("Loading Extentions Of The Bot")
-    if os.path.isfile("cogs/__init__.py"):
+    if os.path.isfile("./cogs/__init__.py"):
         try:
-            print("Attempting to load cogs")
             bot.load_extension(f"cogs.__init__")
             print("Loaded Cogs ✅")
         except Exception as e:
             print(e)
-            print(self)
 
 
 def run():
     bot.run(token)
     
-logged_in = True
+logged_in = False
 def start():
     global control_thread
     control_thread = Thread(target=run, daemon=True)
@@ -141,9 +139,23 @@ class LoginWindow:
         
         LOGIN_BUTTON = ttk.Button(__LOGINFRAME__, text="Login", command=lambda: Login(username.get(), password.get()))
         LOGIN_BUTTON.pack(fill='x', expand=True)
-    
-        loadCogs(self)
+            
+        loadCogs()
         Window.mainloop()
+        
+        
+async def Wait():
+    global guilds
+    await bot.wait_until_ready()
+    guilds = [guild for guild in bot.guilds]
+
+        
+class FrameBase(tk.Frame):
+    def __init__(self, *args, **kwargs):
+        tk.Frame.__init__(self, *args, **kwargs)
+        
+    def show(self):
+        self.lift()
         
         
 class MainWindow(tk.Tk):
@@ -169,12 +181,17 @@ class MainWindow(tk.Tk):
         self.__MAINLABEL__ = ttk.Label(self, text="Astral Discord Bot", foreground=self.TEXTCOLOR, font=(self.MAINFONT, self.MAINFONTSIZE), background=self.MAINCOLOR)
         self.__MAINLABEL__.pack()
         
+
+        guilds = [guild for guild in bot.guilds]
+        variable = tk.StringVar(self)
+        variable.set(guilds[0])
+        self.DROPDOWN = ttk.OptionMenu(self, variable, *guilds)
+        self.DROPDOWN.pack()
+        
         # page.hide page.lift make clases for every page include discord chat for every server create a dropdown menu (tkinter.OptionMenu), create a invite for the server, ect (maybe even clone server) add some cool panels and yeah have fun
         # ref: https://stackoverflow.com/questions/14817210/using-buttons-in-tkinter-to-navigate-to-different-pages-of-the-application
         
         
-        
-        
         self.mainloop()
-
+        
 start()

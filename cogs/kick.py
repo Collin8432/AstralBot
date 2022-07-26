@@ -19,8 +19,7 @@ from disnake import ApplicationCommandInteraction
 
 from utils.db import *
 from utils.color import color
-from utils.message import send
-
+ 
 
 class Kick(commands.Cog, name="Mod Cmds"):
     def __init__(self, bot):

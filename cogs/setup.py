@@ -19,8 +19,7 @@ from disnake.ext import commands
 from utils.db import *
 from utils.webhook import webhooksend
 from utils.color import color
-from utils.message import send
-
+ 
 
 class SetupSelect(disnake.ui.Select):
    def __init__(self):

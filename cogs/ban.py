@@ -16,8 +16,7 @@ from disnake import ApplicationCommandInteraction
 from disnake.ext import commands
 
 
-from utils.message import send
-from utils.color import color
+ from utils.color import color
 
 
 class Ban(commands.Cog):

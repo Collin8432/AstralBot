@@ -15,8 +15,7 @@ import disnake
 from disnake.ext import commands
 
 
-from utils.message import send
-from utils.webhook import webhooksend
+ from utils.webhook import webhooksend
 
 
 class ModApp(disnake.ui.Modal):

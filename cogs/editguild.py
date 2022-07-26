@@ -21,8 +21,7 @@ import random as random
 keys = ["keys"]
 
 
-from utils.message import send
-
+ 
 
 class Editguild(commands.Cog):
    def __init__(self, bot):

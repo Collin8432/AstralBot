@@ -48,11 +48,15 @@ def setup(bot):
    * `setup`
    Used by bot.load_extention to load classes
    """
+   print("checkpoint1")
    bot.add_cog(Astral(bot))
+   print("checkpoint1")
    bot.add_cog(Balls(bot))
    bot.add_cog(Kick(bot))
+   print("checkpoint1")
    bot.add_cog(Ban(bot))
    bot.add_cog(Nsfw(bot))
+   print("checkpoint1")
    bot.add_cog(Setup(bot))
    bot.add_cog(Tasks(bot))
    bot.add_cog(Verification(bot))

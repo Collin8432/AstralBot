@@ -1,16 +1,16 @@
-FROM python:3.9
+# FROM python:3.9
 
 
-WORKDIR .
+# WORKDIR .
 
 
-COPY requirements.txt .
+# COPY requirements.txt .
 
 
-RUN pip3 install -r requirements.txt
+# RUN pip3 install -r requirements.txt
 
 
-COPY . .
+# COPY . .
 
 
-CMD ["python3", "bot.py"]
+# CMD ["python3", "bot.py"]

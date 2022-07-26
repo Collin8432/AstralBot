@@ -17,8 +17,7 @@ from disnake import ApplicationCommandInteraction
 
 
 from utils.color import color
-from utils.message import send
-
+ 
 
 global starttime
 starttime = disnake.utils.utcnow()

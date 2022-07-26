@@ -25,8 +25,7 @@ from disnake.ext import commands
 from utils.webhook import webhooksend
 from utils.discembeds import helpemb, funemb, modemb, setupemb, nsfwemb
 from utils.color import color
-from utils.message import send
-from utils.db import *
+ from utils.db import *
 
 
 from PIL import Image, ImageDraw, ImageFont

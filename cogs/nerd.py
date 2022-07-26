@@ -3,8 +3,7 @@ from disnake.ext import commands
 from disnake import ButtonStyle
 
 
-from utils.message import send
-
+ 
 
 class NerdButton(disnake.ui.View):
       def __init__(self):

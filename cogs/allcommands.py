@@ -20,8 +20,7 @@ from typing import List
 
 
 from utils.color import color
-from utils.message import send
-
+ 
 
 class Paginator(disnake.ui.View):
     
