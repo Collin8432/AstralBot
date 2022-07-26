@@ -14,7 +14,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 # Imports
-from typing import overload
 from .balls import *
 from .listeners import *
 from .kick import *

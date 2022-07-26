@@ -1,6 +1,6 @@
 """
 Astral bot (GUI)
-Using Kivy API
+Using Tkinter Package, For GUI
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Contains initailization of the GUI and classes containing elements of the GUI
@@ -26,7 +26,6 @@ import disnake
 from disnake.ext.commands import Bot
 import tkinter as tk
 from tkinter import ttk
-from tkinter import font
 from tkinter.messagebox import showinfo
 
 
@@ -39,7 +38,7 @@ else:
 
 
 intents = disnake.Intents.all()
-bot = Bot(command_prefix=config["prefix"], intents=intents, case_insensitive=False, description="A Simple Discord Bot Coded by Astro", owner_ids=[config["owners"]], sync_commands=True)
+bot = Bot(command_prefix=config["prefix"], intents=intents, case_insensitive=False, description="A Simple Discord Bot\nCoded In Python\nPackage: Disnake\nOwner: collin#8694", owner_ids=[config["owners"]], sync_commands=True)
 token = config.get("token")
 bot.remove_command("help")
 
@@ -74,32 +73,38 @@ def loadCogs(self):
 def run():
     bot.run(token)
     
-    
+logged_in = True
 def start():
     global control_thread
     control_thread = Thread(target=run, daemon=True)
     control_thread.start()
 
-    Window()
+    if logged_in:
+        MainWindow()
+    else:
+        LoginWindow()
     control_thread.join(1)
 
-# TODO: Add a way too fetch the username and pwd
+
 class Login:
-    username = Window().username.get()
-    password = Window().password.get()
-    if username in whitelistedpasswords:
-        if password in whitelistedpasswords:
-            pass
-    else:
-        showinfo("Login Failed", "Username or Password is incorrect")
-        sys.exit()
-    showinfo(
-        title="Logged In!",
-        message=f"Successfully logged in",
-    )
+    def __init__(
+        self,
+        username: str,
+        password: str
+        ):
+        if username in whitelistedusernames and password in whitelistedpasswords:
+            showinfo(
+                title="Logged In!",
+                message=f"Successfully logged in",
+            )
+            MainWindow()
+        else:
+            showinfo("Login Failed", f"Username or Password is incorrect {username}, {password}")
+            sys.exit()
 
 
-class Window():
+
+class LoginWindow:
     def __init__(
         self,
         title = "Astral Discord Bot",
@@ -109,33 +114,67 @@ class Window():
         Window.title(title)
         Window.iconbitmap("img/astral.ico")
         Window.geometry(geometry)
-
+        Window.configure(
+            bg="#2f2f2f"
+        )
         username = tk.StringVar()
         password = tk.StringVar()
         
 
-        Astral_Login_Frame = ttk.Frame(Window)
-        Astral_Login_Frame.pack(padx=10, pady=10, fill='x', expand=True)
+        __LOGINFRAME__ = ttk.Frame(Window)
+        __LOGINFRAME__.pack(padx=10, pady=10, fill='x', expand=True)
         
-        email_label = ttk.Label(Astral_Login_Frame, text="Username:")
-        email_label.pack(fill='x', expand=True)
+        
+        USERNAME = ttk.Label(__LOGINFRAME__, text="Username:")
+        USERNAME.pack(fill='x', expand=True)
 
-        email_entry = ttk.Entry(Astral_Login_Frame, textvariable=username)
-        email_entry.pack(fill='x', expand=True)
-        email_entry.focus()
+        USERNAME_ENTRY = ttk.Entry(__LOGINFRAME__, textvariable=username)
+        USERNAME_ENTRY.pack(fill='x', expand=True)
+        USERNAME_ENTRY.focus()
 
-        password_label = ttk.Label(Astral_Login_Frame, text="Password:")
-        password_label.pack(fill='x', expand=True)
+        PASSWORD = ttk.Label(__LOGINFRAME__, text="Password:")
+        PASSWORD.pack(fill='x', expand=True)
 
-        password_entry = ttk.Entry(Astral_Login_Frame, textvariable=password, show="*")
-        password_entry.pack(fill='x', expand=True)
-
-        login_button = ttk.Button(Astral_Login_Frame, text="Login", command=Login)
-        login_button.pack(fill='x', expand=True, pady=10)
-
+        PASSWORD_ENTRY = ttk.Entry(__LOGINFRAME__, textvariable=password, show="*")
+        PASSWORD_ENTRY.pack(fill='x', expand=True)
+        
+        
+        LOGIN_BUTTON = ttk.Button(__LOGINFRAME__, text="Login", command=lambda: Login(username.get(), password.get()))
+        LOGIN_BUTTON.pack(fill='x', expand=True)
     
         loadCogs(self)
         Window.mainloop()
-
+        
+        
+class MainWindow(tk.Tk):
+    def __init__(
+        self
+    ):
+        super().__init__()
+        
+        
+        self.title("Astral Discord Bot")
+        self.geometry("1200x800")
+        self.iconbitmap("img/astral.ico")
+        self.MAINCOLOR = "#2f2f2f"
+        self.TEXTCOLOR = "#0072B5"
+        self.MAINFONT = ("Arial")
+        self.MAINFONTSIZE = 12
+        self.configure(
+            bg=self.MAINCOLOR,
+            highlightcolor=self.MAINCOLOR,
+            background=self.MAINCOLOR,
+        )
+        
+        self.__MAINLABEL__ = ttk.Label(self, text="Astral Discord Bot", foreground=self.TEXTCOLOR, font=(self.MAINFONT, self.MAINFONTSIZE), background=self.MAINCOLOR)
+        self.__MAINLABEL__.pack()
+        
+        # page.hide page.lift make clases for every page include discord chat for every server create a dropdown menu (tkinter.OptionMenu), create a invite for the server, ect (maybe even clone server) add some cool panels and yeah have fun
+        # ref: https://stackoverflow.com/questions/14817210/using-buttons-in-tkinter-to-navigate-to-different-pages-of-the-application
+        
+        
+        
+        
+        self.mainloop()
 
 start()
