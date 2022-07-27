@@ -52,7 +52,18 @@ if __name__ == "__main__":
     """
     Used too load the cogs of the bot
     """
-    loadCogs()
+    # loadCogs()
+
+
+from utils.DeleteButton import DeleteButton
+components = DeleteButton
+
+@bot.slash_command(
+    name="delete",
+    description="Deletes a message",
+)
+async def delete(interaction):
+    await interaction.send("This command is currently under development", components=components)
 
 # Starting The Bot
 bot.run(config["token"])

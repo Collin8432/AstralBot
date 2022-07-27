@@ -22,7 +22,7 @@ from utils.color import color
 
 class TicketReason(disnake.ui.Modal):
     def __init__(self) -> None:
-        DeleteButton() = [
+        components = [
             disnake.ui.TextInput(
                 label="What is the reason for this ticket?",
                 placeholder="Ex. I need help",
@@ -32,7 +32,7 @@ class TicketReason(disnake.ui.Modal):
                 max_length=500
             )
         ]
-        super().__init__(title="Ticket Reason", custom_id="TicketReason", DeleteButton()=DeleteButton())
+        super().__init__(title="Ticket Reason", custom_id="TicketReason", components=components)
     async def callback(self, interaction: disnake.ModalInteraction) -> None:
         global Reason
         Reason = interaction.text_values["Reason"]

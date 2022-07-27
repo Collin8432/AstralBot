@@ -16,15 +16,16 @@ import disnake
 from disnake.enums import ButtonStyle
 
 
-class DeleteButton(disnake.ui.View):
+class DeleteButton(disnake.ui.Button):
    def __init__(self): 
       super().__init__()
+      self.style = ButtonStyle.red
+      self.custom_id = "deleteinter"
+      self.emoji = "❌"
+      self.callback = self.delcallback()
       
-   @disnake.ui.Button(emoji="", custom_id="deleteinter", style=ButtonStyle.red)
-   async def DeleteButton(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+   async def delcallback(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
       if not interaction.author:
-         await interaction.send("You must be the author of this message to delete it", ephemeral=True)
+         await interaction.send("This button is not for you", ephemeral=True)
       else:
          await interaction.message.delete()
-      
-   

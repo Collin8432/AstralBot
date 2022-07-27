@@ -51,8 +51,8 @@ class Astralsub(commands.Cog):
       embed.set_footer(
          text=f"Requested by {interaction.author}"
       )
-      DeleteButton() = DeleteButton
-      await interaction.send(embed=embed, component=DeleteButton())
+      components = DeleteButton
+      await interaction.send(embed=embed, component=components)
 
 
    @astral.sub_command(
