@@ -17,6 +17,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import json
 import os
 import sys
+from tokenize import Triple
 
 
 import disnake
@@ -28,12 +29,11 @@ if not os.path.isfile("./secret/config.json"):
 else:
     with open("./secret/config.json") as file:
         config = json.load(file)
-
+        
 
 intents = disnake.Intents.all()
 bot = Bot(command_prefix=config["prefix"], intents=intents, case_insensitive=False, description="A Simple Discord Bot Coded by Astro", owner_ids=[config["owners"]], sync_commands=True)
 token = config.get("token")
-bot.remove_command("help")
 
 
 def loadCogs():

@@ -130,7 +130,7 @@ class Giveaways(commands.Cog):
         }
         giveaways[str(giveaway_message.id)] = data
         json.dump(giveaways, open("cogs/giveaways.json", "w"), indent=4)
-        await send(interaction=interaction, msg="Giveaway Created", ephemeral=True)
+        await interaction.send(msg="Giveaway Created", ephemeral=True)
 
 
     @commands.slash_command(
@@ -150,4 +150,4 @@ class Giveaways(commands.Cog):
             )
             return await interaction.send(embed=embed)
         await stop_giveaway(self, message_id, giveaways[message_id])
-        await send(interaction=interaction, msg="Giveaway Stopped", ephemeral=True)
+        await interaction.send(msg="Giveaway Stopped", ephemeral=True)

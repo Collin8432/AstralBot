@@ -44,4 +44,4 @@ class Timeout(commands.Cog):
          color=color,
          timestamp=disnake.utils.utcnow()
       )
-      await send(interaction=interaction, embed=embed)
+      await interaction.send(embed=embed)

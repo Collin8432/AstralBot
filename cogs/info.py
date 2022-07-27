@@ -94,7 +94,7 @@ class Info(commands.Cog, name="Info Cmds"):
          text="Requested by {}".format(interaction.author)
       )
       
-      await send(interaction=interaction, embed=embed)
+      await interaction.send(embed=embed)
       
       
       
@@ -114,7 +114,7 @@ class Info(commands.Cog, name="Info Cmds"):
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await send(interaction=interaction, embed=embed)
+      await interaction.send(embed=embed)
    
    
    
@@ -140,7 +140,7 @@ class Info(commands.Cog, name="Info Cmds"):
       embed.set_image(
          url=url
       )
-      await send(interaction=interaction, embed=embed)
+      await interaction.send(embed=embed)
       
       
       
@@ -222,7 +222,7 @@ class Info(commands.Cog, name="Info Cmds"):
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await send(interaction=interaction, embed=embed)
+      await interaction.send(embed=embed)
       
       
       
@@ -243,4 +243,4 @@ class Info(commands.Cog, name="Info Cmds"):
             name="Logs",
             value=f"```{entry.user} did {entry.action} to {entry.target}```",
          )
-      await send(interaction=interaction, embed=embed)
+      await interaction.send(embed=embed)

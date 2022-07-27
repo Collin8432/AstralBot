@@ -47,7 +47,7 @@ class Muteunmute(commands.Cog):
          embed.set_footer(
                text="Requested by {}".format(interaction.author)
          )
-         await send(interaction=interaction, embed=embed)
+         await interaction.send(embed=embed)
       except:
          embed = disnake.Embed(
                title="Error!",
@@ -78,7 +78,7 @@ class Muteunmute(commands.Cog):
                color=color,
                timestamp=disnake.utils.utcnow(),
          )
-         await send(interaction=interaction, embed=embed)
+         await interaction.send(embed=embed)
       except:
          embed = disnake.Embed(
                title="Error!",
@@ -86,4 +86,4 @@ class Muteunmute(commands.Cog):
                color=color,
                timestamp=disnake.utils.utcnow(),
          )
-         await send(interaction=interaction, embed=embed)
+         await interaction.send(embed=embed)

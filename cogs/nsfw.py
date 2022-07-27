@@ -17,7 +17,7 @@ from disnake.ext import commands
 
 
 from utils.color import color
-from utils.DeleteButton import deleteinteraction
+from utils.DeleteButton import DeleteButton
  
 
 import aiohttp
@@ -55,7 +55,7 @@ class Nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=ass") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await send(interaction=interaction, embed=embed)
+                await interaction.send(embed=embed)
 
 
     @nsfw.sub_command(
@@ -76,7 +76,7 @@ class Nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=hentai") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await send(interaction=interaction, embed=embed)
+                await interaction.send(embed=embed)
 
 
     @nsfw.sub_command(
@@ -97,7 +97,7 @@ class Nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=tits") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await send(interaction=interaction, embed=embed)
+                await interaction.send(embed=embed)
 
 
     @nsfw.sub_command(
@@ -118,4 +118,4 @@ class Nsfw(commands.Cog, name="NSFW"):
             async with NsfwSession.get("https://nekobot.xyz/api/image?type=thighs") as nsfw:
                 res = await nsfw.json()
                 embed.set_image(url=res["message"])
-                await send(interaction=interaction, embed=embed)
+                await interaction.send(embed=embed)

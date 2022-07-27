@@ -15,7 +15,8 @@ import disnake
 from disnake.ext import commands
 
 
- from utils.color import color
+from utils.color import color
+from utils.DeleteButton import DeleteButton
 
 
 appinfo = """
@@ -76,4 +77,5 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       embed.set_footer(
          text="Requested by {}".format(interaction.author),
       )
-      await send(interaction=interaction, embed=embed)
+      DeleteButton() = DeleteButton
+      await interaction.send(embed=embed, DeleteButton()=DeleteButton())

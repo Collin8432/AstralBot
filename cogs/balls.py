@@ -29,13 +29,13 @@ class BallsButton(disnake.ui.View):
    async def first_button(
       self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
    ):
-      await send(interaction=interaction, msg="balls")
+      await interaction.send(msg="balls")
       
       
    @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
    async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
-         await send(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
+         await interaction.send(msg="You must be the author to delete this message", ephemeral=True)
       else:
          await interaction.message.delete()
 
@@ -50,4 +50,4 @@ class Balls(commands.Cog, name="fun cmds"):
       description="balls"
    )
    async def balls(self, interaction):
-      await send(interaction=interaction, view=BallsButton())
+      await interaction.send(view=BallsButton())

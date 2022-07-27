@@ -106,5 +106,5 @@ class Editguild(commands.Cog):
          public_updates_channel=public_updates_channel, 
          premium_progress_bar_enabled=premium_progress_bar_enabled
          )
-      await send(interaction=interaction, msg="Edited Guild", ephemeral=True)
+      await interaction.send(msg="Edited Guild", ephemeral=True)
       

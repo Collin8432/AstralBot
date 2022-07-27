@@ -17,6 +17,7 @@ from disnake import ApplicationCommandInteraction
 
 
 from utils.color import color
+from utils.DeleteButton import DeleteButton
  
 
 global starttime
@@ -50,7 +51,8 @@ class Astralsub(commands.Cog):
       embed.set_footer(
          text=f"Requested by {interaction.author}"
       )
-      await send(interaction=interaction, embed=embed)
+      DeleteButton() = DeleteButton
+      await interaction.send(embed=embed, component=DeleteButton())
 
 
    @astral.sub_command(
@@ -67,7 +69,7 @@ class Astralsub(commands.Cog):
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await send(interaction=interaction, embed=embed)
+      await interaction.send(embed=embed)
       
    
    @astral.sub_command(
@@ -91,7 +93,7 @@ class Astralsub(commands.Cog):
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await send(interaction=interaction, embed=embed)
+      await interaction.send(embed=embed)
       
    
    @astral.sub_command(
@@ -108,7 +110,7 @@ class Astralsub(commands.Cog):
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await send(interaction=interaction, embed=embed)
+      await interaction.send(embed=embed)
       
       
    @astral.sub_command(
@@ -175,4 +177,4 @@ class Astralsub(commands.Cog):
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await send(interaction=interaction, embed=embed)  
+      await interaction.send(embed=embed)  

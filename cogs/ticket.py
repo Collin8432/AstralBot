@@ -22,7 +22,7 @@ from utils.color import color
 
 class TicketReason(disnake.ui.Modal):
     def __init__(self) -> None:
-        components = [
+        DeleteButton() = [
             disnake.ui.TextInput(
                 label="What is the reason for this ticket?",
                 placeholder="Ex. I need help",
@@ -32,11 +32,11 @@ class TicketReason(disnake.ui.Modal):
                 max_length=500
             )
         ]
-        super().__init__(title="Ticket Reason", custom_id="TicketReason", components=components)
+        super().__init__(title="Ticket Reason", custom_id="TicketReason", DeleteButton()=DeleteButton())
     async def callback(self, interaction: disnake.ModalInteraction) -> None:
         global Reason
         Reason = interaction.text_values["Reason"]
-        await send(interaction=interaction, msg="Ticket Submitted Successfully!", ephemeral=True)
+        await interaction.send(msg="Ticket Submitted Successfully!", ephemeral=True)
         ticketchannel = await interaction.guild.create_text_channel(  
         name=f"ticket-{interaction.author.name}", 
         overwrites={ 
@@ -68,5 +68,5 @@ class Tickets(commands.Cog):
       description="creates a ticket",
    )
    async def ticket(interaction):
-        await send(interaction=interaction, modal=TicketReason())  
+        await interaction.send(modal=TicketReason())  
    

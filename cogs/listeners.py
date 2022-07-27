@@ -41,51 +41,51 @@ class Events(commands.Cog):
       try:
          if (interaction.component.custom_id) == "deleteinter":
                if not interaction.author:
-                  await send(interaction=interaction, msg="You Must Be The Author To Delete The Interaction", ephemeral=True)
+                  await interaction.send(msg="You Must Be The Author To Delete The Interaction", ephemeral=True)
                else:
                   await interaction.message.delete()
          elif (interaction.component.custom_id) == "balls":
-               await send(interaction=interaction, msg="balls")
+               await interaction.send(msg="balls")
          elif (interaction.component.custom_id) == "nerd":
-               await send(interaction=interaction, msg="nerd")
+               await interaction.send(msg="nerd")
          elif (interaction.component.custom_id) == "shutdowncomfirm":
-               await send(interaction=interaction, msg="exiting")   
+               await interaction.send(msg="exiting")   
                os._exit(0)
          elif (interaction.component.custom_id) == "shutdowncancel":
-               await send(interaction=interaction, msg="cancelled")
+               await interaction.send(msg="cancelled")
                await interaction.message.delete()
          elif (interaction.component.custom_id) == "genhelp":
                embed = helpemb
                embed.set_footer(
                   text=f"Requested by {interaction.author}"
                )
-               await send(interaction=interaction, embed=embed, ephemeral=True)
+               await interaction.send(embed=embed, ephemeral=True)
          elif (interaction.component.custom_id) == "funhelp":
                embed = funemb
                embed.set_footer(
                   text=f"Requested by {interaction.author}"
                )   
-               await send(interaction=interaction, embed=embed, ephemeral=True)
+               await interaction.send(embed=embed, ephemeral=True)
          elif (interaction.component.custom_id) == "modhelp":
                embed = modemb
                embed.set_footer(
                   text=f"Requested by {interaction.author}"
                )
-               await send(interaction=interaction, embed=embed, ephemeral=True)
+               await interaction.send(embed=embed, ephemeral=True)
          elif (interaction.component.custom_id) == "setuphelp":
                embed = setupemb
                embed.set_footer(
                   text=f"Requested by {interaction.author}"
                )
-               await send(interaction=interaction, embed=embed, ephemeral=True)
+               await interaction.send(embed=embed, ephemeral=True)
          elif (interaction.component.custom_id) == "nsfwhelp":
             embed = nsfwemb
             embed.set_footer(
                text=f"Requested by {interaction.author}"
             )
-            await send(interaction=interaction, embed=embed, ephemeral=True)
+            await interaction.send(embed=embed, ephemeral=True)
          else:
-               await send(interaction=interaction, msg=f"Invalid Button! - Likely due to it being a paginator button, the paginator interaction has expired, run the command again please")
+               await interaction.send(msg=f"Invalid Button! - Likely due to it being a paginator button, the paginator interaction has expired, run the command again please")
       except:
          pass
 

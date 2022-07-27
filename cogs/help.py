@@ -35,7 +35,7 @@ class HelpButtons(disnake.ui.View):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await send(interaction=interaction, embed=embed, ephemeral=True)
+        await interaction.send(embed=embed, ephemeral=True)
         
 
     @disnake.ui.button(label="Fun 🎉", style=disnake.ButtonStyle.success, custom_id="funhelp")
@@ -44,7 +44,7 @@ class HelpButtons(disnake.ui.View):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )   
-        await send(interaction=interaction, embed=embed, ephemeral=True)
+        await interaction.send(embed=embed, ephemeral=True)
 
 
     @disnake.ui.button(label="Moderation 🚩", style=disnake.ButtonStyle.success, custom_id="modhelp")
@@ -53,7 +53,7 @@ class HelpButtons(disnake.ui.View):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await send(interaction=interaction, embed=embed, ephemeral=True)
+        await interaction.send(embed=embed, ephemeral=True)
         
         
     @disnake.ui.button(label="Setup ⚙️", style=disnake.ButtonStyle.success, custom_id="setuphelp")
@@ -62,7 +62,7 @@ class HelpButtons(disnake.ui.View):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await send(interaction=interaction, embed=embed, ephemeral=True)
+        await interaction.send(embed=embed, ephemeral=True)
         
         
     @disnake.ui.button(label="NSFW 🔞", style=disnake.ButtonStyle.success, custom_id="nsfwhelp")
@@ -71,13 +71,13 @@ class HelpButtons(disnake.ui.View):
         embed.set_footer(
             text="Requested by {}".format(interaction.author)
         )
-        await send(interaction=interaction, embed=embed, ephemeral=True)
+        await interaction.send(embed=embed, ephemeral=True)
     
     
     @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
     async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
-         await send(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
+         await interaction.send(msg="You must be the author to delete this message", ephemeral=True)
       else:
          await interaction.message.delete()
          
@@ -139,4 +139,4 @@ class Help(commands.Cog):
             f"\nTotal ram- {round(values24, 2)} GB"
             f"\nAvailable Ram - {round(val4, 2)} GB"
             )
-        await send(interaction=interaction, embed=embed, view=HelpButtons())
+        await interaction.send(embed=embed, view=HelpButtons())

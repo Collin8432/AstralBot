@@ -50,4 +50,4 @@ class Emojify(commands.Cog):
                   .replace('x', '\u200B🇽')\
                   .replace('y', '\u200B🇾')\
                   .replace('z', '\u200B🇿')
-      await send(interaction=interaction, msg=text, ephemeral=True)
+      await interaction.send(msg=text, ephemeral=True)

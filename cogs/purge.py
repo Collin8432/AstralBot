@@ -35,5 +35,5 @@ class Purge(commands.Cog):
          color=color,
          timestamp=disnake.utils.utcnow()
       )
-      await send(interaction=interaction, embed=embed, ephemeral=True)
+      await interaction.send(embed=embed, ephemeral=True)
       await interaction.channel.purge(limit=200)

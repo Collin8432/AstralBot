@@ -130,4 +130,4 @@ class Helpall(commands.Cog):
          embeds[1].add_field(name=f"{cmd.name}", value=f"{cmd.description}", inline=True)
       for cmd in s[26:]:
          embeds[2].add_field(name=f"{cmd.name}", value=f"{cmd.description}", inline=True)
-      await send(interaction=interaction, embed=embeds[0], view=Paginator(embeds))
+      await interaction.send(embed=embeds[0], view=Paginator(embeds))

@@ -1,5 +1,5 @@
 """
-Contains Class deleteinteraction which contains a button view to delete a message
+Contains Class DeleteButton which contains a button view to delete a message
 
 Copyright 2022-Present Astral 
 
@@ -16,12 +16,15 @@ import disnake
 from disnake.enums import ButtonStyle
 
 
-class DeleteButton:
+class DeleteButton(disnake.ui.View):
    def __init__(self): 
       super().__init__()
       
-   @disnake.ui.Button(emoji="", custom_id="deleteinter", style=ButtonStyle.red):
+   @disnake.ui.Button(emoji="", custom_id="deleteinter", style=ButtonStyle.red)
    async def DeleteButton(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
-      if interaction.author == interaction.message.author:
+      if not interaction.author:
+         await interaction.send("You must be the author of this message to delete it", ephemeral=True)
+      else:
+         await interaction.message.delete()
       
    

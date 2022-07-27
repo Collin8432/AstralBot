@@ -41,7 +41,7 @@ class Ban(commands.Cog):
                         color=color,
                         timestamp=disnake.utils.utcnow()
                      )
-                     await send(interaction=interaction, embed=embed)
+                     await interaction.send(embed=embed)
                else:
                   try:
                      embed = disnake.Embed(
@@ -50,7 +50,7 @@ class Ban(commands.Cog):
                            color=color,
                            timestamp=disnake.utils.utcnow()
                      )
-                     await send(interaction=interaction, embed=embed)
+                     await interaction.send(embed=embed)
                      await member.ban(reason=reason)  
                   except:
                         embed = disnake.Embed(
@@ -59,4 +59,4 @@ class Ban(commands.Cog):
                            color=color,
                            timestamp=disnake.utils.utcnow()
                         )
-                        await send(interaction=interaction, embed=embed)
+                        await interaction.send(embed=embed)

@@ -14,13 +14,13 @@ class NerdButton(disnake.ui.View):
       async def first_button(
         self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
       ):
-         await send(interaction=interaction, msg="nerd")
+         await interaction.send(msg="nerd")
    
    
       @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
       async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
          if not interaction.author:
-            await send(interaction=interaction, msg="You must be the author to delete this message", ephemeral=True)
+            await interaction.send(msg="You must be the author to delete this message", ephemeral=True)
          else:
             await interaction.message.delete()
 
@@ -36,4 +36,4 @@ class Nerd(commands.Cog):
       description="nerd"
    )
    async def nerd(self, interaction):
-      await send(interaction=interaction, view=NerdButton())
+      await interaction.send(view=NerdButton())

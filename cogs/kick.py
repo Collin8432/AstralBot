@@ -42,7 +42,7 @@ class Kick(commands.Cog, name="Mod Cmds"):
                 color=0xE02B2B,
                 timestamp=disnake.utils.utcnow()
             )
-            await send(interaction=interaction, embed=embed)
+            await interaction.send(embed=embed)
         else:
             try:
                 embed = disnake.Embed(
@@ -51,7 +51,7 @@ class Kick(commands.Cog, name="Mod Cmds"):
                     color=color,
                     timestamp=disnake.utils.utcnow()
                 )
-                await send(interaction=interaction, embed=embed)
+                await interaction.send(embed=embed)
                 try:
                     embed = disnake.Embed(
                     title="You Were Kicked!",
@@ -70,4 +70,4 @@ class Kick(commands.Cog, name="Mod Cmds"):
                     color=color,
                     timestamp=disnake.utils.utcnow()
                 )
-                await send(interaction=interaction, embed=embed)
+                await interaction.send(embed=embed)

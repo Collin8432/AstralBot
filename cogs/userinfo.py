@@ -88,4 +88,4 @@ class Userinfo(commands.Cog):
          url=user.avatar.url
       )
       
-      await send(interaction=interaction, embed=embed)
+      await interaction.send(embed=embed)

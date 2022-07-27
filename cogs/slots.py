@@ -51,7 +51,7 @@ class Slots(commands.Cog):
          timestamp=disnake.utils.utcnow(),
          color=color
       )
-      await send(interaction=interaction, embed=embed)
+      await interaction.send(embed=embed)
       
    
    

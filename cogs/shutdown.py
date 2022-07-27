@@ -30,7 +30,7 @@ class ShutdownView(disnake.ui.View):
     async def Confirm(
         self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
     ):
-        await send(interaction=interaction, msg="exiting...")
+        await interaction.send(msg="exiting...")
         os._exit(0)
         
         
@@ -38,14 +38,14 @@ class ShutdownView(disnake.ui.View):
     async def Deny(
         self, button: disnake.ui.button, interaction: disnake.MessageInteraction  
     ):
-        await send(interaction=interaction, msg="Cancelled")
+        await interaction.send(msg="Cancelled")
         await interaction.message.delete()
         
         
     @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
     async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
       if not interaction.author:
-         await send(interaction=interaction, msg="You Must Be The Author To Delete The Interaction", ephemeral=True)
+         await interaction.send(msg="You Must Be The Author To Delete The Interaction", ephemeral=True)
       else:
          await interaction.message.delete()
          
@@ -61,4 +61,4 @@ class Shutdown(commands.Cog):
    ) 
    @commands.is_owner()
    async def shutdown(interaction):
-      await send(interaction=interaction, msg="Are You Sure?", view=ShutdownView())
+      await interaction.send(msg="Are You Sure?", view=ShutdownView())
