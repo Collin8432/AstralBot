@@ -15,11 +15,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 """
 
 
+from cProfile import label
 import json
 import os
 import sys
+from cv2 import exp
 import requests
 import asyncio
+from typing import Optional
 from threading import Thread
 
 
@@ -52,6 +55,9 @@ whitelistedusernames = auth["whitelistedusernames"]
 whitelistedpasswords = auth["whitelistedpasswords"]
 
 
+def log_or_print(content, *, end: Optional[str]):
+    pass
+
 async def runtime():
     bot.run(token)
     
@@ -71,13 +77,15 @@ def loadCogs():
 def run():
     bot.run(token)
     
-logged_in = False
+logged_in = True
 def start():
     global control_thread
     control_thread = Thread(target=run, daemon=True)
     control_thread.start()
 
     if logged_in:
+        import time
+        time.sleep(5)
         MainWindow()
     else:
         LoginWindow()
@@ -142,12 +150,6 @@ class LoginWindow:
             
         loadCogs()
         Window.mainloop()
-        
-        
-async def Wait():
-    global guilds
-    await bot.wait_until_ready()
-    guilds = [guild for guild in bot.guilds]
 
         
 class FrameBase(tk.Frame):
@@ -156,6 +158,27 @@ class FrameBase(tk.Frame):
         
     def show(self):
         self.lift()
+        
+
+class TextChannels(FrameBase):
+    def __init__(self, *args, **kwargs):
+        FrameBase.__init__(self, *args, **kwargs)
+        label = tk.Label(self, text="This is page 1")
+        label.pack(side="top", fill="both", expand=True)
+        
+
+class Messages(FrameBase):
+    def __init__(self, *args, **kwargs):
+        FrameBase.__init__(self, *args, **kwargs)
+        label = tk.Label(self, text="This is page 2")
+        label.pack(side="top", fill="both", expand=True)
+        
+        
+class SendMessage(FrameBase):
+    def __init__(self, *args, **kwargs):
+        FrameBase.__init__(self, *args, **kwargs)
+        label = tk.Label(self, text="This is page 3")
+        label.pack(side="top", fill="both", expand=True)
         
         
 class MainWindow(tk.Tk):
@@ -178,18 +201,40 @@ class MainWindow(tk.Tk):
             background=self.MAINCOLOR,
         )
         
-        self.__MAINLABEL__ = ttk.Label(self, text="Astral Discord Bot", foreground=self.TEXTCOLOR, font=(self.MAINFONT, self.MAINFONTSIZE), background=self.MAINCOLOR)
-        self.__MAINLABEL__.pack()
         
+        
+        
+        self.buttonframe = tk.Frame(self)
+        self.buttonframe.pack(side="top", fill="x", expand=False)
 
+
+        self.container = tk.Frame(self)
+        self.container.pack(side="top", fill="both", expand=True)
+        
+        
         guilds = [guild for guild in bot.guilds]
         variable = tk.StringVar(self)
         variable.set(guilds[0])
-        self.DROPDOWN = ttk.OptionMenu(self, variable, *guilds)
-        self.DROPDOWN.pack()
+        self.DROPDOWN = ttk.OptionMenu(self.buttonframe, variable, *guilds)
+        self.DROPDOWN.pack(side="left")
+
         
-        # page.hide page.lift make clases for every page include discord chat for every server create a dropdown menu (tkinter.OptionMenu), create a invite for the server, ect (maybe even clone server) add some cool panels and yeah have fun
-        # ref: https://stackoverflow.com/questions/14817210/using-buttons-in-tkinter-to-navigate-to-different-pages-of-the-application
+        self.TextChannels = TextChannels(self)
+        self.TextChannels.place(in_=self.container, x=0, y=0, relwidth=1, relheight=1)
+        self.Messages = Messages(self)
+        self.Messages.place(in_=self.container, x=0, y=0, relwidth=1, relheight=1)
+        self.SendMessage = SendMessage(self)
+        self.SendMessage.place(in_=self.container, x=0, y=0, relwidth=1, relheight=1)
+        
+        
+        self.button = ttk.Button(self.buttonframe, text="Page 1", command=self.TextChannels.show)
+        self.button.pack(side="left")
+        self.button2 = ttk.Button(self.buttonframe, text="Page 2", command=self.Messages.show)
+        self.button2.pack(side="left")
+        self.button3 = ttk.Button(self.buttonframe, text="Page 3", command=self.SendMessage.show)
+        self.button3.pack(side="left")
+        
+        
         
         
         self.mainloop()

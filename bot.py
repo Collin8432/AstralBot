@@ -17,7 +17,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import json
 import os
 import sys
-from tokenize import Triple
 
 
 import disnake
@@ -33,7 +32,7 @@ else:
 
 intents = disnake.Intents.all()
 bot = Bot(command_prefix=config["prefix"], intents=intents, case_insensitive=False, description="A Simple Discord Bot Coded by Astro", owner_ids=[config["owners"]], sync_commands=True)
-token = config.get("token")
+bot.remove_command("help")
 
 
 def loadCogs():
@@ -52,18 +51,8 @@ if __name__ == "__main__":
     """
     Used too load the cogs of the bot
     """
-    # loadCogs()
+    loadCogs()
 
-
-from utils.DeleteButton import DeleteButton
-components = DeleteButton
-
-@bot.slash_command(
-    name="delete",
-    description="Deletes a message",
-)
-async def delete(interaction):
-    await interaction.send("This command is currently under development", components=components)
 
 # Starting The Bot
 bot.run(config["token"])
