@@ -1,44 +1,31 @@
-from tkinter import * 
-from tkinter import ttk 
+# Import the required libraries
+from tkinter import *
+from tkinter import ttk
 
+# Create an instance of tkinter frame
+win = Tk()
 
-window = Tk() 
-window.title("Title Name") 
-window.config(bg='#FFFAFA')
-window.geometry('1024x800')
+# Set the size of the tkinter window
+win.geometry("700x350")
 
+# Define the style for combobox widget
+style = ttk.Style()
+print(style.theme_names())
 
+# Define a function to show/hide widget
+def show_widget():
+   label.pack()
+   b1.configure(text="Hide", command=hide_widget)
+def hide_widget():
+   label.pack_forget()
+   b1.configure(text="Show", command=show_widget)
 
-rows = 0
-while rows<50:
-    window.rowconfigure(rows,weight=1)
-    window.columnconfigure(rows, weight=1)
-    rows +=1
+# Add a label widget
+label = ttk.Label(win, text="Eat, Sleep, Code and Repeat", font=('Aerial 11'))
+label.pack(pady=30)
 
-#creation of frame
-mainframe = ttk.Notebook(window,width=50)
-mainframe.grid(row=1,column=2,columnspan=45,rowspan=43,sticky='NESW')
+# Add a Button widget
+b1 = ttk.Button(win, text="Hide", command=hide_widget)
+b1.pack(pady=20)
 
-# create frame style
-s = ttk.Style()
-s.configure('new.TFrame', background='#7AC5CD')
-
-#create tabs within the frame
-tab1 = ttk.Frame(mainframe, style='new.TFrame')
-mainframe.add(tab1, text="Tab1")
-
-
-tab2 = ttk.Frame(mainframe, style='new.TFrame')
-mainframe.add(tab2, text="Tab2")
-
-
-tab3 = ttk.Frame(mainframe, style='new.TFrame')
-mainframe.add(tab3, text="Tab3")
-
-tab4 = ttk.Frame(mainframe, style='new.TFrame')
-mainframe.add(tab4, text="Tab4")
-
-tab5 = ttk.Frame(mainframe, style='new.TFrame')
-mainframe.add(tab5, text="Tab4")
-
-window.mainloop()
+win.mainloop()

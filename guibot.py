@@ -18,9 +18,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import json
 import os
 import sys
-from pyspark import T
 import requests
 import asyncio
+import random
 from typing import Optional
 from threading import Thread
 
@@ -59,6 +59,7 @@ def log_or_print(content, *, end: Optional[str]):
 
 async def runtime():
     bot.run(token)
+    
     
     
 def loadCogs():
@@ -149,50 +150,15 @@ class LoginWindow:
             
         Window.mainloop()
 
-        
-class FrameBase(tk.Frame):
-    def __init__(self, *args, **kwargs):
-        tk.Frame.__init__(self, *args, **kwargs)
-        
-    def show(self):
-        self.lift()
-        
-        
-class MainGuildInfo(FrameBase):
-    def __init__(self, *args, **kwargs):
-        FrameBase.__init__(self, *args, **kwargs)
-        label = tk.Label(self, text="This is page 0")
-        label.pack(side="top", fill="both", expand=True)
-        
 
-class TextChannels(FrameBase):
-    def __init__(self, *args, **kwargs):
-        FrameBase.__init__(self, *args, **kwargs)
-        label = tk.Label(self, text="This is page 1")
-        label.pack(side="top", fill="both", expand=True)
-        
-
-class Messages(FrameBase):
-    def __init__(self, *args, **kwargs):
-        FrameBase.__init__(self, *args, **kwargs)
-        label = tk.Label(self, text="This is page 2")
-        label.pack(side="top", fill="both", expand=True)
-        
-        
-class SendMessage(FrameBase):
-    def __init__(self, *args, **kwargs):
-        FrameBase.__init__(self, *args, **kwargs)
-        label = tk.Label(self, text="This is page 3")
-        label.pack(side="top", fill="both", expand=True)
-        
         
 class MainWindow(tk.Tk):
     def __init__(
         self
     ):
         super().__init__()
-        
-        
+        style = ttk.Style()
+        style.theme_use('vista')
         self.title("Astral Discord Bot")
         self.geometry("1200x800")
         self.iconbitmap("img/astral.ico")
@@ -206,43 +172,23 @@ class MainWindow(tk.Tk):
             background=self.MAINCOLOR,
         )
 
-        
-        # self.buttonframe = tk.Frame(self)
-        # self.buttonframe.pack(side="top", fill="x", expand=False)
-        
-        
-        # self.container = tk.Frame(self, bg=self.MAINCOLOR)
-        # self.container.pack(side="top", fill="both", expand=True)
-        
-        
+
         guilds = [guild for guild in bot.guilds]
+        guilds.append("12345678998765432112345678900987")
+        guilds.append("12345678998765432112345678900987")
+        guilds.append("12345678998765432112345678900987")
         variable = tk.StringVar(self)
-        variable.set(guilds[0])
+        variable.set(guilds[1])
         self.Dropdown = ttk.OptionMenu(self, variable, *guilds)
         self.Dropdown.place(x=0, y=0)
         
         
-        self.MainGuildInfo = MainGuildInfo(self)
-        # self.TextChannels = TextChannels(self)
-        # self.TextChannels.place(in_=self.container, x=0, y=0, relwidth=1, relheight=1)
-        # self.Messages = Messages(self)
-        # self.Messages.place(in_=self.container, x=0, y=0, relwidth=1, relheight=1)
-        # self.SendMessage = SendMessage(self)
-        # self.SendMessage.place(in_=self.container, x=0, y=0, relwidth=1, relheight=1)
-        
-        
-        self.MainGuildInfoButton = ttk.Button(self, text="Main Guild Info", command=lambda: self.MainGuildInfo.show())
-        self.MainGuildInfoButton.place(x=10, y=10)
-        # self.button = ttk.Button(self.buttonframe, text="Page 1", command=lambda: self.TextChannels.show())
-        # self.button.pack(side="left")
-        # self.button2 = ttk.Button(self.buttonframe, text="Page 2", command=lambda: self.Messages.show())
-        # self.button2.pack(side="left")
-        # self.button3 = ttk.Button(self.buttonframe, text="Page 3", command=lambda: self.SendMessage.show())
-        # self.button3.pack(side="left")
-        
-        
-        
+        self.MainGuildInfo = ttk.Frame(self)
+        self.MainGuildInfo.place(in_=self, x=225, y=0)
+        self.MainGuildInfo.configure(height=100, width=100)
         
         self.mainloop()
         
+    
+    
 start()
