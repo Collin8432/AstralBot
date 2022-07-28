@@ -41,6 +41,7 @@ from .timeout import *
 from .editguild import *
 from .purge import *
 from .ban import *
+from .donate import *
 
 
 def setup(bot):
@@ -74,4 +75,5 @@ def setup(bot):
    bot.add_cog(Timeout(bot))
    bot.add_cog(Editguild(bot))
    bot.add_cog(Purge(bot))
+   bot.add_cog(Donate(bot))
    

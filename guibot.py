@@ -15,11 +15,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 """
 
 
-from cProfile import label
 import json
 import os
 import sys
-from cv2 import exp
+from pyspark import T
 import requests
 import asyncio
 from typing import Optional
@@ -73,7 +72,7 @@ def loadCogs():
         except Exception as e:
             print(e)
 
-
+loadCogs()
 def run():
     bot.run(token)
     
@@ -85,7 +84,7 @@ def start():
 
     if logged_in:
         import time
-        time.sleep(5)
+        time.sleep(2)
         MainWindow()
     else:
         LoginWindow()
@@ -148,7 +147,6 @@ class LoginWindow:
         LOGIN_BUTTON = ttk.Button(__LOGINFRAME__, text="Login", command=lambda: Login(username.get(), password.get()))
         LOGIN_BUTTON.pack(fill='x', expand=True)
             
-        loadCogs()
         Window.mainloop()
 
         
@@ -158,6 +156,13 @@ class FrameBase(tk.Frame):
         
     def show(self):
         self.lift()
+        
+        
+class MainGuildInfo(FrameBase):
+    def __init__(self, *args, **kwargs):
+        FrameBase.__init__(self, *args, **kwargs)
+        label = tk.Label(self, text="This is page 0")
+        label.pack(side="top", fill="both", expand=True)
         
 
 class TextChannels(FrameBase):
@@ -200,39 +205,40 @@ class MainWindow(tk.Tk):
             highlightcolor=self.MAINCOLOR,
             background=self.MAINCOLOR,
         )
-        
-        
-        
-        
-        self.buttonframe = tk.Frame(self)
-        self.buttonframe.pack(side="top", fill="x", expand=False)
 
-
-        self.container = tk.Frame(self)
-        self.container.pack(side="top", fill="both", expand=True)
+        
+        # self.buttonframe = tk.Frame(self)
+        # self.buttonframe.pack(side="top", fill="x", expand=False)
+        
+        
+        # self.container = tk.Frame(self, bg=self.MAINCOLOR)
+        # self.container.pack(side="top", fill="both", expand=True)
         
         
         guilds = [guild for guild in bot.guilds]
         variable = tk.StringVar(self)
         variable.set(guilds[0])
-        self.DROPDOWN = ttk.OptionMenu(self.buttonframe, variable, *guilds)
-        self.DROPDOWN.pack(side="left")
-
-        
-        self.TextChannels = TextChannels(self)
-        self.TextChannels.place(in_=self.container, x=0, y=0, relwidth=1, relheight=1)
-        self.Messages = Messages(self)
-        self.Messages.place(in_=self.container, x=0, y=0, relwidth=1, relheight=1)
-        self.SendMessage = SendMessage(self)
-        self.SendMessage.place(in_=self.container, x=0, y=0, relwidth=1, relheight=1)
+        self.Dropdown = ttk.OptionMenu(self, variable, *guilds)
+        self.Dropdown.place(x=0, y=0)
         
         
-        self.button = ttk.Button(self.buttonframe, text="Page 1", command=self.TextChannels.show)
-        self.button.pack(side="left")
-        self.button2 = ttk.Button(self.buttonframe, text="Page 2", command=self.Messages.show)
-        self.button2.pack(side="left")
-        self.button3 = ttk.Button(self.buttonframe, text="Page 3", command=self.SendMessage.show)
-        self.button3.pack(side="left")
+        self.MainGuildInfo = MainGuildInfo(self)
+        # self.TextChannels = TextChannels(self)
+        # self.TextChannels.place(in_=self.container, x=0, y=0, relwidth=1, relheight=1)
+        # self.Messages = Messages(self)
+        # self.Messages.place(in_=self.container, x=0, y=0, relwidth=1, relheight=1)
+        # self.SendMessage = SendMessage(self)
+        # self.SendMessage.place(in_=self.container, x=0, y=0, relwidth=1, relheight=1)
+        
+        
+        self.MainGuildInfoButton = ttk.Button(self, text="Main Guild Info", command=lambda: self.MainGuildInfo.show())
+        self.MainGuildInfoButton.place(x=10, y=10)
+        # self.button = ttk.Button(self.buttonframe, text="Page 1", command=lambda: self.TextChannels.show())
+        # self.button.pack(side="left")
+        # self.button2 = ttk.Button(self.buttonframe, text="Page 2", command=lambda: self.Messages.show())
+        # self.button2.pack(side="left")
+        # self.button3 = ttk.Button(self.buttonframe, text="Page 3", command=lambda: self.SendMessage.show())
+        # self.button3.pack(side="left")
         
         
         
