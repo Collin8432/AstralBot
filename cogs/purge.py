@@ -15,7 +15,7 @@ import disnake
 from disnake.ext import commands
 
 
- from utils.color import color
+from utils.color import color
 
 
 class Purge(commands.Cog):

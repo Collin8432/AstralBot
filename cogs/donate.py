@@ -21,4 +21,7 @@ class Donate(commands.Cog):
          color=color,
          timestamp=disnake.utils.utcnow()
       )
+      embed.set_footer(
+         text="Requested by {}".format(interaction.author),
+      )
       await interaction.send(embed=embed, view=DeleteButton())

@@ -25,7 +25,7 @@ from disnake.ext import commands
 from utils.webhook import webhooksend
 from utils.discembeds import helpemb, funemb, modemb, setupemb, nsfwemb
 from utils.color import color
- from utils.db import *
+from utils.db import *
 
 
 from PIL import Image, ImageDraw, ImageFont
@@ -41,18 +41,18 @@ class Events(commands.Cog):
       try:
          if (interaction.component.custom_id) == "deleteinter":
                if not interaction.author:
-                  await interaction.send(msg="You Must Be The Author To Delete The Interaction", ephemeral=True)
+                  await interaction.send("You Must Be The Author To Delete The Interaction", ephemeral=True)
                else:
                   await interaction.message.delete()
          elif (interaction.component.custom_id) == "balls":
-               await interaction.send(msg="balls")
+               await interaction.send("balls")
          elif (interaction.component.custom_id) == "nerd":
-               await interaction.send(msg="nerd")
+               await interaction.send("nerd")
          elif (interaction.component.custom_id) == "shutdowncomfirm":
-               await interaction.send(msg="exiting")   
+               await interaction.send("exiting")   
                os._exit(0)
          elif (interaction.component.custom_id) == "shutdowncancel":
-               await interaction.send(msg="cancelled")
+               await interaction.send("cancelled")
                await interaction.message.delete()
          elif (interaction.component.custom_id) == "genhelp":
                embed = helpemb
@@ -85,7 +85,7 @@ class Events(commands.Cog):
             )
             await interaction.send(embed=embed, ephemeral=True)
          else:
-               await interaction.send(msg=f"Invalid Button! - Likely due to it being a paginator button, the paginator interaction has expired, run the command again please")
+               await interaction.send(f"Invalid Button! - Likely due to it being a paginator button, the paginator interaction has expired, run the command again please")
       except:
          pass
 

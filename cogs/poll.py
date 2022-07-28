@@ -45,7 +45,6 @@ class Poll(commands.Cog):
             timestamp=disnake.utils.utcnow(),
             color=color
          )
-         import traceback
          message = await channel.send(embed=embed)
          await interaction.edit_original_message()
          await message.add_reaction("✅")

@@ -17,8 +17,8 @@ from disnake.ext import commands
 from disnake import ApplicationCommandInteraction
 
 
-from utils.db import *
 from utils.color import color
+from utils.DeleteButton import DeleteButton
  
 
 class Kick(commands.Cog, name="Mod Cmds"):
@@ -42,7 +42,10 @@ class Kick(commands.Cog, name="Mod Cmds"):
                 color=0xE02B2B,
                 timestamp=disnake.utils.utcnow()
             )
-            await interaction.send(embed=embed)
+            embed.set_footer(
+                text="Requested by {}".format(interaction.author)
+            )
+            await interaction.send(embed=embed, view=DeleteButton())
         else:
             try:
                 embed = disnake.Embed(
@@ -51,13 +54,19 @@ class Kick(commands.Cog, name="Mod Cmds"):
                     color=color,
                     timestamp=disnake.utils.utcnow()
                 )
-                await interaction.send(embed=embed)
+                embed.set_footer(
+                    text="Requested by {}".format(interaction.author)
+                )
+                await interaction.send(embed=embed, view=DeleteButton())
                 try:
                     embed = disnake.Embed(
-                    title="You Were Kicked!",
-                    description=f"**You were Kicked by <@{interaction.author.id}>\n**Reason:**\n{reason}**",  
-                    color=color,
-                    timestamp=disnake.utils.utcnow()
+                        title="You Were Kicked!",
+                        description=f"**You were Kicked by <@{interaction.author.id}>\n**Reason:**\n{reason}**",  
+                        color=color,
+                        timestamp=disnake.utils.utcnow()
+                    )
+                    embed.set_footer(
+                        text="Requested by {}".format(interaction.author)
                     )
                     await member.send(embed=embed)  
                 except disnake.Forbidden:
@@ -70,4 +79,7 @@ class Kick(commands.Cog, name="Mod Cmds"):
                     color=color,
                     timestamp=disnake.utils.utcnow()
                 )
-                await interaction.send(embed=embed)
+                embed.set_footer(
+                    text="Requested by {}".format(interaction.author)
+                )
+                await interaction.send(embed=embed, view=DeleteButton())

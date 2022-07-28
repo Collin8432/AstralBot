@@ -16,7 +16,8 @@ from disnake import ApplicationCommandInteraction
 from disnake.ext import commands
 
 
- from utils.color import color
+from utils.color import color
+from utils.DeleteButton import DeleteButton
 
 
 class Ban(commands.Cog):
@@ -41,7 +42,10 @@ class Ban(commands.Cog):
                         color=color,
                         timestamp=disnake.utils.utcnow()
                      )
-                     await interaction.send(embed=embed)
+                     embed.set_footer(
+                        text="Requested by {}".format(interaction.author),
+                     )
+                     await interaction.send(embed=embed, view=DeleteButton())
                else:
                   try:
                      embed = disnake.Embed(
@@ -50,7 +54,10 @@ class Ban(commands.Cog):
                            color=color,
                            timestamp=disnake.utils.utcnow()
                      )
-                     await interaction.send(embed=embed)
+                     embed.set_footer(
+                        text="Requested by {}".format(interaction.author),
+                     )
+                     await interaction.send(embed=embed, view=DeleteButton())
                      await member.ban(reason=reason)  
                   except:
                         embed = disnake.Embed(
@@ -59,4 +66,7 @@ class Ban(commands.Cog):
                            color=color,
                            timestamp=disnake.utils.utcnow()
                         )
-                        await interaction.send(embed=embed)
+                        embed.set_footer(
+                           text="Requested by {}".format(interaction.author),
+                        )
+                        await interaction.send(embed=embed, view=DeleteButton())

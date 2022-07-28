@@ -60,7 +60,7 @@ class SetupSelect(disnake.ui.Select):
       
    async def callback(self, interaction: disnake.MessageInteraction):
       if self.values[0] == "Complete Setup - Reccomended":
-         await interaction.send(msg="Setup Started", ephemeral=True)
+         await interaction.send("Setup Started", ephemeral=True)
          overwrites = {
             interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False),  
          }
@@ -109,10 +109,10 @@ class SetupSelect(disnake.ui.Select):
          update_guild_information(f"guild_verificationchannel", f"{_verificationchannel}", f"{verificationchannel.id}")
          
          await webhooksend("Test Webhook Message", "If This Message Is Sent, The Webhook Is Working, Further Use Of The Bot Can Be Accessed With /help", f"{interaction.guild.id}")
-         await interaction.send(msg="Setup Complete!", ephemeral=True)
+         await interaction.send("Setup Complete!", ephemeral=True)
          
       elif self.values[0] == "Logging Only":
-         await interaction.send(msg="Setup Started", ephemeral=True)
+         await interaction.send("Setup Started", ephemeral=True)
          overwrites = {
             interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=False, send_messages=False, read_messages=False),  
          }
@@ -126,10 +126,10 @@ class SetupSelect(disnake.ui.Select):
          update_guild_information(f"guild_webhook", f"{_webhook}", f"{webhook.url}")
          
          await webhooksend("Test Webhook Message", "If This Message Is Sent, The Webhook Is Working, Further Use Of The Bot Can Be Accessed With /help", f"{interaction.guild.id}")
-         await interaction.send(msg="Setup Complete!", ephemeral=True)
+         await interaction.send("Setup Complete!", ephemeral=True)
 
       elif self.values[0] == "Verification Only":
-         await interaction.send(msg="Setup Started", ephemeral=True)
+         await interaction.send("Setup Started", ephemeral=True)
          verifyrole = await interaction.guild.create_role(name="Verified", permissions=disnake.Permissions(view_channel=True))
          voverwrites = {
             interaction.guild.default_role: disnake.PermissionOverwrite(view_channel=True, send_messages=True, read_messages=True),
@@ -158,25 +158,25 @@ class SetupSelect(disnake.ui.Select):
          _verificationchannel = fetch_guild_information("guild_verificationchannel", f"{interaction.guild.id}")
          update_guild_information(f"{interaction.guild.id}", f"{_verificationchannel}" f"{verificationchannel.id}")
          
-         await interaction.send(msg="Setup Complete!", ephemeral=True)
+         await interaction.send("Setup Complete!", ephemeral=True)
          
       elif self.values[0] == "Member Count Voice Channel Display Only":
-         await interaction.send(msg="Setup Started", ephemeral=True)
+         await interaction.send("Setup Started", ephemeral=True)
          membervoicechannel = await interaction.guild.create_voice_channel(name=f"Members: {interaction.guild.member_count}")
          
          _membervoicechannel = fetch_guild_information("guild_membercountvoicechannel", f"{interaction.guild.id}")
          update_guild_information(f"guild_membercountvoicechannel", f"{_membervoicechannel}", f"{membervoicechannel.id}")
          
-         await interaction.send(msg="Setup Complete!", ephemeral=True)
+         await interaction.send("Setup Complete!", ephemeral=True)
    
       elif self.values[0] == "Mute Only":
-         await interaction.send(msg="Setup Started", ephemeral=True)
+         await interaction.send("Setup Started", ephemeral=True)
          muterole = await interaction.guild.create_role(name="Mute Role", permissions=disnake.Permissions(speak=False))
          
          _muterole = fetch_guild_information("guild_muterole", f"{interaction.guild.id}")
          update_guild_information("guild_muterole", f"{_muterole}" f"{muterole.id}")
          
-         await interaction.send(msg="Setup Complete!", ephemeral=True)
+         await interaction.send("Setup Complete!", ephemeral=True)
          
    async def on_error(self, error: Exception):
       print(error)
@@ -232,4 +232,4 @@ class Setup(commands.Cog):
    )
    @commands.has_permissions(administrator=True)
    async def setup(self, interaction):
-      await interaction.send(msg="Choose The Correct Option, As This Cannot Be Undone", view=SetupSelectView(), ephemeral=True)
+      await interaction.send("Choose The Correct Option, As This Cannot Be Undone", view=SetupSelectView(), ephemeral=True)

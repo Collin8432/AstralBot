@@ -53,11 +53,11 @@ class ModApp(disnake.ui.Modal):
         Experience = interaction.text_values["Experience"]
         BR = interaction.text_values["BR"]
         await webhooksend("New Application", f"<@{interaction.author.id}> Submitted This Application \n**Appplying For:**\n{ApplyingFor}\n**Experience:**\n{Experience}\n**Why Are You Better Than Others For Your Role:**\n{BR}", f"{interaction.guild.id}")  
-        await interaction.send(msg="Application Submitted Successfully!", ephemeral=True)
+        await interaction.send("Application Submitted Successfully!", ephemeral=True)
         
         
     async def on_error(self, error: Exception, interaction: disnake.ModalInteraction) -> None:
-        await interaction.send(msg=f"Error In Modal Interaction, {error}", ephemeral=True)
+        await interaction.send(f"Error In Modal Interaction, {error}", ephemeral=True)
 
 
 class Moderatorapp(commands.Cog):

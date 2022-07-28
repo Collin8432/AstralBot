@@ -30,6 +30,7 @@ class Tasks(commands.Cog):
       
    @tasks.loop(minutes=1.0)
    async def status_task(self) -> None:
+      print("start task")
       statuses = ["Astral GUI", "Creating Astral GUI", "Discord GUI Bot"]
       # statuses = [f"Watching Over {len(self.bot.guilds)} Servers!", "With You!", "With Astro!", "In Space!"]
       await self.bot.wait_until_ready()

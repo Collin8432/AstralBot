@@ -51,8 +51,7 @@ class Astralsub(commands.Cog):
       embed.set_footer(
          text=f"Requested by {interaction.author}"
       )
-      components = DeleteButton
-      await interaction.send(embed=embed, component=components)
+      await interaction.send(embed=embed, view=DeleteButton())
 
 
    @astral.sub_command(
@@ -69,7 +68,7 @@ class Astralsub(commands.Cog):
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await interaction.send(embed=embed)
+      await interaction.send(embed=embed, view=DeleteButton())
       
    
    @astral.sub_command(
@@ -93,7 +92,7 @@ class Astralsub(commands.Cog):
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await interaction.send(embed=embed)
+      await interaction.send(embed=embed, view=DeleteButton())
       
    
    @astral.sub_command(
@@ -110,7 +109,7 @@ class Astralsub(commands.Cog):
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await interaction.send(embed=embed)
+      await interaction.send(embed=embed, view=DeleteButton())
       
       
    @astral.sub_command(
@@ -177,4 +176,4 @@ class Astralsub(commands.Cog):
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await interaction.send(embed=embed)  
+      await interaction.send(embed=embed, view=DeleteButton())  

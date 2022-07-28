@@ -15,8 +15,8 @@ import disnake
 from disnake.ext import commands
 
 
- from utils.color import color
-
+from utils.color import color
+from utils.DeleteButton import DeleteButton
 
 
 userinfo = """
@@ -88,4 +88,4 @@ class Userinfo(commands.Cog):
          url=user.avatar.url
       )
       
-      await interaction.send(embed=embed)
+      await interaction.send(embed=embed, view=DeleteButton())

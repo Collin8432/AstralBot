@@ -77,5 +77,4 @@ Gateway Message Content Limited: {app.flags.gateway_message_content_limited}"""
       embed.set_footer(
          text="Requested by {}".format(interaction.author),
       )
-      components = DeleteButton
-      await interaction.send(embed=embed, components=components)
+      await interaction.send(embed=embed, view=DeleteButton())

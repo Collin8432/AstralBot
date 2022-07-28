@@ -21,6 +21,7 @@ import random
 
 
 from utils.color import color
+from utils.DeleteButton import DeleteButton
  
 
 class Slots(commands.Cog):
@@ -51,7 +52,7 @@ class Slots(commands.Cog):
          timestamp=disnake.utils.utcnow(),
          color=color
       )
-      await interaction.send(embed=embed)
+      await interaction.send(embed=embed, view=DeleteButton())
       
    
    

@@ -17,7 +17,7 @@ from disnake.ext import commands
 from disnake import ButtonStyle
 
 
- 
+
 
 
 class BallsButton(disnake.ui.View):
@@ -29,13 +29,13 @@ class BallsButton(disnake.ui.View):
    async def first_button(
       self, button: disnake.ui.Button, interaction: disnake.MessageInteraction
    ):
-      await interaction.send(msg="balls")
+      await interaction.send("balls")
       
       
-   @disnake.ui.button(label="Delete Interaction ❌", style=ButtonStyle.red, custom_id="deleteinter")
-   async def first_button(self, button: disnake.ui.Button, interaction: disnake.ApplicationCommandInteraction):
+   @disnake.ui.button(custom_id="deleteinter", emoji="❌", style=ButtonStyle.red)
+   async def delcallback(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
       if not interaction.author:
-         await interaction.send(msg="You must be the author to delete this message", ephemeral=True)
+         await interaction.send("This button is not for you", ephemeral=True)
       else:
          await interaction.message.delete()
 

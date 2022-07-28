@@ -16,7 +16,7 @@ from disnake.ext import commands
 
 
 from utils.color import color
- from utils.webhook import webhooksend
+from utils.webhook import webhooksend
 
 
 
@@ -36,7 +36,7 @@ class TicketReason(disnake.ui.Modal):
     async def callback(self, interaction: disnake.ModalInteraction) -> None:
         global Reason
         Reason = interaction.text_values["Reason"]
-        await interaction.send(msg="Ticket Submitted Successfully!", ephemeral=True)
+        await interaction.send("Ticket Submitted Successfully!", ephemeral=True)
         ticketchannel = await interaction.guild.create_text_channel(  
         name=f"ticket-{interaction.author.name}", 
         overwrites={ 

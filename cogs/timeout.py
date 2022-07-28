@@ -16,10 +16,11 @@ from disnake import ApplicationCommandInteraction
 from disnake.ext import commands
 
 
-from typing import Optional
+from typing import Optional, Literal
 
 
- from utils.color import color
+from utils.color import color
+from utils.DeleteButton import DeleteButton
 
 
 class Timeout(commands.Cog):
@@ -34,14 +35,14 @@ class Timeout(commands.Cog):
    )
    @commands.has_permissions(manage_roles=True)
    async def timeout(self, interaction: ApplicationCommandInteraction,
-                     user: disnake.User,
-                     time: int,
+                     user: disnake.Member,
+                     time: str,
                      reason: Optional[str] = None):
-      await user.timeout(user, time=time)  
+      await user.timeout(user, duration=time)  
       embed = disnake.Embed(
          title="Member Timed Out!",
          description=f"**<@{user.id}> Was Timeout By <@{interaction.author.id}>\n**Time:**\n{time}\n**Reason:**\n{reason}**",
          color=color,
          timestamp=disnake.utils.utcnow()
       )
-      await interaction.send(embed=embed)
+      await interaction.send(embed=embed, view=DeleteButton())

@@ -17,10 +17,6 @@ from disnake.ext import commands
 
 
 from typing import Optional
-import random as random
-keys = ["keys"]
-
-
  
 
 class Editguild(commands.Cog):
@@ -106,5 +102,5 @@ class Editguild(commands.Cog):
          public_updates_channel=public_updates_channel, 
          premium_progress_bar_enabled=premium_progress_bar_enabled
          )
-      await interaction.send(msg="Edited Guild", ephemeral=True)
+      await interaction.send("Edited Guild", ephemeral=True)
       

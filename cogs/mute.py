@@ -18,6 +18,7 @@ from disnake.ext import commands
 
 from utils.db import *
 from utils.color import color
+from utils.DeleteButton import DeleteButton 
  
 
 class Muteunmute(commands.Cog):
@@ -47,7 +48,7 @@ class Muteunmute(commands.Cog):
          embed.set_footer(
                text="Requested by {}".format(interaction.author)
          )
-         await interaction.send(embed=embed)
+         await interaction.send(embed=embed, view=DeleteButton())
       except:
          embed = disnake.Embed(
                title="Error!",
@@ -58,6 +59,7 @@ class Muteunmute(commands.Cog):
          embed.set_footer(
                text="Requested by {}".format(interaction.author)
          )
+         await interaction.send(embed=embed, view=DeleteButton())
 
 
    @commands.slash_command(
@@ -71,19 +73,25 @@ class Muteunmute(commands.Cog):
       muterole = fetch_guild_information("guild_muterole", f"{interaction.guild.id}")  
       muterole = interaction.guild.get_role(muterole)
       try:
-         await user.remove_roles(muterole)
-         embed = disnake.Embed(
-               title="Member Unmuted!",
-               description=f"**{user.mention} was unmuted by {interaction.author.mention}**",
-               color=color,
-               timestamp=disnake.utils.utcnow(),
-         )
-         await interaction.send(embed=embed)
+            await user.remove_roles(muterole)
+            embed = disnake.Embed(
+                  title="Member Unmuted!",
+                  description=f"**{user.mention} was unmuted by {interaction.author.mention}**",
+                  color=color,
+                  timestamp=disnake.utils.utcnow(),
+            )
+            embed.set_footer(
+                  text="Requested by {}".format(interaction.author)
+            )
+            await interaction.send(embed=embed, view=DeleteButton())
       except:
-         embed = disnake.Embed(
-               title="Error!",
-               description=f"**Error While Unmuting Member, Make Sure Member Does Not Have Higher Roles Than Me**",
-               color=color,
-               timestamp=disnake.utils.utcnow(),
-         )
-         await interaction.send(embed=embed)
+            embed = disnake.Embed(
+                  title="Error!",
+                  description=f"**Error While Unmuting Member, Make Sure Member Does Not Have Higher Roles Than Me**",
+                  color=color,
+                  timestamp=disnake.utils.utcnow(),
+            )
+            embed.set_footer(
+                text="Requested by {}".format(interaction.author)
+            )
+            await interaction.send(embed=embed, view=DeleteButton())

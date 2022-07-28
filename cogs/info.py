@@ -20,7 +20,7 @@ from disnake.ext import commands
 
 
 from utils.color import color
- 
+from utils.DeleteButton import DeleteButton
 
 
 
@@ -94,7 +94,7 @@ class Info(commands.Cog, name="Info Cmds"):
          text="Requested by {}".format(interaction.author)
       )
       
-      await interaction.send(embed=embed)
+      await interaction.send(embed=embed, view=DeleteButton())
       
       
       
@@ -114,7 +114,7 @@ class Info(commands.Cog, name="Info Cmds"):
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await interaction.send(embed=embed)
+      await interaction.send(embed=embed, view=DeleteButton())
    
    
    
@@ -140,7 +140,7 @@ class Info(commands.Cog, name="Info Cmds"):
       embed.set_image(
          url=url
       )
-      await interaction.send(embed=embed)
+      await interaction.send(embed=embed, view=DeleteButton())
       
       
       
@@ -222,7 +222,7 @@ class Info(commands.Cog, name="Info Cmds"):
       embed.set_footer(
          text="Requested by {}".format(interaction.author)
       )
-      await interaction.send(embed=embed)
+      await interaction.send(embed=embed, view=DeleteButton())
       
       
       
@@ -243,4 +243,5 @@ class Info(commands.Cog, name="Info Cmds"):
             name="Logs",
             value=f"```{entry.user} did {entry.action} to {entry.target}```",
          )
-      await interaction.send(embed=embed)
+      
+      await interaction.send(embed=embed, ephemeral=True)
