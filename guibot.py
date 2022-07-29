@@ -54,8 +54,16 @@ whitelistedusernames = auth["whitelistedusernames"]
 whitelistedpasswords = auth["whitelistedpasswords"]
 
 
-def log_or_print(content, *, end: Optional[str]):
-    pass
+def log_or_print(content, ttkwidget: Optional[ttk.Widget], tkwidget: Optional[tk.Widget]):
+    try:
+        if ttkwidget is not None:
+            tkwidget.update()
+        else:
+            ttkwidget.update()
+    except:
+        print(content)
+    finally:
+        print(Exception)
 
 async def runtime():
     bot.run(token)
