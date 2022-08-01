@@ -17,6 +17,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import json
 import os
 import sys
+import logging
 
 
 import disnake
@@ -33,6 +34,13 @@ else:
 intents = disnake.Intents.all()
 bot = Bot(command_prefix=config["prefix"], intents=intents, case_insensitive=False, description="A Simple Discord Bot Coded by Astro", owner_ids=[config["owners"]], sync_commands=True)
 bot.remove_command("help")
+
+
+logger = logging.getLogger('disnake')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='disnake.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 
 def loadCogs():
