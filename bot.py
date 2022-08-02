@@ -18,6 +18,7 @@ import json
 import os
 import sys
 import logging
+from typing import Literal
 
 
 import disnake

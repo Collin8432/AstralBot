@@ -11,4 +11,4 @@ db banned messages for a certain guild
 add paginators to the on_button_click
 
 
-typing.literal["", ""] for slash cmd options (how did i not know this lmfao)
+typing.Literal["", ""] for slash cmd options (how did i not know this lmfao)

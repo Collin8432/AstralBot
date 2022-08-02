@@ -27,7 +27,7 @@ class Tasks(commands.Cog):
       self.bot = bot
       self.status_task.start()
       
-      
+   class Exception(BaseException): ...
    @tasks.loop(minutes=1.0)
    async def status_task(self) -> None:
       statuses = ["Astral GUI", "Creating Astral GUI", "Discord GUI Bot"]
