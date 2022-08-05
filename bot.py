@@ -33,7 +33,7 @@ else:
         
 
 intents = disnake.Intents.all()
-bot = Bot(command_prefix=config["prefix"], intents=intents, case_insensitive=False, description="A Simple Discord Bot Coded by Astro", owner_ids=[config["owners"]], sync_commands=True)
+bot = Bot(command_prefix=config["prefix"], intents=intents, case_insensitive=True, description="A Simple Discord Bot Coded by Astro", owner_ids=[config["owners"]], sync_commands=True)
 bot.remove_command("help")
 
 
