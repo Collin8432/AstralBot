@@ -47,6 +47,8 @@ handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(me
 logger.addHandler(handler)
 
 
+
+
 def loadcogs():
     """
     Load Extentions Of The Bot
